@@ -1,5 +1,7 @@
+import { Button } from "@mantine/core";
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
+import { Link } from "react-router";
 
 export function Welcome() {
   return (
@@ -38,6 +40,9 @@ export function Welcome() {
                   </a>
                 </li>
               ))}
+              <Button viewTransition to="/login" component={Link}>
+                Login
+              </Button>
             </ul>
           </nav>
         </div>

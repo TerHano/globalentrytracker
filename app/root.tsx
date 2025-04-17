@@ -8,7 +8,17 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
+
+import "@mantine/core/styles.css";
+import "@mantine/dates/styles.css";
 import "./app.css";
+import {
+  ColorSchemeScript,
+  MantineProvider,
+  createTheme,
+  mantineHtmlProps,
+} from "@mantine/core";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -21,19 +31,34 @@ export const links: Route.LinksFunction = () => [
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap",
+  },
 ];
+
+const queryClient = new QueryClient();
+
+const theme = createTheme({
+  fontFamily: "Montserrat, sans-serif",
+});
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" {...mantineHtmlProps}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <ColorSchemeScript defaultColorScheme="dark" />
         <Meta />
         <Links />
       </head>
       <body>
-        {children}
+        <MantineProvider theme={theme} defaultColorScheme="dark">
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        </MantineProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
