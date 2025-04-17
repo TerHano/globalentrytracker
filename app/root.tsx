@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
+import "@mantine/notifications/styles.css";
 import "./app.css";
 import {
   ColorSchemeScript,
@@ -19,6 +20,8 @@ import {
   mantineHtmlProps,
 } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Notifications } from "@mantine/notifications";
+import { ModalsProvider } from "@mantine/modals";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -55,9 +58,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <MantineProvider theme={theme} defaultColorScheme="dark">
-          <QueryClientProvider client={queryClient}>
-            {children}
-          </QueryClientProvider>
+          <ModalsProvider>
+            <Notifications autoClose={3000} />
+
+            <QueryClientProvider client={queryClient}>
+              {children}
+            </QueryClientProvider>
+          </ModalsProvider>
         </MantineProvider>
         <ScrollRestoration />
         <Scripts />

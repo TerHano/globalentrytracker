@@ -1,8 +1,9 @@
 import { queryOptions } from "@tanstack/react-query";
 import { fetchData } from "~/util/fetchData";
 import { getSupabaseToken } from "~/util/supabase/get-supabase-token-client";
-import type { NotificationType } from "./notification-types-api";
 import type { TrackedLocation } from "./tracked-locations-api";
+
+export const trackedLocationQueryKey = "tracked-location";
 
 export async function trackedLocationApi(
   token: string,
@@ -26,7 +27,7 @@ export const trackedLocationsQuery = ({
   trackedLocationId: number;
 }) =>
   queryOptions({
-    queryKey: ["tracked-locations"],
+    queryKey: [trackedLocationQueryKey, trackedLocationId],
     queryFn: async () => {
       const token = await getSupabaseToken();
       if (!token) {

@@ -1,4 +1,7 @@
 import { fetchData } from "~/util/fetchData";
+import { getSupabaseToken } from "~/util/supabase/get-supabase-token-client";
+
+export const notificationCheckQueryKey = "notification-check";
 
 export interface NotificationCheck {
   isNotificationsSetUp: boolean;
@@ -14,3 +17,14 @@ export async function notificationCheckApi(token: string) {
     },
   });
 }
+
+export const notificationCheckQuery = {
+  queryKey: [notificationCheckQueryKey],
+  queryFn: async () => {
+    const token = await getSupabaseToken();
+    if (!token) {
+      throw new Error("No token found");
+    }
+    return notificationCheckApi(token);
+  },
+};

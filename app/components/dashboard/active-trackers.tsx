@@ -1,21 +1,12 @@
-import {
-  Button,
-  Card,
-  Image,
-  Paper,
-  Skeleton,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { Button, Image, Paper, Skeleton, Stack, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { Link, NavLink } from "react-router";
+import { NavLink } from "react-router";
 import {
   trackedLocationsQuery,
   type TrackedLocation,
 } from "~/api/tracked-locations-api";
 import { Empty } from "../ui/empty";
-import { TicketsPlane } from "lucide-react";
 import notificationBellIcon from "~/assets/icons/notification-bell.png";
 import { TrackerCard } from "./tracker-card";
 
@@ -24,7 +15,7 @@ interface ActiveTrackersProps {
 }
 
 export const ActiveTrackers = ({ trackedLocations }: ActiveTrackersProps) => {
-  const { data, isLoading, isPending } = useQuery({
+  const { data, isLoading } = useQuery({
     ...trackedLocationsQuery,
     initialData: trackedLocations,
   });
@@ -57,8 +48,10 @@ export const ActiveTrackers = ({ trackedLocations }: ActiveTrackersProps) => {
         </>
       );
     }
-    return data.map((location) => <TrackerCard tracker={location} />);
-  }, [data]);
+    return data.map((location) => (
+      <TrackerCard key={location.id} tracker={location} />
+    ));
+  }, [data, isLoading]);
 
   return (
     <section className="flex flex-col gap-4">

@@ -12,5 +12,6 @@ export default [
     route("dashboard", "routes/dashboard.tsx"),
     route("create-tracker", "routes/create-tracker.tsx"),
     route("edit-tracker/:trackerId", "routes/edit-tracker.tsx"),
+    route("settings", "routes/settings.tsx"),
   ]),
 ] satisfies RouteConfig;

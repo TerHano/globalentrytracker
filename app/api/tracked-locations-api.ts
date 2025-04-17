@@ -4,6 +4,8 @@ import { getSupabaseToken } from "~/util/supabase/get-supabase-token-client";
 import type { Location } from "./location-api";
 import type { NotificationType } from "./notification-types-api";
 
+export const trackedLocationsQueryKey = "tracked-locations";
+
 export interface TrackedLocation {
   id: number;
   location: Location;
@@ -24,7 +26,7 @@ export async function trackedLocationsApi(token: string) {
 }
 
 export const trackedLocationsQuery = queryOptions({
-  queryKey: ["tracked-locations"],
+  queryKey: [trackedLocationsQueryKey],
   queryFn: async () => {
     const token = await getSupabaseToken();
     if (!token) {

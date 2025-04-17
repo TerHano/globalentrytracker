@@ -30,3 +30,43 @@ body {
   max-width: 50rem;
   margin: 0 auto;
 }
+
+.body-view-transition {
+  view-transition-name: main-content;
+}
+
+/* View Transition animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Target specific content area instead of root */
+::view-transition-old(main-content) {
+  animation: fade-out 0.25s ease forwards;
+}
+
+::view-transition-new(main-content) {
+  animation: fade-in-up 0.5s ease forwards;
+}
+
+/* Keep the root transition simple (no animation) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}

@@ -1,4 +1,4 @@
-import { Alert } from "@mantine/core";
+import { Alert, Text } from "@mantine/core";
 import { MessageSquare } from "lucide-react";
 
 interface NotificationSetupAlertProps {
@@ -18,7 +18,8 @@ export const NotificationSetupAlert = ({
         title="Hey There!"
         icon={<MessageSquare />}
       >
-        You dont have notifications set up
+        You have not set up any notifications yet. Please set up your
+        notification settings to receive updates.
       </Alert>
     );
   }
@@ -27,10 +28,19 @@ export const NotificationSetupAlert = ({
       <Alert
         variant="light"
         color="blue"
-        title="Hey There!"
+        title="No Active Notification Settings!"
         icon={<MessageSquare />}
       >
-        You dont have any notifications enabled
+        <Text size="xs">
+          None of your notification settings are currently enabled. Please
+          enable at least one notification setting to receive updates.
+        </Text>
+        {/* <br />
+        <br />
+        <strong>Note:</strong> You can enable notifications in the settings
+        page. Once enabled, you will start receiving notifications for the
+        selected events.
+        <br /> */}
       </Alert>
     );
   }

@@ -2,6 +2,8 @@ import { queryOptions } from "@tanstack/react-query";
 import { fetchData } from "~/util/fetchData";
 import { getSupabaseToken } from "~/util/supabase/get-supabase-token-client";
 
+export const notificationTypesQueryKey = "notification-types";
+
 export interface NotificationType {
   id: number;
   name: string;
@@ -19,7 +21,7 @@ export async function notificationTypesApi(token: string) {
   });
 }
 export const notificationTypesQuery = queryOptions({
-  queryKey: ["notification-types"],
+  queryKey: [notificationTypesQueryKey],
   queryFn: async () => {
     const token = await getSupabaseToken();
     if (!token) {

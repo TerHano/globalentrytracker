@@ -12,7 +12,7 @@ import classes from "./login-form.module.css";
 import { useFetcher } from "react-router";
 
 export default function LoginForm() {
-  let fetcher = useFetcher();
+  const fetcher = useFetcher();
   return (
     <div className={classes.wrapper}>
       <Paper className={classes.form} radius={0} p={30}>

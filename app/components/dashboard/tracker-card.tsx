@@ -7,12 +7,64 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import { EllipsisVerticalIcon, PencilLine } from "lucide-react";
+import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
+import { EllipsisVerticalIcon, PencilLine, Trash2 } from "lucide-react";
+import { useCallback, useRef } from "react";
 import { Link } from "react-router";
 import type { TrackedLocation } from "~/api/tracked-locations-api";
+import { useDeleteTracker } from "~/hooks/api/useDeleteTracker";
+import { ConfirmDeleteTracker } from "./confirm-delete-tracker";
 
-export const TrackerCard = ({ tracker }: { tracker: TrackedLocation }) => {
+export interface TrackerCardProps {
+  tracker: TrackedLocation;
+  canEdit?: boolean;
+}
+
+export const TrackerCard = ({ tracker, canEdit = true }: TrackerCardProps) => {
   const { id, enabled, location } = tracker;
+  const modalId = useRef<string | null>(null);
+
+  console.log("TrackerCard", tracker);
+
+  const deleteTrackerMutation = useDeleteTracker({
+    onSuccess: () => {
+      notifications.show({
+        title: "Tracker Deleted",
+        message: "The tracker has been deleted successfully.",
+        color: "teal",
+      });
+      if (modalId.current) {
+        modals.close(modalId.current);
+      }
+    },
+    onError: (error) => {
+      if (error instanceof Error) {
+        notifications.show({
+          title: "Error Deleting Tracker",
+          message: error.message,
+          color: "red",
+        });
+        console.error("Error deleting tracker:", error);
+      }
+    },
+  });
+  const handleDelete = useCallback(async () => {
+    await deleteTrackerMutation.mutateAsync(id);
+  }, [deleteTrackerMutation, id]);
+
+  const openConfirmDelete = useCallback(() => {
+    modalId.current = modals.openConfirmModal({
+      title: "Are you sure?",
+      children: <ConfirmDeleteTracker tracker={tracker} />,
+
+      labels: { confirm: "Delete Tracker", cancel: "Cancel" },
+      confirmProps: { color: "red", loading: deleteTrackerMutation.isPending },
+      onCancel: () => console.log("Cancel"),
+      onConfirm: () => handleDelete(),
+    });
+  }, [deleteTrackerMutation.isPending, handleDelete, tracker]);
+
   return (
     <Card withBorder p="sm">
       <Stack gap={3}>
@@ -25,26 +77,32 @@ export const TrackerCard = ({ tracker }: { tracker: TrackedLocation }) => {
           >
             {enabled ? "Enabled" : "Disabled"}
           </Badge>
+          {canEdit && (
+            <Menu>
+              <Menu.Target>
+                <ActionIcon variant="subtle" size="sm">
+                  <EllipsisVerticalIcon size={12} />
+                </ActionIcon>
+              </Menu.Target>
 
-          <Menu>
-            <Menu.Target>
-              <ActionIcon variant="subtle" size="sm">
-                <EllipsisVerticalIcon size={12} />
-              </ActionIcon>
-            </Menu.Target>
-
-            <Menu.Dropdown>
-              <Menu.Item
-                component={Link}
-                to={`/edit-tracker/${id}`}
-                leftSection={<PencilLine size={14} />}
-              >
-                Edit Tracker
-              </Menu.Item>
-
-              {/* Other items ... */}
-            </Menu.Dropdown>
-          </Menu>
+              <Menu.Dropdown>
+                <Menu.Item
+                  component={Link}
+                  to={`/edit-tracker/${id}`}
+                  leftSection={<PencilLine size={14} />}
+                >
+                  Edit Tracker
+                </Menu.Item>
+                <Menu.Item
+                  onClick={openConfirmDelete}
+                  color="red"
+                  leftSection={<Trash2 size={14} />}
+                >
+                  Delete Tracker
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          )}
         </Flex>
         <Stack>
           <Text fw="bold" fz={{ base: "md", sm: "lg" }}>

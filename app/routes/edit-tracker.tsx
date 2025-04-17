@@ -40,7 +40,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     session.access_token,
     trackerIdNumber
   );
-
+  console.log("trackedLocation", trackedLocation);
   return { notificationCheck, me, trackedLocation };
 }
 export default function EditTracker({ loaderData }: Route.ComponentProps) {

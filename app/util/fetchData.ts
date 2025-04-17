@@ -1,9 +1,11 @@
+import type { ApiResponse } from "~/models/ApiResponse";
+
 const BASE_URL = "http://localhost:5145"; // Replace with your actual base URL
 
 export async function fetchData<T = null>(
   endpoint: string,
   options: RequestInit = {
-    cache: "no-cache",
+    cache: "no-store",
   }
 ): Promise<T> {
   const url = `${BASE_URL}${endpoint}`;

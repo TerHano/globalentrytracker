@@ -2,6 +2,8 @@ import { queryOptions } from "@tanstack/react-query";
 import { fetchData } from "~/util/fetchData";
 import { getSupabaseToken } from "~/util/supabase/get-supabase-token-client";
 
+export const locationQueryKey = "all-locations";
+
 export interface Location {
   id: number;
   name: string;
@@ -23,7 +25,7 @@ export async function locationApi(token: string) {
 }
 
 export const locationQuery = queryOptions({
-  queryKey: ["all-locations"],
+  queryKey: [locationQueryKey],
   queryFn: async () => {
     const token = await getSupabaseToken();
     if (!token) {
