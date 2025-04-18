@@ -35,6 +35,10 @@ body {
   view-transition-name: main-content;
 }
 
+.settings-tab-transition {
+  animation: fade-in-up 0.5s ease forwards;
+}
+
 /* View Transition animations */
 @keyframes fade-in-up {
   from {
@@ -64,6 +68,14 @@ body {
 ::view-transition-new(main-content) {
   animation: fade-in-up 0.5s ease forwards;
 }
+
+/* ::view-transition-old(settings-tab) {
+  animation: fade-out 0.25s ease forwards;
+}
+
+::view-transition-new(settings-tab) {
+  animation: fade-in-up 0.5s ease forwards;
+} */
 
 /* Keep the root transition simple (no animation) */
 ::view-transition-old(root),

@@ -1,5 +1,5 @@
-import { fetchData } from "~/util/fetchData";
-import { getSupabaseToken } from "~/util/supabase/get-supabase-token-client";
+import { fetchData } from "~/utils/fetchData";
+import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 
 export const notificationCheckQueryKey = "notification-check";
 

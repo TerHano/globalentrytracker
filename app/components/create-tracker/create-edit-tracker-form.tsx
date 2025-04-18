@@ -16,9 +16,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { locationQuery } from "~/api/location-api";
 import { notificationTypesQuery } from "~/api/notification-types-api";
 import { DatePickerInput } from "@mantine/dates";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { z } from "zod";
-import { NotificationType } from "~/enum/NotificationType";
 import notificationRadioCardStles from "./notification-type-radio-card.module.css";
 import { Bell, BellOff } from "lucide-react";
 import type { TrackedLocation } from "~/api/tracked-locations-api";
@@ -37,8 +36,7 @@ interface FormValues {
   enabled: boolean;
   locationId: string;
   notificationTypeId: string;
-  beforeDate: Date;
-  dateRange: [Date, Date] | null;
+  cutOffDate: Date;
 }
 
 export const CreateEditTrackerForm = ({
@@ -65,8 +63,7 @@ export const CreateEditTrackerForm = ({
         enabled: body.enabled,
         locationId: body.locationId.toString(),
         notificationTypeId: body.notificationTypeId.toString(),
-        beforeDate: dayjs(body.startDate).toDate(),
-        dateRange: null,
+        cutOffDate: dayjs(body.cutOffDate).toDate(),
       };
       form.setInitialValues(newValues);
       form.setValues(newValues);
@@ -101,31 +98,31 @@ export const CreateEditTrackerForm = ({
 
   const defaultNotificationType = notificationTypes?.[0].id.toString() ?? "";
 
-  const [selectedNotificationTypeId, setSelectedNotificationTypeId] = useState<
-    string | undefined
-  >(defaultNotificationType);
+  // const [selectedNotificationTypeId, setSelectedNotificationTypeId] = useState<
+  //   string | undefined
+  // >(defaultNotificationType);
 
-  const beforeDateschema = z.object({
+  const schema = z.object({
     enabled: z.boolean(),
     locationId: z.string().nonempty("Location is required"),
     notificationTypeId: z.string().nonempty("Notification type is required"),
-    beforeDate: z.date().refine((date) => date > new Date(), {
+    cutOffDate: z.date().refine((date) => date > new Date(), {
       message: "Date must be in the future",
     }),
   });
-  const dateRangeSchema = z.object({
-    enabled: z.boolean(),
-    locationId: z.string().nonempty("Location is required"),
-    notificationTypeId: z.string().nonempty("Notification type is required"),
-    //daterange can be 2 dates or null
-    dateRange: z.nullable(
-      z.array(z.date()).refine((dates) => dates[0] < dates[1], {
-        message: "Start date must be before end date",
-      })
-    ),
-  });
+  // const dateRangeSchema = z.object({
+  //   enabled: z.boolean(),
+  //   locationId: z.string().nonempty("Location is required"),
+  //   notificationTypeId: z.string().nonempty("Notification type is required"),
+  //   //daterange can be 2 dates or null
+  //   dateRange: z.nullable(
+  //     z.array(z.date()).refine((dates) => dates[0] < dates[1], {
+  //       message: "Start date must be before end date",
+  //     })
+  //   ),
+  // });
 
-  const schema = z.union([beforeDateschema, dateRangeSchema]);
+  //const schema = z.union([beforeDateschema, dateRangeSchema]);
 
   const form = useForm<FormValues>({
     mode: "uncontrolled",
@@ -133,17 +130,12 @@ export const CreateEditTrackerForm = ({
       enabled: true,
       locationId: "",
       notificationTypeId: defaultNotificationType,
-      beforeDate: dayjs().add(2, "week").toDate(),
-      dateRange: [
-        dayjs().add(2, "week").toDate(),
-        dayjs().add(3, "week").toDate(),
-      ],
+      cutOffDate: dayjs().add(2, "week").toDate(),
     },
-
     validate: zodResolver(schema),
-    onValuesChange: (values) => {
-      setSelectedNotificationTypeId(values.notificationTypeId);
-    },
+    // onValuesChange: (values) => {
+    //   setSelectedNotificationTypeId(values.notificationTypeId);
+    // },
   });
 
   const isLoading = isLocationsLoading || isNotificationTypesLoading;
@@ -154,68 +146,54 @@ export const CreateEditTrackerForm = ({
       label: location.name,
     })) ?? [];
 
-  const datePicker = useMemo(() => {
-    const selectedNotificationType = notificationTypes?.find(
-      (type) => type.id.toString() === selectedNotificationTypeId
-    )?.type;
-    switch (selectedNotificationType) {
-      case NotificationType.Before:
-        return (
-          <DatePickerInput
-            modalProps={{ centered: true }}
-            firstDayOfWeek={0}
-            maw={250}
-            withAsterisk
-            dropdownType="modal"
-            label="I want appointments before..."
-            placeholder="Pick date"
-            key={form.key("beforeDate")}
-            {...form.getInputProps("beforeDate")}
-          />
-        );
-      default:
-        return (
-          <DatePickerInput
-            modalProps={{ centered: true }}
-            firstDayOfWeek={0}
-            type="range"
-            maw={400}
-            withAsterisk
-            dropdownType="modal"
-            label="I want appointments between..."
-            placeholder="Pick date"
-            key={form.key("dateRange")}
-            {...form.getInputProps("dateRange")}
-          />
-        );
-    }
-  }, [notificationTypes, selectedNotificationTypeId, form]);
+  // const datePicker = useMemo(() => {
+  //   const selectedNotificationType = notificationTypes?.find(
+  //     (type) => type.id.toString() === selectedNotificationTypeId
+  //   )?.type;
+  //   switch (selectedNotificationType) {
+  //     case NotificationType.Before:
+  //       return (
+  //         <DatePickerInput
+  //           modalProps={{ centered: true }}
+  //           firstDayOfWeek={0}
+  //           maw={250}
+  //           withAsterisk
+  //           dropdownType="modal"
+  //           label="I want appointments before..."
+  //           placeholder="Pick date"
+  //           key={form.key("beforeDate")}
+  //           {...form.getInputProps("beforeDate")}
+  //         />
+  //       );
+  //     default:
+  //       return (
+  //         <DatePickerInput
+  //           modalProps={{ centered: true }}
+  //           firstDayOfWeek={0}
+  //           type="range"
+  //           maw={400}
+  //           withAsterisk
+  //           dropdownType="modal"
+  //           label="I want appointments between..."
+  //           placeholder="Pick date"
+  //           key={form.key("dateRange")}
+  //           {...form.getInputProps("dateRange")}
+  //         />
+  //       );
+  //   }
+  // }, [notificationTypes, selectedNotificationTypeId, form]);
 
   const handleSubmit = async (values: typeof form.values) => {
     console.log("Submitting form", values);
-    const selectedNotificationType = notificationTypes?.find(
-      (type) => type.id.toString() === form.values.notificationTypeId
-    )?.type;
-    let startDate: Date = values.beforeDate;
-    let endDate: Date | null = null;
-    if (selectedNotificationType === NotificationType.Between) {
-      if (values.dateRange) {
-        startDate = values.dateRange[0];
-        endDate = values.dateRange[1];
-      }
-    }
-    const startDateString = dayjs(startDate).format("YYYY-MM-DD");
-    const endDateString = endDate
-      ? dayjs(endDate).format("YYYY-MM-DD")
-      : undefined;
+
+    const cutOffString = dayjs(values.cutOffDate).format("YYYY-MM-DD");
 
     const requestBody: CreateUpdateTrackerRequest = {
       id: isUpdate ? trackedLocation.id : 0,
       locationId: Number(values.locationId),
       enabled: isUpdate ? values.enabled : true,
       notificationTypeId: Number(values.notificationTypeId),
-      startDate: startDateString,
-      endDate: endDateString,
+      cutOffDate: cutOffString,
     };
 
     await createUpdateTrackerMutation.mutateAsync(requestBody);
@@ -233,15 +211,11 @@ export const CreateEditTrackerForm = ({
         enabled: trackedLocation.enabled,
         locationId: trackedLocation.location.id.toString(),
         notificationTypeId: trackedLocation.notificationType.id.toString(),
-        beforeDate: dayjs(trackedLocation.startDate).toDate(),
-        dateRange: [
-          dayjs(trackedLocation.startDate).toDate(),
-          dayjs(trackedLocation.endDate).toDate(),
-        ],
+        cutOffDate: dayjs(trackedLocation.cutOffDate).toDate(),
       });
-      setSelectedNotificationTypeId(
-        trackedLocation.notificationType.id.toString()
-      );
+      // setSelectedNotificationTypeId(
+      //   trackedLocation.notificationType.id.toString()
+      // );
     }
   }, [defaultNotificationType, form, trackedLocation]);
 
@@ -283,6 +257,9 @@ export const CreateEditTrackerForm = ({
             maw={100}
             withCheckIcon
             checkIconPosition="left"
+            comboboxProps={{
+              transitionProps: { transition: "pop", duration: 200 },
+            }}
             data={[
               {
                 label: "NJ",
@@ -338,8 +315,18 @@ export const CreateEditTrackerForm = ({
             ))}
           </SimpleGrid>
         </Radio.Group>
+        <DatePickerInput
+          modalProps={{ centered: true }}
+          firstDayOfWeek={0}
+          maw={400}
+          withAsterisk
+          dropdownType="modal"
+          label="Cutoff Date"
+          placeholder="Pick date"
+          key={form.key("cutOffDate")}
+          {...form.getInputProps("cutOffDate")}
+        />
 
-        {datePicker}
         <Button loading={createUpdateTrackerMutation.isPending} type="submit">
           {isUpdate ? "Update Tracker" : "Create Tracker"}
         </Button>

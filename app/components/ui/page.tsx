@@ -2,6 +2,7 @@ import { Breadcrumbs, Paper, Stack, Text } from "@mantine/core";
 import type { ReactNode } from "react";
 
 export interface PageProps {
+  className?: string;
   breadcrumbs?: ReactNode[];
   header: string;
   description: string;
@@ -10,12 +11,13 @@ export interface PageProps {
 
 export const Page = ({
   header,
+  className,
   description,
   children,
   breadcrumbs,
 }: PageProps) => {
   return (
-    <Paper withBorder p="lg">
+    <Paper className={className} withBorder p="lg">
       <Stack gap="lg">
         {breadcrumbs ? (
           <Breadcrumbs separatorMargin={3}>{breadcrumbs}</Breadcrumbs>

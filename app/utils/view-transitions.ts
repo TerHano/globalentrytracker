@@ -9,7 +9,9 @@ export function applyPageLoadTransition() {
 
   // Add a class to indicate content is ready to be displayed
   const applyTransition = () => {
-    const contentElement = document.querySelector(".body-view-transition");
+    const contentElement = document.querySelector(
+      ".body-view-transition"
+    ) as HTMLElement | null;
     if (contentElement) {
       // Force a repaint before transition
       contentElement.style.opacity = "0";

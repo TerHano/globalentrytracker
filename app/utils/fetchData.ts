@@ -1,6 +1,7 @@
 import type { ApiResponse } from "~/models/ApiResponse";
 
-const BASE_URL = "http://localhost:5145"; // Replace with your actual base URL
+const BASE_URL = import.meta.env.VITE_API_SERVER_BASE_URL;
+// Replace with your actual base URL
 
 export async function fetchData<T = null>(
   endpoint: string,

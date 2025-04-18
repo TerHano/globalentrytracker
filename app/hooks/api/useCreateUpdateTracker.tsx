@@ -1,7 +1,7 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import type { ApiResponse } from "~/models/ApiResponse";
-import { fetchData } from "~/util/fetchData";
-import { getSupabaseToken } from "~/util/supabase/get-supabase-token-client";
+import { fetchData } from "~/utils/fetchData";
+import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 import type { MutationHookOptions } from "./mutationOptions";
 
 export interface CreateUpdateTrackerRequest {
@@ -9,8 +9,7 @@ export interface CreateUpdateTrackerRequest {
   locationId: number;
   enabled: boolean;
   notificationTypeId: number;
-  startDate: string;
-  endDate?: string;
+  cutOffDate: string;
 }
 
 interface useCreateUpdateTrackerProps

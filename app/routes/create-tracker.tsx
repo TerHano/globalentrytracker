@@ -1,11 +1,10 @@
-import { Alert, Anchor, Text } from "@mantine/core";
+import { Anchor, Text } from "@mantine/core";
 import { Link, redirect } from "react-router";
 import { CreateEditTrackerForm } from "~/components/create-tracker/create-edit-tracker-form";
 import { Page } from "~/components/ui/page";
-import { createSupabaseServerClient } from "~/util/supabase/createSupabaseServerClient";
+import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 import type { Route } from "./+types/create-tracker";
 import { notificationCheckApi } from "~/api/notification-check-api";
-import { MailWarning } from "lucide-react";
 import { CreateTrackerNotificationWarning } from "~/components/create-tracker/create-tracker-notification-warning";
 
 export function meta() {

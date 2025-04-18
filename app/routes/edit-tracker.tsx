@@ -1,24 +1,12 @@
-import { Anchor, Autocomplete, Select, Stack, Text } from "@mantine/core";
-import { useQuery } from "@tanstack/react-query";
+import { Anchor, Text } from "@mantine/core";
 import { Link, redirect } from "react-router";
-import { locationQuery } from "~/api/location-api";
 import { meApi } from "~/api/me-api";
 import { notificationCheckApi } from "~/api/notification-check-api";
-import {
-  trackedLocationsApi,
-  type TrackedLocation,
-} from "~/api/tracked-locations-api";
 import { CreateEditTrackerForm } from "~/components/create-tracker/create-edit-tracker-form";
 import { Page } from "~/components/ui/page";
-import { createSupabaseServerClient } from "~/util/supabase/createSupabaseServerClient";
+import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 import type { Route } from "../routes/+types/edit-tracker";
 import { trackedLocationApi } from "~/api/tracked-location-api";
-
-interface EditTrackerProps {
-  initialData?: {
-    trackedLocations: TrackedLocation[];
-  };
-}
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   const { supabase, headers } = createSupabaseServerClient(request);
@@ -48,10 +36,16 @@ export default function EditTracker({ loaderData }: Route.ComponentProps) {
   return (
     <Page
       breadcrumbs={[
-        <Anchor viewTransition fz="xs" component={Link} to="/dashboard">
+        <Anchor
+          key="Dashboard"
+          viewTransition
+          fz="xs"
+          component={Link}
+          to="/dashboard"
+        >
           Dashboard
         </Anchor>,
-        <Text aria-current fw="bold" fz="xs">
+        <Text key="Edit Tracker" aria-current fw="bold" fz="xs">
           Edit Tracker
         </Text>,
       ]}

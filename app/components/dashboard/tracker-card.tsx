@@ -88,6 +88,7 @@ export const TrackerCard = ({ tracker, canEdit = true }: TrackerCardProps) => {
               <Menu.Dropdown>
                 <Menu.Item
                   component={Link}
+                  viewTransition
                   to={`/edit-tracker/${id}`}
                   leftSection={<PencilLine size={14} />}
                 >

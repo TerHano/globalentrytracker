@@ -1,31 +1,27 @@
-import { useMutation } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import type { ApiResponse } from "~/models/ApiResponse";
+import { fetchData } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 import type { MutationHookOptions } from "./mutationOptions";
-import { fetchData } from "~/utils/fetchData";
-import type { ApiResponse } from "~/models/ApiResponse";
+import { meQueryKey } from "~/api/me-api";
 
-export interface CreateUpdateDiscordSettingsRequest {
-  id?: number;
-  enabled: boolean;
-  webhookUrl: string;
-}
-interface useCreateUpdateDiscordSettingsProps
-  extends MutationHookOptions<CreateUpdateDiscordSettingsRequest> {
-  isUpdate?: boolean;
+export interface UpdateUserRequest {
+  firstName: string;
+  lastName: string;
 }
 
-export const useCreateUpdateDiscordSettings = ({
-  isUpdate = false,
+export const useUpdateUser = ({
   onSuccess,
   onError,
-}: useCreateUpdateDiscordSettingsProps) => {
+}: MutationHookOptions<UpdateUserRequest>) => {
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (request: CreateUpdateDiscordSettingsRequest) => {
+    mutationFn: async (request: UpdateUserRequest) => {
       const token = await getSupabaseToken();
       if (!token) {
         throw new Error("No token found");
       }
-      return discordNotificationSettingsApi(request, isUpdate);
+      return updateUserApi(request);
     },
     onSuccess: (data, body) => {
       // Default behavior
@@ -33,6 +29,7 @@ export const useCreateUpdateDiscordSettings = ({
       // Call user-provided handler if it exists
       if (onSuccess) {
         onSuccess(data, body);
+        queryClient.invalidateQueries({ queryKey: [meQueryKey] });
       }
     },
     onError: (error) => {
@@ -46,21 +43,17 @@ export const useCreateUpdateDiscordSettings = ({
     },
   });
 };
-
-async function discordNotificationSettingsApi(
-  request: CreateUpdateDiscordSettingsRequest,
-  isUpdate: boolean
-) {
+async function updateUserApi(request: UpdateUserRequest) {
   const token = await getSupabaseToken();
   if (!token) {
     throw new Error("No token found");
   }
-  return fetchData<ApiResponse>(`/api/v1/notification-settings/discord`, {
-    method: isUpdate ? "PUT" : "POST",
-    body: JSON.stringify(request),
+  return fetchData<ApiResponse>("/api/v1/me", {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
+    body: JSON.stringify(request),
   });
 }

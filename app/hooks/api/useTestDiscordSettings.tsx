@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import { getSupabaseToken } from "~/util/supabase/get-supabase-token-client";
+import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 import type { MutationHookOptions } from "./mutationOptions";
-import { fetchData } from "~/util/fetchData";
+import { fetchData } from "~/utils/fetchData";
 import type { ApiResponse } from "~/models/ApiResponse";
 
 export interface TestDiscordSettingsRequest {

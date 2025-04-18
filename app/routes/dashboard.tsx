@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from "~/util/supabase/createSupabaseServerClient";
+import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 import type { Route } from "./+types/dashboard";
 import { redirect } from "react-router";
 import { notificationCheckApi } from "~/api/notification-check-api";

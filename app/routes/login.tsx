@@ -1,9 +1,9 @@
 import LoginForm from "~/components/login-form/login-form";
 import type { Route } from "./+types/login";
 import { redirect } from "react-router";
-import { createSupabaseServerClient } from "~/util/supabase/createSupabaseServerClient";
+import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Login" },
     { name: "description", content: "Welcome to React Router!" },

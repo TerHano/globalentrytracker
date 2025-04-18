@@ -7,12 +7,12 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Cog, DoorOpen, LogOut } from "lucide-react";
 import { useCallback, useState } from "react";
-import { NavLink, useNavigate } from "react-router";
-import type { me } from "~/api/me-api";
-import { createSupabaseBrowserClient } from "~/util/supabase/createSupbaseBrowerClient";
+import { Link, NavLink, useNavigate } from "react-router";
+import { meQuery, type me } from "~/api/me-api";
+import { createSupabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClient";
 
 interface AppHeaderProps {
   me: me;
@@ -20,6 +20,7 @@ interface AppHeaderProps {
 
 export const AppHeader = ({ me }: AppHeaderProps) => {
   const navigate = useNavigate();
+  const { data: meData } = useQuery({ ...meQuery, initialData: me });
   const queryClient = useQueryClient();
 
   const [isSigningOut, setIsSigningOut] = useState(false);
@@ -72,15 +73,18 @@ export const AppHeader = ({ me }: AppHeaderProps) => {
         <Menu.Target>
           <UnstyledButton>
             <Avatar color="cyan" size="md" radius="xl">
-              {me.firstName.charAt(0)}
+              {meData.firstName.charAt(0)}
             </Avatar>
           </UnstyledButton>
         </Menu.Target>
 
         <Menu.Dropdown>
+          <Menu.Label>
+            <Text size="xs">{`${meData.firstName} ${meData.lastName}`}</Text>
+          </Menu.Label>
           <Menu.Item
-            component={NavLink}
-            to={`/settings`}
+            component={Link}
+            to={`/settings/profile`}
             leftSection={<Cog size={14} />}
             viewTransition
           >

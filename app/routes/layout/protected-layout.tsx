@@ -1,11 +1,9 @@
 import { Outlet, redirect } from "react-router";
-import { createSupabaseServerClient } from "~/util/supabase/createSupabaseServerClient";
+import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 import type { Route } from "./+types/protected-layout";
 import { AppShell, AppShellHeader, AppShellMain } from "@mantine/core";
 import { meApi } from "~/api/me-api";
 import { AppHeader } from "~/components/appshell/app-header";
-import { useEffect } from "react";
-import { applyPageLoadTransition } from "~/utils/view-transitions";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const { supabase, headers } = createSupabaseServerClient(request);
@@ -21,10 +19,6 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export default function ProtectedLayout({ loaderData }: Route.ComponentProps) {
   const { me } = loaderData;
-
-  useEffect(() => {
-    applyPageLoadTransition();
-  }, []);
 
   return (
     <AppShell header={{ height: 50 }}>

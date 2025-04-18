@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
-import { fetchData } from "~/util/fetchData";
-import { getSupabaseToken } from "~/util/supabase/get-supabase-token-client";
+import { fetchData } from "~/utils/fetchData";
+import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 import type { Location } from "./location-api";
 import type { NotificationType } from "./notification-types-api";
 
@@ -11,8 +11,7 @@ export interface TrackedLocation {
   location: Location;
   enabled: boolean;
   notificationType: NotificationType;
-  startDate: Date;
-  endDate: Date;
+  cutOffDate: Date;
 }
 
 export async function trackedLocationsApi(token: string) {

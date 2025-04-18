@@ -1,6 +1,5 @@
 import {
   Button,
-  Card,
   Divider,
   Flex,
   Stack,
@@ -12,7 +11,9 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { MessageCircleMore } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router";
 import type { DiscordSettings } from "~/api/discord-settings-api";
+import { Page } from "~/components/ui/page";
 import {
   useCreateUpdateDiscordSettings,
   type CreateUpdateDiscordSettingsRequest,
@@ -117,66 +118,68 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
     }
   }, [form, settings]);
   return (
-    <Card mt="sm">
-      <Stack gap={1}>
-        <Text fw="bold">Discord Settings</Text>
-        <Text size="xs" c="dimmed">
-          This is where you can configure your Discord settings. You can set up
-          webhooks, notifications, and other integrations with Discord.
-        </Text>
-
-        <form onSubmit={form.onSubmit(handleSubmit)}>
-          <Stack mt="lg">
-            <Switch
-              size="sm"
-              label={
-                <Text size="sm" fw={500}>
-                  Enable
-                </Text>
-              }
-              // labelPosition="left"
-              defaultChecked={settings ? settings.enabled : true}
-              mt={3}
-              color="green"
-              key={form.key("enabled")}
-              {...form.getInputProps("enabled")}
-              description={
-                <Text component="span" size="xs">
-                  You will not receive notifications for this service if the
-                  setting is disabled
-                </Text>
-              }
-            />
-            <Textarea
-              disabled={!isEnabled}
-              autosize
-              minRows={2}
-              label="Webhook URL"
-              description={
-                <Text component="span" size="xs">
-                  If you need help locating your webhook url{" "}
-                  <Text component="span">dsdsd</Text>
-                </Text>
-              }
-              key={form.key("webhookUrl")}
-              {...form.getInputProps("webhookUrl")}
-            />
-            <Divider />
-            <Flex justify="end" gap="md">
-              <Button
-                onClick={handleTestMessage}
-                loading={testMessageMutate.isPending}
-                variant="outline"
-              >
-                Test Webhook
-              </Button>
-              <Button loading={discordSettingsMutate.isPending} type="submit">
-                Save Settings
-              </Button>
-            </Flex>
-          </Stack>
-        </form>
-      </Stack>
-    </Card>
+    <Page
+      header="Discord Settings"
+      description="  This is where you can configure your Discord settings. You can set up
+          webhooks, notifications, and other integrations with Discord."
+    >
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <Stack mt="lg">
+          <Switch
+            size="sm"
+            label={
+              <Text size="sm" fw={500}>
+                Enable
+              </Text>
+            }
+            // labelPosition="left"
+            defaultChecked={settings ? settings.enabled : true}
+            mt={3}
+            color="green"
+            key={form.key("enabled")}
+            {...form.getInputProps("enabled")}
+            description={
+              <Text component="span" size="xs">
+                You will not receive notifications for this service if the
+                setting is disabled
+              </Text>
+            }
+          />
+          <Textarea
+            disabled={!isEnabled}
+            autosize
+            minRows={2}
+            label="Webhook URL"
+            description={
+              <Text component="span" size="xs">
+                If you need help locating your webhook url, please check out
+                this{" "}
+                <Link
+                  target="_blank"
+                  to="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks"
+                >
+                  discord article
+                </Link>
+              </Text>
+            }
+            key={form.key("webhookUrl")}
+            {...form.getInputProps("webhookUrl")}
+          />
+          <Divider />
+          <Flex justify="end" gap="md">
+            <Button
+              onClick={handleTestMessage}
+              loading={testMessageMutate.isPending}
+              variant="outline"
+            >
+              Test Webhook
+            </Button>
+            <Button loading={discordSettingsMutate.isPending} type="submit">
+              Save Settings
+            </Button>
+          </Flex>
+        </Stack>
+      </form>
+    </Page>
   );
 };

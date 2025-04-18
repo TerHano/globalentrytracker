@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
-import { fetchData } from "~/util/fetchData";
-import { getSupabaseToken } from "~/util/supabase/get-supabase-token-client";
+import { fetchData } from "~/utils/fetchData";
+import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 import type { DiscordSettings } from "./discord-settings-api";
 
 export const allNotificationSettingsQueryKey = "all-notification-settings";

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ApiResponse } from "~/models/ApiResponse";
-import { fetchData } from "~/util/fetchData";
-import { getSupabaseToken } from "~/util/supabase/get-supabase-token-client";
+import { fetchData } from "~/utils/fetchData";
+import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 import type { MutationHookOptions } from "./mutationOptions";
 
 export interface DeleteTrackerResponse {
