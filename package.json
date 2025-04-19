@@ -29,6 +29,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router": "^7.5.0",
+    "use-dehydrated-state": "^0.1.0",
     "zod": "^3.24.3"
   },
   "devDependencies": {

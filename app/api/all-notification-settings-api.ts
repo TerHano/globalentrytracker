@@ -19,13 +19,17 @@ export async function allNotificationSettingsApi(token: string) {
   });
 }
 
-export const notificationSettingsQuery = queryOptions({
-  queryKey: [allNotificationSettingsQueryKey],
-  queryFn: async () => {
-    const token = await getSupabaseToken();
-    if (!token) {
-      throw new Error("No token found");
-    }
-    return allNotificationSettingsApi(token);
-  },
-});
+export const allNotificationSettingsQuery = (token?: string) =>
+  queryOptions({
+    queryKey: [allNotificationSettingsQueryKey],
+    queryFn: async () => {
+      if (!token) {
+        const _token = await getSupabaseToken();
+        if (!_token) {
+          throw new Error("No token found");
+        }
+        token = _token;
+      }
+      return allNotificationSettingsApi(token);
+    },
+  });

@@ -16,23 +16,31 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { locationQuery } from "~/api/location-api";
 import { notificationTypesQuery } from "~/api/notification-types-api";
 import { DatePickerInput } from "@mantine/dates";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import notificationRadioCardStles from "./notification-type-radio-card.module.css";
-import { Bell, BellOff } from "lucide-react";
+import { Bell, BellOff, TicketsPlane, Watch } from "lucide-react";
 import type { TrackedLocation } from "~/api/tracked-locations-api";
-import { notifications } from "@mantine/notifications";
 import { useNavigate } from "react-router";
 import {
   useCreateUpdateTracker,
   type CreateUpdateTrackerRequest,
 } from "~/hooks/api/useCreateUpdateTracker";
+import { useShowNotification } from "~/hooks/useShowNotification";
+import { NotificationTypeEnum } from "~/enum/NotificationType";
+import { locationStatesQuery } from "~/api/location-states-api";
 
 interface CreateEditTrackerFormProps {
+  // data: {
+  //   states: string[];
+  //   appointmentLocations: Location[];
+  //   notificationTypes: NotificationType[];
+  // };
   trackedLocation?: TrackedLocation;
 }
 
 interface FormValues {
+  state?: string;
   enabled: boolean;
   locationId: string;
   notificationTypeId: string;
@@ -42,8 +50,22 @@ interface FormValues {
 export const CreateEditTrackerForm = ({
   trackedLocation,
 }: CreateEditTrackerFormProps) => {
+  const { showNotification } = useShowNotification();
   const isUpdate = !!trackedLocation;
   const navigate = useNavigate();
+
+  const { data: appointmentLocations, isLoading: isLocationsLoading } =
+    useQuery(locationQuery());
+  const { data: notificationTypes, isLoading: isNotificationTypesLoading } =
+    useQuery(notificationTypesQuery());
+  const { data: states, isLoading: isStatesLoading } = useQuery(
+    locationStatesQuery()
+  );
+  const isLoading =
+    isLocationsLoading || isNotificationTypesLoading || isStatesLoading;
+
+  const [filteredAppointmentLocations, setFilteredAppointmentLocations] =
+    useState(appointmentLocations);
   const queryClient = useQueryClient();
   const createUpdateTrackerMutation = useCreateUpdateTracker({
     isUpdate,
@@ -54,10 +76,12 @@ export const CreateEditTrackerForm = ({
       const message = isUpdate
         ? "Tracker updated successfully"
         : "Tracker created successfully";
-      notifications.show({
+
+      showNotification({
         title,
         message,
-        color: "teal",
+        status: "success",
+        icon: <TicketsPlane size={16} />,
       });
       const newValues = {
         enabled: body.enabled,
@@ -72,7 +96,7 @@ export const CreateEditTrackerForm = ({
       });
       queryClient.invalidateQueries({ queryKey: ["track-location"] });
 
-      navigate("/dashboard", { viewTransition: true });
+      navigate("/dashboard");
     },
     onError: (error) => {
       if (error instanceof Error) {
@@ -82,47 +106,28 @@ export const CreateEditTrackerForm = ({
         const message = isUpdate
           ? "Failed to update tracker"
           : "Failed to create tracker";
-        notifications.show({
+        showNotification({
           title,
           message,
-          color: "red",
+          status: "error",
+          icon: <TicketsPlane size={16} />,
         });
       }
     },
   });
 
-  const { data: appointmentLocations, isLoading: isLocationsLoading } =
-    useQuery(locationQuery);
-  const { data: notificationTypes, isLoading: isNotificationTypesLoading } =
-    useQuery(notificationTypesQuery);
-
   const defaultNotificationType = notificationTypes?.[0].id.toString() ?? "";
 
-  // const [selectedNotificationTypeId, setSelectedNotificationTypeId] = useState<
-  //   string | undefined
-  // >(defaultNotificationType);
-
   const schema = z.object({
+    //make state optional
+    state: z.string().optional(),
     enabled: z.boolean(),
-    locationId: z.string().nonempty("Location is required"),
+    locationId: z.string({ message: "Location is required" }),
     notificationTypeId: z.string().nonempty("Notification type is required"),
     cutOffDate: z.date().refine((date) => date > new Date(), {
       message: "Date must be in the future",
     }),
   });
-  // const dateRangeSchema = z.object({
-  //   enabled: z.boolean(),
-  //   locationId: z.string().nonempty("Location is required"),
-  //   notificationTypeId: z.string().nonempty("Notification type is required"),
-  //   //daterange can be 2 dates or null
-  //   dateRange: z.nullable(
-  //     z.array(z.date()).refine((dates) => dates[0] < dates[1], {
-  //       message: "Start date must be before end date",
-  //     })
-  //   ),
-  // });
-
-  //const schema = z.union([beforeDateschema, dateRangeSchema]);
 
   const form = useForm<FormValues>({
     mode: "uncontrolled",
@@ -133,55 +138,26 @@ export const CreateEditTrackerForm = ({
       cutOffDate: dayjs().add(2, "week").toDate(),
     },
     validate: zodResolver(schema),
-    // onValuesChange: (values) => {
-    //   setSelectedNotificationTypeId(values.notificationTypeId);
-    // },
+    onValuesChange: (newValues, oldValues) => {
+      if (newValues.state !== oldValues.state) {
+        console.log("State changed", newValues.state);
+        if (!newValues.state) {
+          setFilteredAppointmentLocations(appointmentLocations);
+          return;
+        }
+        const filteredLocations = appointmentLocations?.filter(
+          (location) => location.state === newValues.state
+        );
+        setFilteredAppointmentLocations(filteredLocations);
+      }
+    },
   });
 
-  const isLoading = isLocationsLoading || isNotificationTypesLoading;
-
   const appointmentLocationOptions =
-    appointmentLocations?.map((location) => ({
+    filteredAppointmentLocations?.map((location) => ({
       value: location.id.toString(),
       label: location.name,
     })) ?? [];
-
-  // const datePicker = useMemo(() => {
-  //   const selectedNotificationType = notificationTypes?.find(
-  //     (type) => type.id.toString() === selectedNotificationTypeId
-  //   )?.type;
-  //   switch (selectedNotificationType) {
-  //     case NotificationType.Before:
-  //       return (
-  //         <DatePickerInput
-  //           modalProps={{ centered: true }}
-  //           firstDayOfWeek={0}
-  //           maw={250}
-  //           withAsterisk
-  //           dropdownType="modal"
-  //           label="I want appointments before..."
-  //           placeholder="Pick date"
-  //           key={form.key("beforeDate")}
-  //           {...form.getInputProps("beforeDate")}
-  //         />
-  //       );
-  //     default:
-  //       return (
-  //         <DatePickerInput
-  //           modalProps={{ centered: true }}
-  //           firstDayOfWeek={0}
-  //           type="range"
-  //           maw={400}
-  //           withAsterisk
-  //           dropdownType="modal"
-  //           label="I want appointments between..."
-  //           placeholder="Pick date"
-  //           key={form.key("dateRange")}
-  //           {...form.getInputProps("dateRange")}
-  //         />
-  //       );
-  //   }
-  // }, [notificationTypes, selectedNotificationTypeId, form]);
 
   const handleSubmit = async (values: typeof form.values) => {
     console.log("Submitting form", values);
@@ -205,8 +181,6 @@ export const CreateEditTrackerForm = ({
       trackedLocation &&
       defaultNotificationType != undefined
     ) {
-      console.log(form.initialized);
-      console.log("Tracked location", trackedLocation);
       form.initialize({
         enabled: trackedLocation.enabled,
         locationId: trackedLocation.location.id.toString(),
@@ -261,22 +235,16 @@ export const CreateEditTrackerForm = ({
             comboboxProps={{
               transitionProps: { transition: "pop", duration: 200 },
             }}
-            data={[
-              {
-                label: "NJ",
-                value: "NJ",
-              },
-              {
-                label: "NY",
-                value: "NY",
-              },
-            ]}
+            data={states}
             label="State"
+            {...form.getInputProps("state")}
+            key={form.key("state")}
           />
           <Select
             comboboxProps={{
               transitionProps: { transition: "pop", duration: 200 },
             }}
+            searchable
             withAsterisk
             maw={400}
             withCheckIcon
@@ -297,7 +265,7 @@ export const CreateEditTrackerForm = ({
           {...form.getInputProps("notificationTypeId")}
           key={form.key("notificationTypeId")}
         >
-          <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} mt="xs">
+          <SimpleGrid my="xs" cols={{ base: 1, sm: 2, md: 3 }}>
             {notificationTypes?.map((type) => (
               <Radio.Card
                 className={notificationRadioCardStles.root}
@@ -307,9 +275,12 @@ export const CreateEditTrackerForm = ({
                 <Group wrap="nowrap" align="flex-start">
                   <Radio.Indicator size="xs" />
                   <div>
-                    <Text className={notificationRadioCardStles.label}>
-                      {type.name}
-                    </Text>
+                    <Group gap={3} align="start">
+                      <Text className={notificationRadioCardStles.label}>
+                        {type.name}
+                      </Text>
+                      {getIconForNotificationType(type.type)}
+                    </Group>
                     <Text className={notificationRadioCardStles.description}>
                       {type.description}
                     </Text>
@@ -322,8 +293,9 @@ export const CreateEditTrackerForm = ({
         <DatePickerInput
           modalProps={{ centered: true }}
           firstDayOfWeek={0}
-          maw={200}
+          maw={300}
           withAsterisk
+          description="You will only recieve alerts for appointments before this date."
           dropdownType="modal"
           label="Cutoff Date"
           placeholder="Pick date"
@@ -337,4 +309,16 @@ export const CreateEditTrackerForm = ({
       </Stack>
     </form>
   );
+};
+
+const getIconForNotificationType = (type: NotificationTypeEnum) => {
+  const size = 19;
+  switch (type) {
+    case NotificationTypeEnum.Soonest:
+      return <Watch size={size} />;
+    case NotificationTypeEnum.Weekends:
+      return <TicketsPlane size={size} />;
+    default:
+      return <Bell size={size} />;
+  }
 };

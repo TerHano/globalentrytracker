@@ -6,28 +6,25 @@ import {
   Text,
   UnstyledButton,
 } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Cog, DoorOpen, LogOut } from "lucide-react";
+import { Cog, DoorOpen, LogOut, TowerControl } from "lucide-react";
 import { useCallback, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
-import { meQuery, type me } from "~/api/me-api";
+import { meQuery } from "~/api/me-api";
+import { useShowNotification } from "~/hooks/useShowNotification";
 import { createSupabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClient";
 
-interface AppHeaderProps {
-  me: me;
-}
-
-export const AppHeader = ({ me }: AppHeaderProps) => {
+export const AppHeader = () => {
+  const { showNotification } = useShowNotification();
   const navigate = useNavigate();
-  const { data: meData } = useQuery({ ...meQuery, initialData: me });
+  const { data: meData } = useQuery(meQuery());
   const queryClient = useQueryClient();
 
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   const onSettingsClick = useCallback(() => {
     // Handle settings click
-    navigate("/settings/profile", { viewTransition: false });
+    navigate("/settings/profile");
   }, [navigate]);
 
   const handleSignOut = useCallback(() => {
@@ -41,22 +38,21 @@ export const AppHeader = ({ me }: AppHeaderProps) => {
         if (error) {
           console.error("Error signing out:", error.message);
         } else {
-          navigate("/login", { viewTransition: true });
+          navigate("/login");
         }
       })
       .finally(() => {
         setIsSigningOut(false);
-        // Optionally, you can show a notification or perform any other action after sign out
-        notifications.show({
+
+        showNotification({
           icon: <DoorOpen size={16} />,
-          withBorder: true,
-          withCloseButton: false,
           title: "Signed out",
           message: "You have been signed out successfully.",
-          color: "teal",
+          status: "success",
         });
+        // Optionally, you can show a notification or perform any other action after sign out
       });
-  }, [navigate, queryClient]);
+  }, [navigate, queryClient, showNotification]);
   return (
     <Group
       className="container"
@@ -66,33 +62,29 @@ export const AppHeader = ({ me }: AppHeaderProps) => {
       justify="space-between"
       align="center"
     >
-      <Text
-        component={NavLink}
-        //  viewTransition
-        to="/dashboard"
-        fz="lg"
-        fw="bold"
-      >
-        Global
-      </Text>
+      <Group align="baseline" gap={4}>
+        <TowerControl size={24} />
+        <Text component={NavLink} to="/dashboard" fz="xl" fw="bold">
+          Global
+        </Text>
+      </Group>
       <Menu transitionProps={{ transition: "rotate-right", duration: 150 }}>
         <Menu.Target>
           <UnstyledButton>
             <Avatar color="cyan" size="md" radius="xl">
-              {meData.firstName.charAt(0)}
+              {meData?.firstName.charAt(0)}
             </Avatar>
           </UnstyledButton>
         </Menu.Target>
 
         <Menu.Dropdown>
           <Menu.Label>
-            <Text size="xs">{`${meData.firstName} ${meData.lastName}`}</Text>
+            <Text size="xs">{`${meData?.firstName} ${meData?.lastName}`}</Text>
           </Menu.Label>
           <Menu.Item
             // component={Link}
             // to="/settings/profile"
             leftSection={<Cog size={14} />}
-            // viewTransition
             onClick={onSettingsClick}
           >
             Settings

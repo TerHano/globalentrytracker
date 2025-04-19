@@ -24,13 +24,17 @@ export async function locationApi(token: string) {
   });
 }
 
-export const locationQuery = queryOptions({
-  queryKey: [locationQueryKey],
-  queryFn: async () => {
-    const token = await getSupabaseToken();
-    if (!token) {
-      throw new Error("No token found");
-    }
-    return locationApi(token);
-  },
-});
+export const locationQuery = (token?: string) =>
+  queryOptions({
+    queryKey: [locationQueryKey],
+    queryFn: async () => {
+      if (!token) {
+        const _token = await getSupabaseToken();
+        if (!_token) {
+          throw new Error("No token found");
+        }
+        token = _token;
+      }
+      return locationApi(token);
+    },
+  });

@@ -20,13 +20,17 @@ export async function notificationTypesApi(token: string) {
     },
   });
 }
-export const notificationTypesQuery = queryOptions({
-  queryKey: [notificationTypesQueryKey],
-  queryFn: async () => {
-    const token = await getSupabaseToken();
-    if (!token) {
-      throw new Error("No token found");
-    }
-    return notificationTypesApi(token);
-  },
-});
+export const notificationTypesQuery = (token?: string) =>
+  queryOptions({
+    queryKey: [notificationTypesQueryKey],
+    queryFn: async () => {
+      if (!token) {
+        const _token = await getSupabaseToken();
+        if (!_token) {
+          throw new Error("No token found");
+        }
+        token = _token;
+      }
+      return notificationTypesApi(token);
+    },
+  });

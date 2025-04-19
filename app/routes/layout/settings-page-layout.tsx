@@ -14,7 +14,6 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (path.endsWith("notifications")) {
     tab = "Notifications";
   }
-  console.log("loaded", tab);
   return { tab };
 }
 

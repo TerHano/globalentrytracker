@@ -1,16 +1,16 @@
 import { Alert, Text } from "@mantine/core";
+import { useQuery } from "@tanstack/react-query";
 import { MessageSquare } from "lucide-react";
+import { notificationCheckQuery } from "~/api/notification-check-api";
 
-interface NotificationSetupAlertProps {
-  hasNotificationsSetup: boolean;
-  hasAnyNotificationsEnabled: boolean;
-}
+export const NotificationSetupAlert = () => {
+  const { data: notificationCheck, isLoading: isNotificationCheckLoading } =
+    useQuery(notificationCheckQuery());
 
-export const NotificationSetupAlert = ({
-  hasNotificationsSetup,
-  hasAnyNotificationsEnabled,
-}: NotificationSetupAlertProps) => {
-  if (!hasNotificationsSetup) {
+  if (isNotificationCheckLoading) {
+    return null;
+  }
+  if (!notificationCheck?.isNotificationsSetUp) {
     return (
       <Alert
         variant="light"
@@ -23,7 +23,7 @@ export const NotificationSetupAlert = ({
       </Alert>
     );
   }
-  if (!hasAnyNotificationsEnabled) {
+  if (!notificationCheck.isAnyNotificationsEnabled) {
     return (
       <Alert
         variant="light"

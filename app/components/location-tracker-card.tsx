@@ -8,11 +8,13 @@ import {
   Menu,
   Text,
   type MenuItemProps,
+  SimpleGrid,
 } from "@mantine/core";
+import dayjs from "dayjs";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { Link } from "react-router";
 import type { TrackedLocation } from "~/api/tracked-locations-api";
-import { NotificationType } from "~/enum/NotificationType";
+import { NotificationTypeEnum } from "~/enum/NotificationType";
 
 interface LocationTrackerCardProps {
   locationTracker: TrackedLocation;
@@ -32,11 +34,11 @@ export const LocationTrackerCard = ({
   locationTracker,
   actions,
 }: LocationTrackerCardProps) => {
-  const getNotificationTypeText = (type: NotificationType) => {
+  const getNotificationTypeText = (type: NotificationTypeEnum) => {
     switch (type) {
-      case NotificationType.Soonest:
+      case NotificationTypeEnum.Soonest:
         return "Soonest";
-      case NotificationType.Weekends:
+      case NotificationTypeEnum.Weekends:
         return "Weekends";
     }
     return "Unknown";
@@ -91,14 +93,20 @@ export const LocationTrackerCard = ({
           <Text fw="bold" fz={{ base: "md", sm: "lg" }}>
             {location.name}
           </Text>
-
-          <InputWrapper label="Notification Type">
-            <Text size="xs" c="dimmed">
-              {getNotificationTypeText(
-                notificationType.type as NotificationType
-              )}
-            </Text>
-          </InputWrapper>
+          <SimpleGrid cols={{ base: 1, xs: 2 }} spacing="xs">
+            <InputWrapper label="Notification Type">
+              <Text size="xs" c="dimmed">
+                {getNotificationTypeText(
+                  notificationType.type as NotificationTypeEnum
+                )}
+              </Text>
+            </InputWrapper>
+            <InputWrapper label="Cutoff Date">
+              <Text size="xs" c="dimmed">
+                {dayjs(locationTracker.cutOffDate).format("MMM DD , YYYY")}
+              </Text>
+            </InputWrapper>
+          </SimpleGrid>
         </Stack>
       </Stack>
     </Card>

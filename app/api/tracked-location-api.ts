@@ -21,17 +21,22 @@ export async function trackedLocationApi(
   );
 }
 
-export const trackedLocationsQuery = ({
+export const trackedLocationQuery = ({
   trackedLocationId,
+  token,
 }: {
   trackedLocationId: number;
+  token?: string;
 }) =>
   queryOptions({
     queryKey: [trackedLocationQueryKey, trackedLocationId],
     queryFn: async () => {
-      const token = await getSupabaseToken();
       if (!token) {
-        throw new Error("No token found");
+        const _token = await getSupabaseToken();
+        if (!_token) {
+          throw new Error("No token found");
+        }
+        token = _token;
       }
       return trackedLocationApi(token, trackedLocationId);
     },

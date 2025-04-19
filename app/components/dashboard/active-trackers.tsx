@@ -9,21 +9,14 @@ import {
 import { Empty } from "../ui/empty";
 import notificationBellIcon from "~/assets/icons/notification-bell.png";
 import { LocationTrackerCard } from "../location-tracker-card";
-import { PencilLine, Trash2 } from "lucide-react";
+import { BellMinus, PencilLine, Trash2 } from "lucide-react";
 import { modals } from "@mantine/modals";
-import { notifications } from "@mantine/notifications";
 import { useDeleteTracker } from "~/hooks/api/useDeleteTracker";
 import { ConfirmDeleteTrackerBody } from "./confirm-delete-tracker-body";
+import { useShowNotification } from "~/hooks/useShowNotification";
 
-interface ActiveTrackersProps {
-  trackedLocations: TrackedLocation[];
-}
-
-export const ActiveTrackers = ({ trackedLocations }: ActiveTrackersProps) => {
-  const { data, isLoading } = useQuery({
-    ...trackedLocationsQuery,
-    initialData: trackedLocations,
-  });
+export const ActiveTrackers = () => {
+  const { data, isLoading } = useQuery(trackedLocationsQuery());
 
   const trackedLocationsList = useMemo(() => {
     if (!data && isLoading) {
@@ -34,7 +27,7 @@ export const ActiveTrackers = ({ trackedLocations }: ActiveTrackersProps) => {
         <>
           <Empty
             action={
-              <NavLink viewTransition to={"/create-tracker"}>
+              <NavLink to={"/create-tracker"}>
                 <Button>Add Tracker</Button>
               </NavLink>
             }
@@ -83,6 +76,8 @@ const ActionableLocationTrackerCard = ({
 }: {
   tracker: TrackedLocation;
 }) => {
+  const { showNotification } = useShowNotification();
+
   const modalId = useRef<string | null>(null);
 
   console.log("TrackerCard", tracker);
@@ -92,18 +87,20 @@ const ActionableLocationTrackerCard = ({
       if (modalId.current) {
         modals.close(modalId.current);
       }
-      notifications.show({
+      showNotification({
+        icon: <BellMinus size={16} />,
         title: "Tracker Deleted",
         message: "The tracker has been deleted successfully.",
-        color: "teal",
+        status: "success",
       });
     },
     onError: (error) => {
       if (error instanceof Error) {
-        notifications.show({
+        showNotification({
+          icon: <BellMinus size={16} />,
           title: "Error Deleting Tracker",
           message: error.message,
-          color: "red",
+          status: "error",
         });
         console.error("Error deleting tracker:", error);
       }

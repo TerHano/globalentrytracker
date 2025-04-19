@@ -1,4 +1,4 @@
-import { Card, Group, Stack, Text } from "@mantine/core";
+import { Stack, Text } from "@mantine/core";
 import type { TrackedLocation } from "~/api/tracked-locations-api";
 import { LocationTrackerCard } from "../location-tracker-card";
 import trashCanIcon from "~/assets/icons/trash-can.png";

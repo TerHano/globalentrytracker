@@ -40,7 +40,7 @@ export function Welcome() {
                   </a>
                 </li>
               ))}
-              <Button viewTransition to="/login" component={Link}>
+              <Button to="/login" component={Link}>
                 Login
               </Button>
             </ul>

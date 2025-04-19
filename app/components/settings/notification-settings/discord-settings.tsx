@@ -8,11 +8,11 @@ import {
   Textarea,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { notifications } from "@mantine/notifications";
-import { MessageCircleMore } from "lucide-react";
+import { Send } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router";
 import type { DiscordSettings } from "~/api/discord-settings-api";
+import { DiscordIcon } from "~/components/ui/icons/DiscordIcon";
 import { Page } from "~/components/ui/page";
 import {
   useCreateUpdateDiscordSettings,
@@ -22,6 +22,7 @@ import {
   useTestDiscordSettings,
   type TestDiscordSettingsRequest,
 } from "~/hooks/api/useTestDiscordSettings";
+import { useShowNotification } from "~/hooks/useShowNotification";
 
 interface DiscordSettingsProps {
   settings: DiscordSettings;
@@ -34,23 +35,26 @@ interface DiscordSettingsForm {
 
 export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
   const isUpdate = !!settings;
+  const { showNotification } = useShowNotification();
 
   const [isEnabled, setIsEnabled] = useState(settings?.enabled ?? true);
   const discordSettingsMutate = useCreateUpdateDiscordSettings({
     isUpdate,
     onSuccess: (data, body) => {
       console.log("Settings saved successfully", data, body);
-      notifications.show({
+      showNotification({
         title: "Settings saved",
         message: "Your settings have been saved successfully.",
-        color: "teal",
+        status: "success",
+        icon: <DiscordIcon size={16} />,
       });
     },
     onError: (error) => {
-      notifications.show({
+      showNotification({
         title: "Error saving settings",
-        message: "There was an error saving your settings.",
-        color: "red",
+        message: "There was an error saving your settings. Please try again.",
+        status: "error",
+        icon: <DiscordIcon size={16} />,
       });
       console.error("Error saving settings", error);
     },
@@ -59,19 +63,19 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
   const testMessageMutate = useTestDiscordSettings({
     onSuccess: (data, body) => {
       console.log("Settings tested successfully", data, body);
-      notifications.show({
-        icon: <MessageCircleMore size={16} />,
-        title: "Test Message Sent",
-        message: "Check your Discord channel for the test message.",
-        color: "teal",
+      showNotification({
+        title: "Test message sent",
+        message: "Your test message has been sent successfully.",
+        status: "success",
+        icon: <DiscordIcon size={16} />,
       });
     },
     onError: (error) => {
-      notifications.show({
-        title: "Error Sending Test Message",
-        message:
-          "There was an error testing your settings. Please check the webhook URL.",
-        color: "red",
+      showNotification({
+        title: "Error testing settings",
+        message: "There was an error testing your settings. Please try again.",
+        status: "error",
+        icon: <DiscordIcon size={16} />,
       });
       console.error("Error testing settings", error);
     },
@@ -171,7 +175,8 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
               size="sm"
               onClick={handleTestMessage}
               loading={testMessageMutate.isPending}
-              variant="outline"
+              variant="light"
+              leftSection={<Send size={16} />}
             >
               Test Webhook
             </Button>

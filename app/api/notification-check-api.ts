@@ -1,3 +1,4 @@
+import { queryOptions } from "@tanstack/react-query";
 import { fetchData } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 
@@ -18,13 +19,17 @@ export async function notificationCheckApi(token: string) {
   });
 }
 
-export const notificationCheckQuery = {
-  queryKey: [notificationCheckQueryKey],
-  queryFn: async () => {
-    const token = await getSupabaseToken();
-    if (!token) {
-      throw new Error("No token found");
-    }
-    return notificationCheckApi(token);
-  },
-};
+export const notificationCheckQuery = (token?: string) =>
+  queryOptions({
+    queryKey: [notificationCheckQueryKey],
+    queryFn: async () => {
+      if (!token) {
+        const _token = await getSupabaseToken();
+        if (!_token) {
+          throw new Error("No token found");
+        }
+        token = _token;
+      }
+      return notificationCheckApi(token);
+    },
+  });

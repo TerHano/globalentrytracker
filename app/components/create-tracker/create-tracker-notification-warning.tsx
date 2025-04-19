@@ -1,16 +1,14 @@
 "use client";
 import { Alert, Text } from "@mantine/core";
+import { useQuery } from "@tanstack/react-query";
 import { MailWarning } from "lucide-react";
 import { useState } from "react";
-import type { NotificationCheck } from "~/api/notification-check-api";
+import { notificationCheckQuery } from "~/api/notification-check-api";
 
-export const CreateTrackerNotificationWarning = ({
-  notificationCheck,
-}: {
-  notificationCheck: NotificationCheck;
-}) => {
+export const CreateTrackerNotificationWarning = () => {
+  const { data: notificationCheck } = useQuery(notificationCheckQuery());
   const [hideAlert, setHideAlert] = useState(false);
-  const showAlert = !hideAlert && !notificationCheck.isAnyNotificationsEnabled;
+  const showAlert = !hideAlert && !notificationCheck?.isAnyNotificationsEnabled;
   return showAlert ? (
     <Alert
       withCloseButton

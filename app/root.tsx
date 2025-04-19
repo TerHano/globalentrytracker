@@ -22,6 +22,7 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
+import React from "react";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -40,13 +41,26 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-const queryClient = new QueryClient();
+//const queryClient = new QueryClient();
 
 const theme = createTheme({
   fontFamily: "Montserrat, sans-serif",
 });
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const [queryClient] = React.useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            // With SSR, we usually want to set some default staleTime
+            // above 0 to avoid refetching immediately on the client
+            staleTime: 60 * 1000,
+          },
+        },
+      })
+  );
+
   return (
     <html lang="en" {...mantineHtmlProps}>
       <head>

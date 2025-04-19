@@ -9,14 +9,14 @@ import {
   Text,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { notifications } from "@mantine/notifications";
 import { EllipsisVerticalIcon, PencilLine, Trash2 } from "lucide-react";
 import { useCallback, useRef } from "react";
 import { Link } from "react-router";
 import type { TrackedLocation } from "~/api/tracked-locations-api";
 import { useDeleteTracker } from "~/hooks/api/useDeleteTracker";
 import { ConfirmDeleteTrackerBody } from "./confirm-delete-tracker-body";
-import { NotificationType } from "~/enum/NotificationType";
+import { NotificationTypeEnum } from "~/enum/NotificationType";
+import { useShowNotification } from "~/hooks/useShowNotification";
 
 export interface TrackerCardProps {
   tracker: TrackedLocation;
@@ -24,6 +24,8 @@ export interface TrackerCardProps {
 }
 
 export const TrackerCard = ({ tracker, canEdit = true }: TrackerCardProps) => {
+  const { showNotification } = useShowNotification();
+
   const { id, enabled, location } = tracker;
   const modalId = useRef<string | null>(null);
 
@@ -31,10 +33,11 @@ export const TrackerCard = ({ tracker, canEdit = true }: TrackerCardProps) => {
 
   const deleteTrackerMutation = useDeleteTracker({
     onSuccess: () => {
-      notifications.show({
-        title: "Tracker Deleted",
-        message: "The tracker has been deleted successfully.",
-        color: "teal",
+      showNotification({
+        title: "Tracker deleted successfully",
+        message: "Your tracker has been deleted successfully.",
+        status: "success",
+        icon: <Trash2 size={16} />,
       });
       if (modalId.current) {
         modals.close(modalId.current);
@@ -42,10 +45,11 @@ export const TrackerCard = ({ tracker, canEdit = true }: TrackerCardProps) => {
     },
     onError: (error) => {
       if (error instanceof Error) {
-        notifications.show({
-          title: "Error Deleting Tracker",
+        showNotification({
+          title: "Error deleting tracker",
           message: error.message,
-          color: "red",
+          status: "error",
+          icon: <Trash2 size={16} />,
         });
         console.error("Error deleting tracker:", error);
       }
@@ -67,11 +71,11 @@ export const TrackerCard = ({ tracker, canEdit = true }: TrackerCardProps) => {
     });
   }, [deleteTrackerMutation.isPending, handleDelete, tracker]);
 
-  const getNotificationTypeText = (type: NotificationType) => {
+  const getNotificationTypeText = (type: NotificationTypeEnum) => {
     switch (type) {
-      case NotificationType.Soonest:
+      case NotificationTypeEnum.Soonest:
         return "Soonest";
-      case NotificationType.Weekends:
+      case NotificationTypeEnum.Weekends:
         return "Weekends";
     }
     return "Unknown";
@@ -125,7 +129,7 @@ export const TrackerCard = ({ tracker, canEdit = true }: TrackerCardProps) => {
           <InputWrapper label="Notification Type">
             <Text size="xs" c="dimmed">
               {getNotificationTypeText(
-                tracker.notificationType.type as NotificationType
+                tracker.notificationType.type as NotificationTypeEnum
               )}
             </Text>
           </InputWrapper>

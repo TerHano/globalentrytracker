@@ -6,7 +6,12 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import reactHooks from "eslint-plugin-react-hooks";
 
 export default defineConfig([
-  globalIgnores(["**/node_modules/**", "**/dist/**", "**/build/**"]),
+  globalIgnores([
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.react-router/**",
+  ]),
   {
     files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     plugins: { js },

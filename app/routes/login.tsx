@@ -14,6 +14,7 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  console.log("email", email, password);
   const { supabase, headers } = createSupabaseServerClient(request);
   const { data, error } = await supabase.auth.signInWithPassword({
     email,

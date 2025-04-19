@@ -11,7 +11,7 @@ export interface TrackedLocation {
   location: Location;
   enabled: boolean;
   notificationType: NotificationType;
-  cutOffDate: Date;
+  cutOffDate: string;
 }
 
 export async function trackedLocationsApi(token: string) {
@@ -24,13 +24,17 @@ export async function trackedLocationsApi(token: string) {
   });
 }
 
-export const trackedLocationsQuery = queryOptions({
-  queryKey: [trackedLocationsQueryKey],
-  queryFn: async () => {
-    const token = await getSupabaseToken();
-    if (!token) {
-      throw new Error("No token found");
-    }
-    return trackedLocationsApi(token);
-  },
-});
+export const trackedLocationsQuery = (token?: string) =>
+  queryOptions({
+    queryKey: [trackedLocationsQueryKey],
+    queryFn: async () => {
+      if (!token) {
+        const _token = await getSupabaseToken();
+        if (!_token) {
+          throw new Error("No token found");
+        }
+        token = _token;
+      }
+      return trackedLocationsApi(token);
+    },
+  });

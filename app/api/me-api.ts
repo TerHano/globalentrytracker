@@ -19,13 +19,17 @@ export async function meApi(token: string) {
   });
 }
 
-export const meQuery = queryOptions({
-  queryKey: [meQueryKey],
-  queryFn: async () => {
-    const token = await getSupabaseToken();
-    if (!token) {
-      throw new Error("No token found");
-    }
-    return meApi(token);
-  },
-});
+export const meQuery = (token?: string) =>
+  queryOptions({
+    queryKey: [meQueryKey],
+    queryFn: async () => {
+      if (!token) {
+        const _token = await getSupabaseToken();
+        if (!_token) {
+          throw new Error("No token found");
+        }
+        token = _token;
+      }
+      return meApi(token);
+    },
+  });

@@ -1,5 +1,4 @@
 import { Stack, Text } from "@mantine/core";
-import { icons } from "lucide-react";
 
 interface EmptyProps {
   icon: React.ReactNode;

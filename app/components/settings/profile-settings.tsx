@@ -9,20 +9,18 @@ import {
   TextInput,
 } from "@mantine/core";
 import { Page } from "../ui/page";
-import { meQuery, type me } from "~/api/me-api";
+import { meQuery } from "~/api/me-api";
 import { useQuery } from "@tanstack/react-query";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import { useUpdateUser } from "~/hooks/api/useUpdateUser";
-import { notifications } from "@mantine/notifications";
 import { useCallback } from "react";
+import { useShowNotification } from "~/hooks/useShowNotification";
+import { UserRoundCheck } from "lucide-react";
 
-export interface ProfileSettingsProps {
-  me: me;
-}
-
-export const ProfileSettings = (props: ProfileSettingsProps) => {
-  const { data: me } = useQuery({ ...meQuery, initialData: props.me });
+export const ProfileSettings = () => {
+  const { data: me } = useQuery(meQuery());
+  const { showNotification } = useShowNotification();
 
   const schema = z.object({
     firstName: z
@@ -37,8 +35,8 @@ export const ProfileSettings = (props: ProfileSettingsProps) => {
 
   const form = useForm({
     initialValues: {
-      firstName: me.firstName,
-      lastName: me.lastName,
+      firstName: me?.firstName ?? "",
+      lastName: me?.lastName ?? "",
     },
     validate: zodResolver(schema),
   });
@@ -46,24 +44,27 @@ export const ProfileSettings = (props: ProfileSettingsProps) => {
   const updateUserMutation = useUpdateUser({
     onSuccess: (data, request) => {
       console.log("User updated successfully:", data);
-      notifications.show({
-        title: "Profile Updated",
+      showNotification({
+        title: "Profile updated",
         message: "Your profile has been updated successfully.",
-        color: "teal",
-        withBorder: true,
+        status: "success",
+        icon: <UserRoundCheck size={16} />,
       });
+
       form.setInitialValues({
         firstName: request.firstName,
         lastName: request.lastName,
       });
     },
     onError: (error) => {
-      notifications.show({
-        title: "Error",
-        message: "There was an error updating your profile.",
-        color: "red",
-        withBorder: true,
-      });
+      if (error instanceof Error) {
+        showNotification({
+          title: "Error updating profile",
+          message: error.message,
+          status: "error",
+          icon: <UserRoundCheck size={16} />,
+        });
+      }
       console.error("Error updating user:", error);
     },
   });
@@ -88,7 +89,7 @@ export const ProfileSettings = (props: ProfileSettingsProps) => {
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Stack gap="md">
           <InputWrapper label="Email">
-            <Text fz={{ base: "sm", xs: "md" }}>{me.email}</Text>
+            <Text fz={{ base: "sm", xs: "md" }}>{me?.email}</Text>
           </InputWrapper>
           <SimpleGrid cols={{ base: 1, xs: 2 }} spacing="lg">
             <TextInput

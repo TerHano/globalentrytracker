@@ -2,17 +2,10 @@ import { queryOptions } from "@tanstack/react-query";
 import { fetchData } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 
-export const discordNotificationSettingsQueryKey =
-  "discord-notification-settings";
+export const locationStatesQueryKey = "all-locations-states";
 
-export interface DiscordSettings {
-  id: number;
-  enabled: boolean;
-  webhookUrl: string;
-}
-
-export async function discordNotificationSettingsApi(token: string) {
-  return fetchData<DiscordSettings>("/api/v1/notification-settings/discord", {
+export async function locationStatesApi(token: string) {
+  return fetchData<string[]>("/api/v1/location/states", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -21,9 +14,9 @@ export async function discordNotificationSettingsApi(token: string) {
   });
 }
 
-export const discordNotificationSettingsQuery = (token?: string) =>
+export const locationStatesQuery = (token?: string) =>
   queryOptions({
-    queryKey: [discordNotificationSettingsQueryKey],
+    queryKey: [locationStatesQueryKey],
     queryFn: async () => {
       if (!token) {
         const _token = await getSupabaseToken();
@@ -32,6 +25,6 @@ export const discordNotificationSettingsQuery = (token?: string) =>
         }
         token = _token;
       }
-      return discordNotificationSettingsApi(token);
+      return locationStatesApi(token);
     },
   });

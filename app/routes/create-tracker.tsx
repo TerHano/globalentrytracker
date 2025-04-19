@@ -4,8 +4,16 @@ import { CreateEditTrackerForm } from "~/components/create-tracker/create-edit-t
 import { Page } from "~/components/ui/page";
 import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 import type { Route } from "./+types/create-tracker";
-import { notificationCheckApi } from "~/api/notification-check-api";
+import { notificationCheckQuery } from "~/api/notification-check-api";
 import { CreateTrackerNotificationWarning } from "~/components/create-tracker/create-tracker-notification-warning";
+import { locationStatesQuery } from "~/api/location-states-api";
+import { locationQuery } from "~/api/location-api";
+import { notificationTypesQuery } from "~/api/notification-types-api";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
 export function meta() {
   return [
@@ -23,34 +31,41 @@ export async function loader({ request }: Route.LoaderArgs) {
     // If the user is already logged in, redirect to the home page
     return redirect("/login", { headers });
   }
-  const notificationCheck = await notificationCheckApi(session.access_token);
-  return { notificationCheck };
+  const token = session.access_token;
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(notificationCheckQuery(token));
+  await queryClient.prefetchQuery(locationQuery(token));
+  await queryClient.prefetchQuery(notificationTypesQuery(token));
+  await queryClient.prefetchQuery(locationStatesQuery(token));
+  return { dehydratedState: dehydrate(queryClient) };
 }
 
 export default function CreateTracker({ loaderData }: Route.ComponentProps) {
-  const { notificationCheck } = loaderData;
+  const { dehydratedState } = loaderData;
   return (
-    <Page
-      className="fade-in-animation"
-      breadcrumbs={[
-        <Anchor
-          key="dashboard"
-          viewTransition
-          fz="xs"
-          component={Link}
-          to="/dashboard"
-        >
-          Dashboard
-        </Anchor>,
-        <Text key="create-tracker" aria-current fw="bold" fz="xs">
-          Create Tracker
-        </Text>,
-      ]}
-      header="Create Tracker"
-      description="This form allows you to create a new tracker for a specific Global Entry appointment location."
-    >
-      <CreateTrackerNotificationWarning notificationCheck={notificationCheck} />
-      <CreateEditTrackerForm />
-    </Page>
+    <HydrationBoundary state={dehydratedState}>
+      <Page
+        className="fade-in-animation"
+        breadcrumbs={[
+          <Anchor
+            key="dashboard"
+            viewTransition
+            fz="xs"
+            component={Link}
+            to="/dashboard"
+          >
+            Dashboard
+          </Anchor>,
+          <Text key="create-tracker" aria-current fw="bold" fz="xs">
+            Create Tracker
+          </Text>,
+        ]}
+        header="Create Tracker"
+        description="This form allows you to create a new tracker for a specific Global Entry appointment location."
+      >
+        <CreateTrackerNotificationWarning />
+        <CreateEditTrackerForm />
+      </Page>
+    </HydrationBoundary>
   );
 }
