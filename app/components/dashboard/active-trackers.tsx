@@ -1,6 +1,6 @@
 import { Button, Image, Paper, Skeleton, Stack, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { NavLink } from "react-router";
 import {
   trackedLocationsQuery,
@@ -8,7 +8,12 @@ import {
 } from "~/api/tracked-locations-api";
 import { Empty } from "../ui/empty";
 import notificationBellIcon from "~/assets/icons/notification-bell.png";
-import { TrackerCard } from "./tracker-card";
+import { LocationTrackerCard } from "../location-tracker-card";
+import { PencilLine, Trash2 } from "lucide-react";
+import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
+import { useDeleteTracker } from "~/hooks/api/useDeleteTracker";
+import { ConfirmDeleteTrackerBody } from "./confirm-delete-tracker-body";
 
 interface ActiveTrackersProps {
   trackedLocations: TrackedLocation[];
@@ -49,7 +54,7 @@ export const ActiveTrackers = ({ trackedLocations }: ActiveTrackersProps) => {
       );
     }
     return data.map((location) => (
-      <TrackerCard key={location.id} tracker={location} />
+      <ActionableLocationTrackerCard key={location.id} tracker={location} />
     ));
   }, [data, isLoading]);
 
@@ -59,10 +64,10 @@ export const ActiveTrackers = ({ trackedLocations }: ActiveTrackersProps) => {
         <Stack>
           <Stack gap={0}>
             <Text fw="bold" fz={{ base: "h5", sm: "h3" }}>
-              Active Trackers
+              Trackers
             </Text>
             <Text c="dimmed" fz={{ base: "xs", sm: "sm" }}>
-              Here you can see all your active trackers
+              Here you can see all your trackers
             </Text>
           </Stack>
 
@@ -70,5 +75,79 @@ export const ActiveTrackers = ({ trackedLocations }: ActiveTrackersProps) => {
         </Stack>
       </Paper>
     </section>
+  );
+};
+
+const ActionableLocationTrackerCard = ({
+  tracker,
+}: {
+  tracker: TrackedLocation;
+}) => {
+  const modalId = useRef<string | null>(null);
+
+  console.log("TrackerCard", tracker);
+
+  const deleteTrackerMutation = useDeleteTracker({
+    onSuccess: () => {
+      if (modalId.current) {
+        modals.close(modalId.current);
+      }
+      notifications.show({
+        title: "Tracker Deleted",
+        message: "The tracker has been deleted successfully.",
+        color: "teal",
+      });
+    },
+    onError: (error) => {
+      if (error instanceof Error) {
+        notifications.show({
+          title: "Error Deleting Tracker",
+          message: error.message,
+          color: "red",
+        });
+        console.error("Error deleting tracker:", error);
+      }
+    },
+  });
+  const handleDelete = useCallback(async () => {
+    await deleteTrackerMutation.mutateAsync(tracker.id);
+  }, [deleteTrackerMutation, tracker.id]);
+  const openConfirmDelete = useCallback(() => {
+    modalId.current = modals.openConfirmModal({
+      title: <Text fw="bold">Delete Tracker</Text>,
+      children: <ConfirmDeleteTrackerBody tracker={tracker} />,
+
+      labels: { confirm: "Delete Tracker", cancel: "Cancel" },
+      confirmProps: {
+        color: "red",
+        loading: deleteTrackerMutation.isPending,
+      },
+
+      onCancel: () => console.log("Cancel"),
+      onConfirm: () => handleDelete(),
+    });
+  }, [deleteTrackerMutation.isPending, handleDelete, tracker]);
+
+  return (
+    <LocationTrackerCard
+      locationTracker={tracker}
+      actions={[
+        {
+          id: "edit",
+          link: { to: `/edit-tracker/${tracker.id}` },
+          leftSection: <PencilLine size={14} />,
+          children: "Edit Tracker",
+        },
+        {
+          id: "delete",
+          button: {
+            onClick: openConfirmDelete,
+            color: "red",
+          },
+          leftSection: <Trash2 size={14} />,
+          children: "Delete Tracker",
+        },
+      ]}
+    />
   );
 };

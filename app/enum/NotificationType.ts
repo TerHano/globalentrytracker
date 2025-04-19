@@ -1,4 +1,4 @@
 export enum NotificationType {
-  Before = 0,
-  Between = 1,
+  Soonest = 0,
+  Weekends = 1,
 }

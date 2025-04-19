@@ -1,9 +1,10 @@
-import { SegmentedControl, Group } from "@mantine/core";
-import { useCallback, useMemo } from "react";
+import { SegmentedControl, Group, Text } from "@mantine/core";
+import { useCallback, useEffect, useMemo } from "react";
 import { Bell, User } from "lucide-react";
 import { Outlet, useNavigate } from "react-router";
 import { Page } from "~/components/ui/page";
 import type { Route } from "./+types/settings-page-layout";
+import { useField } from "@mantine/form";
 
 type SettingsTab = "Profile" | "Notifications";
 
@@ -24,9 +25,26 @@ export default function SettingsPageLayout({
   // const isFirstRender = useIsFirstRender();
   const navigate = useNavigate();
 
+  const tabs = useMemo(
+    () => [
+      {
+        value: "Profile",
+        label: <TabLabel icon={<User size={14} />} label="Profile" />,
+      },
+      {
+        value: "Notifications",
+        label: <TabLabel icon={<Bell size={14} />} label="Notifications" />,
+      },
+    ],
+    []
+  );
+
+  const segmentedControlField = useField({
+    initialValue: tab,
+  });
+
   const handleTabChange = useCallback(
     (val: string) => {
-      // setCurrentTab(val as SettingsTab);
       if (val === "Profile") {
         navigate("/settings/profile");
       } else if (val === "Notifications") {
@@ -36,40 +54,51 @@ export default function SettingsPageLayout({
     [navigate]
   );
 
+  useEffect(() => {
+    segmentedControlField.setValue(tab);
+  }, [tab, segmentedControlField]);
+
   const settingsTabs = useMemo(
     () => (
       <SegmentedControl
-        defaultValue={tab}
+        {...segmentedControlField.getInputProps()}
         onChange={(val) => handleTabChange(val)}
-        data={[
-          {
-            value: "Profile",
-            label: (
-              <Group gap="xs" justify="center">
-                <User size={16} />
-                Profile
-              </Group>
-            ),
-          },
-          {
-            value: "Notifications",
-            label: (
-              <Group gap="xs" justify="center">
-                <Bell size={16} />
-                Notifications
-              </Group>
-            ),
-          },
-        ]}
+        data={tabs}
       />
     ),
-    [handleTabChange, tab]
+    [handleTabChange, segmentedControlField, tabs]
   );
 
   return (
-    <Page header="Settings" description="You can change your settings here">
+    <Page
+      className="fade-in-animation"
+      header="Settings"
+      description="You can change your settings here"
+    >
       {settingsTabs}
       <Outlet />
     </Page>
   );
 }
+
+const TabLabel = ({
+  icon,
+  label,
+}: {
+  icon: React.ReactNode;
+  label: string;
+}) => {
+  return (
+    <Group
+      fz={{ base: "xs", xs: "sm" }}
+      gap={5}
+      align="center"
+      justify="center"
+    >
+      {icon}
+      <Text fw="bold" fz={{ base: "xs", xs: "sm" }}>
+        {label}
+      </Text>
+    </Group>
+  );
+};

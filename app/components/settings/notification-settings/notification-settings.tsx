@@ -11,7 +11,7 @@ export const NotificationSettings = ({
   settings,
 }: NotificationSettingsProps) => {
   return (
-    <div className="settings-tab-transition">
+    <div className="fade-in-animation">
       <Tabs radius="md" defaultValue="discord">
         <TabsList>
           <TabsTab value="discord" leftSection={<DiscordIcon />}>

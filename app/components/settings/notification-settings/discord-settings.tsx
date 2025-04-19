@@ -1,7 +1,7 @@
 import {
   Button,
   Divider,
-  Flex,
+  Group,
   Stack,
   Switch,
   Text,
@@ -118,13 +118,13 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
     }
   }, [form, settings]);
   return (
-    <Page
+    <Page.Subsection
       header="Discord Settings"
       description="  This is where you can configure your Discord settings. You can set up
           webhooks, notifications, and other integrations with Discord."
     >
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Stack mt="lg">
+        <Stack>
           <Switch
             size="sm"
             label={
@@ -158,7 +158,7 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
                   target="_blank"
                   to="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks"
                 >
-                  discord article
+                  discord article.
                 </Link>
               </Text>
             }
@@ -166,20 +166,25 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
             {...form.getInputProps("webhookUrl")}
           />
           <Divider />
-          <Flex justify="end" gap="md">
+          <Group justify="end" gap="md" wrap="wrap">
             <Button
+              size="sm"
               onClick={handleTestMessage}
               loading={testMessageMutate.isPending}
               variant="outline"
             >
               Test Webhook
             </Button>
-            <Button loading={discordSettingsMutate.isPending} type="submit">
+            <Button
+              size="sm"
+              loading={discordSettingsMutate.isPending}
+              type="submit"
+            >
               Save Settings
             </Button>
-          </Flex>
+          </Group>
         </Stack>
       </form>
-    </Page>
+    </Page.Subsection>
   );
 };

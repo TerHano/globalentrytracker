@@ -10,7 +10,7 @@ import { notifications } from "@mantine/notifications";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Cog, DoorOpen, LogOut } from "lucide-react";
 import { useCallback, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { meQuery, type me } from "~/api/me-api";
 import { createSupabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClient";
 
@@ -24,6 +24,11 @@ export const AppHeader = ({ me }: AppHeaderProps) => {
   const queryClient = useQueryClient();
 
   const [isSigningOut, setIsSigningOut] = useState(false);
+
+  const onSettingsClick = useCallback(() => {
+    // Handle settings click
+    navigate("/settings/profile", { viewTransition: false });
+  }, [navigate]);
 
   const handleSignOut = useCallback(() => {
     // Clear the query cache
@@ -55,6 +60,7 @@ export const AppHeader = ({ me }: AppHeaderProps) => {
   return (
     <Group
       className="container"
+      //mx="md"
       px="xs"
       h="100%"
       justify="space-between"
@@ -62,7 +68,7 @@ export const AppHeader = ({ me }: AppHeaderProps) => {
     >
       <Text
         component={NavLink}
-        viewTransition
+        //  viewTransition
         to="/dashboard"
         fz="lg"
         fw="bold"
@@ -83,10 +89,11 @@ export const AppHeader = ({ me }: AppHeaderProps) => {
             <Text size="xs">{`${meData.firstName} ${meData.lastName}`}</Text>
           </Menu.Label>
           <Menu.Item
-            component={Link}
-            to={`/settings/profile`}
+            // component={Link}
+            // to="/settings/profile"
             leftSection={<Cog size={14} />}
-            viewTransition
+            // viewTransition
+            onClick={onSettingsClick}
           >
             Settings
           </Menu.Item>

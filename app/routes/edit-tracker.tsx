@@ -35,6 +35,7 @@ export default function EditTracker({ loaderData }: Route.ComponentProps) {
   const { trackedLocation } = loaderData;
   return (
     <Page
+      className="fade-in-animation"
       breadcrumbs={[
         <Anchor
           key="Dashboard"

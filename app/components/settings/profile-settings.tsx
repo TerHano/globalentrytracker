@@ -2,8 +2,8 @@ import {
   Button,
   Divider,
   Flex,
-  Group,
   InputWrapper,
+  SimpleGrid,
   Stack,
   Text,
   TextInput,
@@ -28,11 +28,11 @@ export const ProfileSettings = (props: ProfileSettingsProps) => {
     firstName: z
       .string()
       .nonempty("First name is required")
-      .min(2, "First name must be at least 2 characters long"),
+      .min(2, "Must be 2 characters or more"),
     lastName: z
       .string()
       .nonempty("Last name is required")
-      .min(2, "Last name must be at least 2 characters long"),
+      .min(2, "Must be 2 characters or more"),
   });
 
   const form = useForm({
@@ -80,17 +80,17 @@ export const ProfileSettings = (props: ProfileSettingsProps) => {
   );
 
   return (
-    <Page
-      className="settings-tab-transition"
+    <Page.Subsection
+      className="fade-in-animation"
       header="Profile Settings"
       description="You can change your profile settings here"
     >
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Stack gap="md">
           <InputWrapper label="Email">
-            <Text>{me.email}</Text>
+            <Text fz={{ base: "sm", xs: "md" }}>{me.email}</Text>
           </InputWrapper>
-          <Group gap="md">
+          <SimpleGrid cols={{ base: 1, xs: 2 }} spacing="lg">
             <TextInput
               label="First Name"
               placeholder="First Name"
@@ -103,13 +103,13 @@ export const ProfileSettings = (props: ProfileSettingsProps) => {
               key={form.key("lastName")}
               {...form.getInputProps("lastName")}
             />
-          </Group>
+          </SimpleGrid>
           <Divider />
           <Flex justify="end">
             <Button type="submit">Update Profile</Button>
           </Flex>
         </Stack>
       </form>
-    </Page>
+    </Page.Subsection>
   );
 };

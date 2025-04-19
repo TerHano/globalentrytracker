@@ -3,6 +3,7 @@ import {
   Badge,
   Card,
   Flex,
+  InputWrapper,
   Menu,
   Stack,
   Text,
@@ -14,7 +15,8 @@ import { useCallback, useRef } from "react";
 import { Link } from "react-router";
 import type { TrackedLocation } from "~/api/tracked-locations-api";
 import { useDeleteTracker } from "~/hooks/api/useDeleteTracker";
-import { ConfirmDeleteTracker } from "./confirm-delete-tracker";
+import { ConfirmDeleteTrackerBody } from "./confirm-delete-tracker-body";
+import { NotificationType } from "~/enum/NotificationType";
 
 export interface TrackerCardProps {
   tracker: TrackedLocation;
@@ -56,7 +58,7 @@ export const TrackerCard = ({ tracker, canEdit = true }: TrackerCardProps) => {
   const openConfirmDelete = useCallback(() => {
     modalId.current = modals.openConfirmModal({
       title: "Are you sure?",
-      children: <ConfirmDeleteTracker tracker={tracker} />,
+      children: <ConfirmDeleteTrackerBody tracker={tracker} />,
 
       labels: { confirm: "Delete Tracker", cancel: "Cancel" },
       confirmProps: { color: "red", loading: deleteTrackerMutation.isPending },
@@ -64,6 +66,16 @@ export const TrackerCard = ({ tracker, canEdit = true }: TrackerCardProps) => {
       onConfirm: () => handleDelete(),
     });
   }, [deleteTrackerMutation.isPending, handleDelete, tracker]);
+
+  const getNotificationTypeText = (type: NotificationType) => {
+    switch (type) {
+      case NotificationType.Soonest:
+        return "Soonest";
+      case NotificationType.Weekends:
+        return "Weekends";
+    }
+    return "Unknown";
+  };
 
   return (
     <Card withBorder p="sm">
@@ -109,7 +121,14 @@ export const TrackerCard = ({ tracker, canEdit = true }: TrackerCardProps) => {
           <Text fw="bold" fz={{ base: "md", sm: "lg" }}>
             {location.name}
           </Text>
-          <Text size="sm" c="dimmed"></Text>
+
+          <InputWrapper label="Notification Type">
+            <Text size="xs" c="dimmed">
+              {getNotificationTypeText(
+                tracker.notificationType.type as NotificationType
+              )}
+            </Text>
+          </InputWrapper>
         </Stack>
       </Stack>
     </Card>

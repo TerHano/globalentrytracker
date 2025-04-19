@@ -232,7 +232,7 @@ export const CreateEditTrackerForm = ({
     <form
       onSubmit={form.onSubmit(handleSubmit, (errors) => console.log(errors))}
     >
-      <Stack gap="xl">
+      <Stack gap="lg">
         {trackedLocation ? (
           <Switch
             size="md"
@@ -254,6 +254,7 @@ export const CreateEditTrackerForm = ({
 
         <Group grow align="flex-end">
           <Select
+            clearable={false}
             maw={100}
             withCheckIcon
             checkIconPosition="left"
@@ -273,6 +274,9 @@ export const CreateEditTrackerForm = ({
             label="State"
           />
           <Select
+            comboboxProps={{
+              transitionProps: { transition: "pop", duration: 200 },
+            }}
             withAsterisk
             maw={400}
             withCheckIcon
@@ -318,7 +322,7 @@ export const CreateEditTrackerForm = ({
         <DatePickerInput
           modalProps={{ centered: true }}
           firstDayOfWeek={0}
-          maw={400}
+          maw={200}
           withAsterisk
           dropdownType="modal"
           label="Cutoff Date"

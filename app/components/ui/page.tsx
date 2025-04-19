@@ -23,10 +23,10 @@ export const Page = ({
           <Breadcrumbs separatorMargin={3}>{breadcrumbs}</Breadcrumbs>
         ) : null}
         <Stack gap={0}>
-          <Text fw="bold" size="xl">
+          <Text fz={{ base: "md", xs: "lg" }} fw="bold">
             {header}
           </Text>
-          <Text size="sm" c="dimmed">
+          <Text fz={{ base: "xs", xs: "sm" }} c="dimmed">
             {description}
           </Text>
         </Stack>
@@ -35,3 +35,34 @@ export const Page = ({
     </Paper>
   );
 };
+
+export interface PageSubsectionProps {
+  className?: string;
+  header: string;
+  description: string;
+  children: ReactNode;
+}
+
+const PageSubsection = ({
+  children,
+  className,
+  header,
+  description,
+}: PageSubsectionProps) => {
+  return (
+    <Stack className={className} gap="lg">
+      <Stack gap={0}>
+        <Text fz={{ base: "md", xs: "lg" }} fw="bold">
+          {header}
+        </Text>
+        <Text fz={{ base: "xs", xs: "sm" }} c="dimmed">
+          {description}
+        </Text>
+      </Stack>
+      {children}
+    </Stack>
+  );
+};
+
+Page.Subsection = PageSubsection;
+//Page.Subsection.displayName = "Page.Subsection";

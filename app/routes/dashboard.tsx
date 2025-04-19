@@ -35,7 +35,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 export default function Dashboard({ loaderData }: Route.ComponentProps) {
   const { notificationCheck, me, trackedLocations } = loaderData;
   return (
-    <Stack>
+    <Stack className="fade-in-animation">
       <Greeting initialData={{ me, trackedLocations }} />
       <NotificationSetupAlert
         hasAnyNotificationsEnabled={notificationCheck.isAnyNotificationsEnabled}

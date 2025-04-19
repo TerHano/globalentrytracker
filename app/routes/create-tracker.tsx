@@ -31,6 +31,7 @@ export default function CreateTracker({ loaderData }: Route.ComponentProps) {
   const { notificationCheck } = loaderData;
   return (
     <Page
+      className="fade-in-animation"
       breadcrumbs={[
         <Anchor
           key="dashboard"

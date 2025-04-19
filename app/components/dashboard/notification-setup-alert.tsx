@@ -27,7 +27,7 @@ export const NotificationSetupAlert = ({
     return (
       <Alert
         variant="light"
-        color="blue"
+        color="yellow"
         title="No Active Notification Settings!"
         icon={<MessageSquare />}
       >
@@ -35,12 +35,6 @@ export const NotificationSetupAlert = ({
           None of your notification settings are currently enabled. Please
           enable at least one notification setting to receive updates.
         </Text>
-        {/* <br />
-        <br />
-        <strong>Note:</strong> You can enable notifications in the settings
-        page. Once enabled, you will start receiving notifications for the
-        selected events.
-        <br /> */}
       </Alert>
     );
   }
