@@ -13,6 +13,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { permissionQuery } from "~/api/permissions-api";
 
 export function meta() {
   return [
@@ -35,6 +36,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   await queryClient.prefetchQuery(notificationCheckQuery(token));
   await queryClient.prefetchQuery(trackedLocationsQuery(token));
   await queryClient.prefetchQuery(meQuery(token));
+  await queryClient.prefetchQuery(permissionQuery(token));
 
   return { dehydratedState: dehydrate(queryClient) };
 }

@@ -28,7 +28,9 @@ export const ActiveTrackers = () => {
           <Empty
             action={
               <NavLink to={"/create-tracker"}>
-                <Button>Add Tracker</Button>
+                {({ isPending }) => (
+                  <Button loading={isPending}>Add Tracker</Button>
+                )}
               </NavLink>
             }
             icon={
@@ -79,8 +81,6 @@ const ActionableLocationTrackerCard = ({
   const { showNotification } = useShowNotification();
 
   const modalId = useRef<string | null>(null);
-
-  console.log("TrackerCard", tracker);
 
   const deleteTrackerMutation = useDeleteTracker({
     onSuccess: () => {

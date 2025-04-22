@@ -73,7 +73,11 @@ export const LocationTrackerCard = ({
                         to={action.link.to}
                         key={action.id}
                         {...action}
-                      />
+                      >
+                        <Text fz="sm" fw={600}>
+                          {action.children}
+                        </Text>
+                      </Menu.Item>
                     );
                   } else
                     return (
@@ -82,7 +86,11 @@ export const LocationTrackerCard = ({
                         onClick={action.button?.onClick}
                         color={action.button?.color}
                         {...action}
-                      />
+                      >
+                        <Text fz="sm" fw={600}>
+                          {action.children}
+                        </Text>
+                      </Menu.Item>
                     );
                 })}
               </Menu.Dropdown>
@@ -90,9 +98,14 @@ export const LocationTrackerCard = ({
           )}
         </Flex>
         <Stack>
-          <Text fw="bold" fz={{ base: "md", sm: "lg" }}>
-            {location.name}
-          </Text>
+          <Stack gap={0}>
+            <Text fw="bold" fz={{ base: "md", sm: "lg" }}>
+              {location.name}
+            </Text>
+            <Text fz={{ base: "sm", sm: "md" }} c="dimmed">
+              {location.city}, {location.state}
+            </Text>
+          </Stack>
           <SimpleGrid cols={{ base: 1, xs: 2 }} spacing="xs">
             <InputWrapper label="Notification Type">
               <Text size="xs" c="dimmed">

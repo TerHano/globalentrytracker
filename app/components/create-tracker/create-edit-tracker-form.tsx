@@ -31,11 +31,6 @@ import { NotificationTypeEnum } from "~/enum/NotificationType";
 import { locationStatesQuery } from "~/api/location-states-api";
 
 interface CreateEditTrackerFormProps {
-  // data: {
-  //   states: string[];
-  //   appointmentLocations: Location[];
-  //   notificationTypes: NotificationType[];
-  // };
   trackedLocation?: TrackedLocation;
 }
 
@@ -90,7 +85,7 @@ export const CreateEditTrackerForm = ({
         cutOffDate: dayjs(body.cutOffDate).toDate(),
       };
       form.setInitialValues(newValues);
-      form.setValues(newValues);
+      //form.setValues(newValues);
       queryClient.invalidateQueries({
         queryKey: ["tracked-locations"],
       });
@@ -122,7 +117,9 @@ export const CreateEditTrackerForm = ({
     //make state optional
     state: z.string().optional(),
     enabled: z.boolean(),
-    locationId: z.string({ message: "Location is required" }),
+    locationId: z
+      .string({ message: "Location is required" })
+      .nonempty("Location is required"),
     notificationTypeId: z.string().nonempty("Notification type is required"),
     cutOffDate: z.date().refine((date) => date > new Date(), {
       message: "Date must be in the future",
@@ -149,6 +146,7 @@ export const CreateEditTrackerForm = ({
           (location) => location.state === newValues.state
         );
         setFilteredAppointmentLocations(filteredLocations);
+        form.setFieldValue("locationId", "");
       }
     },
   });
@@ -156,7 +154,8 @@ export const CreateEditTrackerForm = ({
   const appointmentLocationOptions =
     filteredAppointmentLocations?.map((location) => ({
       value: location.id.toString(),
-      label: location.name,
+      label: `${location.city} (${location.name})`,
+      description: location.name,
     })) ?? [];
 
   const handleSubmit = async (values: typeof form.values) => {
@@ -226,7 +225,7 @@ export const CreateEditTrackerForm = ({
           />
         ) : null}
 
-        <Group grow align="flex-end">
+        <Group grow align="flex-start">
           <Select
             clearable={false}
             maw={100}
@@ -237,6 +236,7 @@ export const CreateEditTrackerForm = ({
             }}
             data={states}
             label="State"
+            //   description="location state"
             {...form.getInputProps("state")}
             key={form.key("state")}
           />
@@ -244,7 +244,7 @@ export const CreateEditTrackerForm = ({
             comboboxProps={{
               transitionProps: { transition: "pop", duration: 200 },
             }}
-            searchable
+            //searchable
             withAsterisk
             maw={400}
             withCheckIcon
@@ -254,7 +254,7 @@ export const CreateEditTrackerForm = ({
             placeholder="Pick location"
             key={form.key("locationId")}
             {...form.getInputProps("locationId")}
-            description="Select the location you want to track."
+            //  description="Select the location you want to track."
           />
         </Group>
         <Radio.Group
@@ -275,7 +275,7 @@ export const CreateEditTrackerForm = ({
                 <Group wrap="nowrap" align="flex-start">
                   <Radio.Indicator size="xs" />
                   <div>
-                    <Group gap={3} align="start">
+                    <Group gap={5} align="start">
                       <Text className={notificationRadioCardStles.label}>
                         {type.name}
                       </Text>

@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Button,
   Group,
   Loader,
   Menu,
@@ -7,10 +8,11 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Cog, DoorOpen, LogOut, TowerControl } from "lucide-react";
+import { Cog, DoorOpen, LogOut, Star, TowerControl } from "lucide-react";
 import { useCallback, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { meQuery } from "~/api/me-api";
+import { RoleEnum } from "~/enum/RoleEnum";
 import { useShowNotification } from "~/hooks/useShowNotification";
 import { createSupabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClient";
 
@@ -30,7 +32,6 @@ export const AppHeader = () => {
   const handleSignOut = useCallback(() => {
     // Clear the query cache
     setIsSigningOut(true);
-    queryClient.clear();
     const supabase = createSupabaseBrowserClient();
     supabase.auth
       .signOut()
@@ -38,6 +39,7 @@ export const AppHeader = () => {
         if (error) {
           console.error("Error signing out:", error.message);
         } else {
+          queryClient.clear();
           navigate("/login");
         }
       })
@@ -68,42 +70,54 @@ export const AppHeader = () => {
           Global
         </Text>
       </Group>
-      <Menu transitionProps={{ transition: "rotate-right", duration: 150 }}>
-        <Menu.Target>
-          <UnstyledButton>
-            <Avatar color="cyan" size="md" radius="xl">
-              {meData?.firstName.charAt(0)}
-            </Avatar>
-          </UnstyledButton>
-        </Menu.Target>
+      <Group>
+        {meData?.role !== RoleEnum.Pro ? (
+          <Button size="compact-sm">Upgrade To Pro</Button>
+        ) : null}
+        <Menu transitionProps={{ transition: "rotate-right", duration: 150 }}>
+          <Menu.Target>
+            <UnstyledButton>
+              <Avatar color="cyan" size="md" radius="xl">
+                {meData?.firstName.charAt(0)}
+              </Avatar>
+            </UnstyledButton>
+          </Menu.Target>
 
-        <Menu.Dropdown>
-          <Menu.Label>
-            <Text size="xs">{`${meData?.firstName} ${meData?.lastName}`}</Text>
-          </Menu.Label>
-          <Menu.Item
-            // component={Link}
-            // to="/settings/profile"
-            leftSection={<Cog size={14} />}
-            onClick={onSettingsClick}
-          >
-            Settings
-          </Menu.Item>
-          <Menu.Item
-            color="red"
-            onClick={handleSignOut}
-            leftSection={
-              isSigningOut ? (
-                <Loader size="xs" color="red" />
-              ) : (
-                <LogOut size={14} />
-              )
-            }
-          >
-            Sign Out
-          </Menu.Item>
-        </Menu.Dropdown>
-      </Menu>
+          <Menu.Dropdown>
+            <Menu.Label>
+              <Text size="xs">{`${meData?.firstName} ${meData?.lastName}`}</Text>
+            </Menu.Label>
+            <Menu.Item
+              disabled
+              leftSection={<Star size={14} />}
+              onClick={() => {}}
+            >
+              Upgrade
+            </Menu.Item>
+            <Menu.Item
+              // component={Link}
+              // to="/settings/profile"
+              leftSection={<Cog size={14} />}
+              onClick={onSettingsClick}
+            >
+              Settings
+            </Menu.Item>
+            <Menu.Item
+              color="red"
+              onClick={handleSignOut}
+              leftSection={
+                isSigningOut ? (
+                  <Loader size="xs" color="red" />
+                ) : (
+                  <LogOut size={14} />
+                )
+              }
+            >
+              Sign Out
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
+      </Group>
     </Group>
   );
 };

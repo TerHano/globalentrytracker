@@ -16,7 +16,7 @@ export async function fetchData<T = null>(
   }
   const data: ApiResponse<T> = await response.json();
   if (!data.success) {
-    throw new Error(`Error fetching data: ${data.errorMessage}`);
+    throw new Error(`Error fetching data: ${data.errorMessages}`);
   }
   return data.data as T;
 }

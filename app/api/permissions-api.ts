@@ -1,19 +1,15 @@
 import { queryOptions } from "@tanstack/react-query";
-import type { RoleEnum } from "~/enum/RoleEnum";
 import { fetchData } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 
-export const meQueryKey = "me";
+export const permissionQueryKey = "permission";
 
-export interface me {
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: RoleEnum;
+export interface Permission {
+  canCreateTracker: boolean;
 }
 
-export async function meApi(token: string) {
-  return fetchData<me>("/api/v1/me", {
+export async function permissionApi(token: string) {
+  return fetchData<Permission>("/api/v1/me/permissions", {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -21,9 +17,9 @@ export async function meApi(token: string) {
   });
 }
 
-export const meQuery = (token?: string) =>
+export const permissionQuery = (token?: string) =>
   queryOptions({
-    queryKey: [meQueryKey],
+    queryKey: [permissionQueryKey],
     queryFn: async () => {
       if (!token) {
         const _token = await getSupabaseToken();
@@ -32,6 +28,6 @@ export const meQuery = (token?: string) =>
         }
         token = _token;
       }
-      return meApi(token);
+      return permissionApi(token);
     },
   });
