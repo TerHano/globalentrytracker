@@ -4,6 +4,7 @@ import {
   Flex,
   InputWrapper,
   SimpleGrid,
+  Skeleton,
   Stack,
   Text,
   TextInput,
@@ -14,12 +15,18 @@ import { useQuery } from "@tanstack/react-query";
 import { useForm, zodResolver } from "@mantine/form";
 import { z } from "zod";
 import { useUpdateUser } from "~/hooks/api/useUpdateUser";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useShowNotification } from "~/hooks/useShowNotification";
 import { UserRoundCheck } from "lucide-react";
 
+interface ProfileSettingsFormSchema {
+  firstName: string;
+  lastName: string;
+}
+
 export const ProfileSettings = () => {
-  const { data: me } = useQuery(meQuery());
+  const { data: me, isLoading: isMeLoading } = useQuery(meQuery());
+
   const { showNotification } = useShowNotification();
 
   const schema = z.object({
@@ -33,17 +40,12 @@ export const ProfileSettings = () => {
       .min(2, "Must be 2 characters or more"),
   });
 
-  const form = useForm({
-    initialValues: {
-      firstName: me?.firstName ?? "",
-      lastName: me?.lastName ?? "",
-    },
+  const form = useForm<ProfileSettingsFormSchema>({
     validate: zodResolver(schema),
   });
 
   const updateUserMutation = useUpdateUser({
     onSuccess: (data, request) => {
-      console.log("User updated successfully:", data);
       showNotification({
         title: "Profile updated",
         message: "Your profile has been updated successfully.",
@@ -80,6 +82,15 @@ export const ProfileSettings = () => {
     [form, updateUserMutation]
   );
 
+  useEffect(() => {
+    if (me && !form.initialized) {
+      form.initialize({
+        firstName: me.firstName,
+        lastName: me.lastName,
+      });
+    }
+  }, [form, me]);
+
   return (
     <Page.Subsection
       className="fade-in-animation"
@@ -89,21 +100,29 @@ export const ProfileSettings = () => {
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Stack gap="md">
           <InputWrapper label="Email">
-            <Text fz={{ base: "sm", xs: "md" }}>{me?.email}</Text>
+            <Skeleton width="fit-content" visible={isMeLoading}>
+              <Text fz={{ base: "sm", xs: "md" }}>
+                {me?.email ?? "EMAIL@EMAIL.COM"}
+              </Text>
+            </Skeleton>
           </InputWrapper>
           <SimpleGrid cols={{ base: 1, xs: 2 }} spacing="lg">
-            <TextInput
-              label="First Name"
-              placeholder="First Name"
-              key={form.key("firstName")}
-              {...form.getInputProps("firstName")}
-            />
-            <TextInput
-              label="Last Name"
-              placeholder="Last Name"
-              key={form.key("lastName")}
-              {...form.getInputProps("lastName")}
-            />
+            <Skeleton visible={isMeLoading}>
+              <TextInput
+                label="First Name"
+                placeholder="First Name"
+                key={form.key("firstName")}
+                {...form.getInputProps("firstName")}
+              />
+            </Skeleton>
+            <Skeleton visible={isMeLoading}>
+              <TextInput
+                label="Last Name"
+                placeholder="Last Name"
+                key={form.key("lastName")}
+                {...form.getInputProps("lastName")}
+              />
+            </Skeleton>
           </SimpleGrid>
           <Divider />
           <Flex justify="end">

@@ -1,18 +1,20 @@
 import { SegmentedControl, Group, Text } from "@mantine/core";
 import { useCallback, useEffect, useMemo } from "react";
-import { Bell, User } from "lucide-react";
+import { Bell, CreditCard, User } from "lucide-react";
 import { Outlet, useNavigate } from "react-router";
 import { Page } from "~/components/ui/page";
 import type { Route } from "./+types/settings-page-layout";
 import { useField } from "@mantine/form";
 
-type SettingsTab = "Profile" | "Notifications";
+type SettingsTab = "Profile" | "Notifications" | "Subscription";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const path = request.url;
   let tab: SettingsTab = "Profile";
   if (path.endsWith("notifications")) {
     tab = "Notifications";
+  } else if (path.endsWith("subscription")) {
+    tab = "Subscription";
   }
   return { tab };
 }
@@ -29,6 +31,12 @@ export default function SettingsPageLayout({
       {
         value: "Profile",
         label: <TabLabel icon={<User size={14} />} label="Profile" />,
+      },
+      {
+        value: "Subscription",
+        label: (
+          <TabLabel icon={<CreditCard size={14} />} label="Subscription" />
+        ),
       },
       {
         value: "Notifications",
@@ -48,6 +56,9 @@ export default function SettingsPageLayout({
         navigate("/settings/profile");
       } else if (val === "Notifications") {
         navigate("/settings/notifications");
+      }
+      if (val === "Subscription") {
+        navigate("/settings/subscription");
       }
     },
     [navigate]

@@ -1,9 +1,9 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import type { ApiResponse } from "~/models/ApiResponse";
 import { fetchData } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 import type { MutationHookOptions } from "./mutationOptions";
 import { meQueryKey } from "~/api/me-api";
+import type { ApiError } from "~/models/ApiError";
 
 export interface UpdateUserRequest {
   firstName: string;
@@ -13,9 +13,9 @@ export interface UpdateUserRequest {
 export const useUpdateUser = ({
   onSuccess,
   onError,
-}: MutationHookOptions<UpdateUserRequest>) => {
+}: MutationHookOptions<UpdateUserRequest, number>) => {
   const queryClient = useQueryClient();
-  return useMutation({
+  return useMutation<number, ApiError[], UpdateUserRequest>({
     mutationFn: async (request: UpdateUserRequest) => {
       const token = await getSupabaseToken();
       if (!token) {
@@ -48,7 +48,7 @@ async function updateUserApi(request: UpdateUserRequest) {
   if (!token) {
     throw new Error("No token found");
   }
-  return fetchData<ApiResponse>("/api/v1/me", {
+  return fetchData<number>("/api/v1/me", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

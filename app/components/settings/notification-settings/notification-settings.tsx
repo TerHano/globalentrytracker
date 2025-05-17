@@ -1,4 +1,4 @@
-import { Tabs, TabsList, TabsTab, TabsPanel } from "@mantine/core";
+import { Tabs, TabsList, TabsTab, TabsPanel, Skeleton } from "@mantine/core";
 import { DiscordIcon } from "~/components/ui/icons/DiscordIcon";
 import { DiscordSettingsCard } from "./discord-settings";
 import { allNotificationSettingsQuery } from "~/api/all-notification-settings-api";
@@ -10,7 +10,11 @@ export const NotificationSettings = () => {
   );
 
   if (isSettingsLoading || !settings) {
-    return <div className="fade-in-animation">Loading...</div>;
+    return (
+      <div className="fade-in-animation">
+        <Skeleton h={300} visible />
+      </div>
+    );
   }
   return (
     <div className="fade-in-animation">

@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 import type { MutationHookOptions } from "./mutationOptions";
 import { fetchData } from "~/utils/fetchData";
-import type { ApiResponse } from "~/models/ApiResponse";
+import type { ApiError } from "~/models/ApiError";
 
 export interface CreateUpdateDiscordSettingsRequest {
   id?: number;
@@ -10,7 +10,7 @@ export interface CreateUpdateDiscordSettingsRequest {
   webhookUrl: string;
 }
 interface useCreateUpdateDiscordSettingsProps
-  extends MutationHookOptions<CreateUpdateDiscordSettingsRequest> {
+  extends MutationHookOptions<CreateUpdateDiscordSettingsRequest, number> {
   isUpdate?: boolean;
 }
 
@@ -19,7 +19,7 @@ export const useCreateUpdateDiscordSettings = ({
   onSuccess,
   onError,
 }: useCreateUpdateDiscordSettingsProps) => {
-  return useMutation({
+  return useMutation<number, ApiError[], CreateUpdateDiscordSettingsRequest>({
     mutationFn: async (request: CreateUpdateDiscordSettingsRequest) => {
       const token = await getSupabaseToken();
       if (!token) {
@@ -55,7 +55,7 @@ async function discordNotificationSettingsApi(
   if (!token) {
     throw new Error("No token found");
   }
-  return fetchData<ApiResponse>(`/api/v1/notification-settings/discord`, {
+  return fetchData<number>(`/api/v1/notification-settings/discord`, {
     method: isUpdate ? "PUT" : "POST",
     body: JSON.stringify(request),
     headers: {

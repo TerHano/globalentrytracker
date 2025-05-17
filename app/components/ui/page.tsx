@@ -50,7 +50,7 @@ const PageSubsection = ({
   description,
 }: PageSubsectionProps) => {
   return (
-    <Stack className={className} gap="lg">
+    <Stack className={className} gap="xs">
       <Stack gap={0}>
         <Text fz={{ base: "md", xs: "lg" }} fw="bold">
           {header}

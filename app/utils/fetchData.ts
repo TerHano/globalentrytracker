@@ -11,12 +11,10 @@ export async function fetchData<T = null>(
 ): Promise<T> {
   const url = `${BASE_URL}${endpoint}`;
   const response = await fetch(url, options);
-  if (!response.ok) {
-    throw new Error(`Error fetching data: ${response.statusText}`);
-  }
   const data: ApiResponse<T> = await response.json();
   if (!data.success) {
-    throw new Error(`Error fetching data: ${data.errorMessages}`);
+    throw data.errors;
+    //throw new Error(`Error fetching data: ${data.errors}`);
   }
   return data.data as T;
 }

@@ -41,7 +41,6 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
   const discordSettingsMutate = useCreateUpdateDiscordSettings({
     isUpdate,
     onSuccess: (data, body) => {
-      console.log("Settings saved successfully", data, body);
       showNotification({
         title: "Settings saved",
         message: "Your settings have been saved successfully.",
@@ -62,7 +61,6 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
 
   const testMessageMutate = useTestDiscordSettings({
     onSuccess: (data, body) => {
-      console.log("Settings tested successfully", data, body);
       showNotification({
         title: "Test message sent",
         message: "Your test message has been sent successfully.",
@@ -95,7 +93,6 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
     const request: TestDiscordSettingsRequest = {
       webhookUrl: form.values.webhookUrl,
     };
-    console.log("Testing settings", form.values);
     await testMessageMutate.mutateAsync(request);
   }, [testMessageMutate, form]);
 
@@ -107,7 +104,6 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
         webhookUrl: values.webhookUrl,
         enabled: values.enabled,
       };
-      console.log("Saving settings", values);
       await discordSettingsMutate.mutateAsync(request);
     },
     [discordSettingsMutate, form, settings?.id]

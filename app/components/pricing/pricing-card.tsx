@@ -1,6 +1,5 @@
 import {
   Button,
-  Card,
   Group,
   Indicator,
   Paper,

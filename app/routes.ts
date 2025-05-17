@@ -18,6 +18,7 @@ export default [
         index("routes/settings-page.tsx"),
         route("profile", "routes/profile-settings-page.tsx"),
         route("notifications", "routes/notification-settings-page.tsx"),
+        route("subscription", "routes/subscription-settings-page.tsx"),
       ]),
     ]),
   ]),

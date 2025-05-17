@@ -16,6 +16,8 @@ import { RoleEnum } from "~/enum/RoleEnum";
 import { useShowNotification } from "~/hooks/useShowNotification";
 import { createSupabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClient";
 
+import { useShowUpgradeModalContext } from "~/hooks/useShowUpgradeModal";
+
 export const AppHeader = () => {
   const { showNotification } = useShowNotification();
   const navigate = useNavigate();
@@ -23,6 +25,9 @@ export const AppHeader = () => {
   const queryClient = useQueryClient();
 
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const { showUpgradeModal } = useShowUpgradeModalContext();
+
+  const isProUser = meData ? meData.roles.includes(RoleEnum.Pro) : true;
 
   const onSettingsClick = useCallback(() => {
     // Handle settings click
@@ -71,8 +76,10 @@ export const AppHeader = () => {
         </Text>
       </Group>
       <Group>
-        {meData?.role !== RoleEnum.Pro ? (
-          <Button size="compact-sm">Upgrade To Pro</Button>
+        {!isProUser ? (
+          <Button onClick={showUpgradeModal} size="compact-sm">
+            Upgrade To Pro
+          </Button>
         ) : null}
         <Menu transitionProps={{ transition: "rotate-right", duration: 150 }}>
           <Menu.Target>
@@ -87,13 +94,14 @@ export const AppHeader = () => {
             <Menu.Label>
               <Text size="xs">{`${meData?.firstName} ${meData?.lastName}`}</Text>
             </Menu.Label>
-            <Menu.Item
-              disabled
-              leftSection={<Star size={14} />}
-              onClick={() => {}}
-            >
-              Upgrade
-            </Menu.Item>
+            {!isProUser ? (
+              <Menu.Item
+                onClick={showUpgradeModal}
+                leftSection={<Star size={14} />}
+              >
+                Upgrade
+              </Menu.Item>
+            ) : null}
             <Menu.Item
               // component={Link}
               // to="/settings/profile"

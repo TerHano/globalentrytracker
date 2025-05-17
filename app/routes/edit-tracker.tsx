@@ -53,24 +53,6 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   );
 
   return { trackedLocation, dehydratedState: dehydrate(queryClient) };
-
-  // const trackerIdNumber = parseInt(trackerId);
-  // const notificationCheck = await notificationCheckApi(session.access_token);
-  // const appointmentLocations = await locationApi(session.access_token);
-  // const notificationTypes = await notificationTypesApi(session.access_token);
-  // const states = await locationStatesApi(session.access_token);
-  // const trackedLocation = await trackedLocationApi(
-  //   session.access_token,
-  //   trackerIdNumber
-  // );
-  //console.log("trackedLocation", trackedLocation);
-  // return {
-  //   notificationCheck,
-  //   states,
-  //   trackedLocation,
-  //   appointmentLocations,
-  //   notificationTypes,
-  // };
 }
 export default function EditTracker({ loaderData }: Route.ComponentProps) {
   const { dehydratedState, trackedLocation } = loaderData;

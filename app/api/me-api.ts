@@ -9,7 +9,7 @@ export interface me {
   firstName: string;
   lastName: string;
   email: string;
-  role: RoleEnum;
+  roles: RoleEnum[];
 }
 
 export async function meApi(token: string) {

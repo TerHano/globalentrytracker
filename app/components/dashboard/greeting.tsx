@@ -1,16 +1,16 @@
-import { ActionIcon, Button, Flex, Skeleton, Text } from "@mantine/core";
+import { Button, Flex, Skeleton, Text } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
-import { Link, NavLink } from "react-router";
+import { NavLink } from "react-router";
 import { meQuery } from "~/api/me-api";
 import { permissionQuery } from "~/api/permissions-api";
 import { trackedLocationsQuery } from "~/api/tracked-locations-api";
+import { useShowUpgradeModalContext } from "~/hooks/useShowUpgradeModal";
 
 export const Greeting = () => {
   const { data: trackedLocations } = useQuery(trackedLocationsQuery());
   const { data: meData, isLoading: isMeLoading } = useQuery(meQuery());
   const { data: permissions } = useQuery(permissionQuery());
-
+  const { showUpgradeModal } = useShowUpgradeModalContext();
   const isAddingTrackerDisabled = !permissions?.canCreateTracker;
 
   const hasTrackers = trackedLocations && trackedLocations.length > 0;
@@ -22,8 +22,12 @@ export const Greeting = () => {
           {isMeLoading ? "Loading..." : `Hey, ${meData?.firstName} 👋`}
         </Text>
       </Skeleton>
-      {hasTrackers && (
-        <>
+      {hasTrackers &&
+        (isAddingTrackerDisabled ? (
+          <Button onClick={showUpgradeModal} size="sm">
+            Add Tracker
+          </Button>
+        ) : (
           <NavLink
             data-disabled={isAddingTrackerDisabled}
             to={"/create-tracker"}
@@ -34,23 +38,7 @@ export const Greeting = () => {
               </Button>
             )}
           </NavLink>
-          {/* <Button
-            visibleFrom="xs"
-            onClick={(e) =>
-              isAddingTrackerDisabled ? e.preventDefault() : null
-            }
-            component={Link}
-            data-disabled={isAddingTrackerDisabled}
-            to="/create-tracker"
-            size="sm"
-          >
-            Add Tracker
-          </Button> */}
-          <ActionIcon component={Link} to="/create-tracker" hiddenFrom="xs">
-            <Plus />
-          </ActionIcon>
-        </>
-      )}
+        ))}
     </Flex>
   );
 };

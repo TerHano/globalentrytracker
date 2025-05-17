@@ -13,6 +13,12 @@ import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
 import "./app.css";
+
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(customParseFormat);
+
 import {
   ColorSchemeScript,
   MantineProvider,
@@ -23,6 +29,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import React from "react";
+import { UpgradeModalProvider } from "./provider/upgrade-modal-provider";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -76,7 +83,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Notifications autoClose={3000} />
 
             <QueryClientProvider client={queryClient}>
-              {children}
+              <UpgradeModalProvider>{children}</UpgradeModalProvider>
             </QueryClientProvider>
           </ModalsProvider>
         </MantineProvider>

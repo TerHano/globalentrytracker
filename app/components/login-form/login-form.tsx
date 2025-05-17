@@ -16,8 +16,10 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useCallback, useEffect, useState } from "react";
 import { useShowNotification } from "~/hooks/useShowNotification";
 import { Key } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function LoginForm() {
+  const { t } = useTranslation();
   const { showNotification } = useShowNotification();
   const [isLoading, setIsLoading] = useState(false);
   const submit = useSubmit();
@@ -78,9 +80,9 @@ export default function LoginForm() {
 
   return (
     <div className={classes.wrapper}>
-      <Paper className={classes.form} radius={0} p={30}>
+      <Paper className={`${classes.form} fade-in-animation`} radius={0} p={30}>
         <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
-          Welcome back to Mantine!
+          {t("Welcome back to Global Entry Appointment Tracker")}
         </Title>
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput

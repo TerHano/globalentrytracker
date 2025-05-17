@@ -1,10 +1,11 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import type { ApiResponse } from "~/models/ApiResponse";
 import { fetchData } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 import type { MutationHookOptions } from "./mutationOptions";
 import { trackedLocationQueryKey } from "~/api/tracked-location-api";
 import { permissionQueryKey } from "~/api/permissions-api";
+import type { ApiError } from "~/models/ApiError";
+import { trackedLocationsQueryKey } from "~/api/tracked-locations-api";
 
 export interface CreateUpdateTrackerRequest {
   id?: number;
@@ -15,7 +16,7 @@ export interface CreateUpdateTrackerRequest {
 }
 
 interface useCreateUpdateTrackerProps
-  extends MutationHookOptions<CreateUpdateTrackerRequest> {
+  extends MutationHookOptions<CreateUpdateTrackerRequest, number> {
   isUpdate?: boolean;
 }
 
@@ -25,7 +26,7 @@ export const useCreateUpdateTracker = ({
   onError,
 }: useCreateUpdateTrackerProps) => {
   const queryClient = useQueryClient();
-  return useMutation({
+  return useMutation<number, ApiError[], CreateUpdateTrackerRequest>({
     mutationFn: async (request: CreateUpdateTrackerRequest) => {
       const token = await getSupabaseToken();
       if (!token) {
@@ -39,7 +40,13 @@ export const useCreateUpdateTracker = ({
       // Call user-provided handler if it exists
       if (onSuccess) {
         onSuccess(data, body);
-        queryClient.invalidateQueries({ queryKey: [trackedLocationQueryKey] });
+        queryClient.invalidateQueries({
+          queryKey: [trackedLocationQueryKey],
+        });
+        queryClient.invalidateQueries({
+          queryKey: [trackedLocationsQueryKey],
+        });
+
         queryClient.invalidateQueries({ queryKey: [permissionQueryKey] });
       }
     },
@@ -62,7 +69,7 @@ async function trackedLocationApi(
   if (!token) {
     throw new Error("No token found");
   }
-  return fetchData<ApiResponse>("/api/v1/track-location", {
+  return fetchData<number>("/api/v1/track-location", {
     method: isUpdate ? "PUT" : "POST",
     headers: {
       "Content-Type": "application/json",

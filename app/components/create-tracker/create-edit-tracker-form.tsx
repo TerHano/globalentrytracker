@@ -19,7 +19,7 @@ import { DatePickerInput } from "@mantine/dates";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import notificationRadioCardStles from "./notification-type-radio-card.module.css";
-import { Bell, BellOff, TicketsPlane, Watch } from "lucide-react";
+import { Bell, BellOff, BellRing, TicketsPlane, Watch } from "lucide-react";
 import type { TrackedLocation } from "~/api/tracked-locations-api";
 import { useNavigate } from "react-router";
 import {
@@ -39,13 +39,13 @@ interface FormValues {
   enabled: boolean;
   locationId: string;
   notificationTypeId: string;
-  cutOffDate: Date;
+  cutOffDate: string;
 }
 
 export const CreateEditTrackerForm = ({
   trackedLocation,
 }: CreateEditTrackerFormProps) => {
-  const { showNotification } = useShowNotification();
+  const { showNotification, showErrorCodeNotification } = useShowNotification();
   const isUpdate = !!trackedLocation;
   const navigate = useNavigate();
 
@@ -82,7 +82,7 @@ export const CreateEditTrackerForm = ({
         enabled: body.enabled,
         locationId: body.locationId.toString(),
         notificationTypeId: body.notificationTypeId.toString(),
-        cutOffDate: dayjs(body.cutOffDate).toDate(),
+        cutOffDate: body.cutOffDate,
       };
       form.setInitialValues(newValues);
       //form.setValues(newValues);
@@ -94,20 +94,8 @@ export const CreateEditTrackerForm = ({
       navigate("/dashboard");
     },
     onError: (error) => {
-      if (error instanceof Error) {
-        const title = isUpdate
-          ? "Error updating tracker"
-          : "Error creating tracker";
-        const message = isUpdate
-          ? "Failed to update tracker"
-          : "Failed to create tracker";
-        showNotification({
-          title,
-          message,
-          status: "error",
-          icon: <TicketsPlane size={16} />,
-        });
-      }
+      //Check if error is of the type ApplicationError
+      showErrorCodeNotification(error);
     },
   });
 
@@ -121,7 +109,7 @@ export const CreateEditTrackerForm = ({
       .string({ message: "Location is required" })
       .nonempty("Location is required"),
     notificationTypeId: z.string().nonempty("Notification type is required"),
-    cutOffDate: z.date().refine((date) => date > new Date(), {
+    cutOffDate: z.string().refine((date) => dayjs(date).isAfter(new Date()), {
       message: "Date must be in the future",
     }),
   });
@@ -132,12 +120,11 @@ export const CreateEditTrackerForm = ({
       enabled: true,
       locationId: "",
       notificationTypeId: defaultNotificationType,
-      cutOffDate: dayjs().add(2, "week").toDate(),
+      cutOffDate: dayjs().add(2, "week").toString(),
     },
     validate: zodResolver(schema),
     onValuesChange: (newValues, oldValues) => {
       if (newValues.state !== oldValues.state) {
-        console.log("State changed", newValues.state);
         if (!newValues.state) {
           setFilteredAppointmentLocations(appointmentLocations);
           return;
@@ -161,14 +148,12 @@ export const CreateEditTrackerForm = ({
   const handleSubmit = async (values: typeof form.values) => {
     console.log("Submitting form", values);
 
-    const cutOffString = dayjs(values.cutOffDate).format("YYYY-MM-DD");
-
     const requestBody: CreateUpdateTrackerRequest = {
       id: isUpdate ? trackedLocation.id : 0,
       locationId: Number(values.locationId),
       enabled: isUpdate ? values.enabled : true,
       notificationTypeId: Number(values.notificationTypeId),
-      cutOffDate: cutOffString,
+      cutOffDate: values.cutOffDate,
     };
 
     await createUpdateTrackerMutation.mutateAsync(requestBody);
@@ -184,11 +169,8 @@ export const CreateEditTrackerForm = ({
         enabled: trackedLocation.enabled,
         locationId: trackedLocation.location.id.toString(),
         notificationTypeId: trackedLocation.notificationType.id.toString(),
-        cutOffDate: dayjs(trackedLocation.cutOffDate).toDate(),
+        cutOffDate: dayjs(trackedLocation.cutOffDate).format("YYYY-MM-DD"),
       });
-      // setSelectedNotificationTypeId(
-      //   trackedLocation.notificationType.id.toString()
-      // );
     }
   }, [defaultNotificationType, form, trackedLocation]);
 
@@ -213,7 +195,7 @@ export const CreateEditTrackerForm = ({
             defaultChecked={trackedLocation.enabled}
             mt={3}
             color="green"
-            onLabel={<Bell size={12} />}
+            onLabel={<BellRing size={12} />}
             offLabel={<BellOff size={12} color="red" />}
             key={form.key("enabled")}
             {...form.getInputProps("enabled")}

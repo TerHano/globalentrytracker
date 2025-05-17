@@ -1,17 +1,11 @@
-import type { Route } from "./+types/notification-settings-page";
+import type { Route } from "./+types/profile-settings-page";
 import { redirect } from "react-router";
 import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
-import { allNotificationSettingsQuery } from "~/api/all-notification-settings-api";
-import { NotificationSettings } from "~/components/settings/notification-settings/notification-settings";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
+import { SubscriptionSettings } from "~/components/settings/subscription-settings";
 
 export function meta() {
   return [
-    { title: "Settings - Notification" },
+    { title: "Settings - Subscription" },
     { name: "description", content: "Welcome to React Router!" },
   ];
 }
@@ -27,6 +21,6 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
 }
 
-export default function NotificationSettingsPage() {
-  return <NotificationSettings />;
+export default function ProfileSettingsPage() {
+  return <SubscriptionSettings />;
 }
