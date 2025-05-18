@@ -8,6 +8,7 @@ import {
   Text,
   SimpleGrid,
   Stack,
+  Modal,
 } from "@mantine/core";
 import classes from "./sign-up-form.module.css";
 import { z } from "zod";
@@ -15,34 +16,34 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { useShowNotification } from "~/hooks/useShowNotification";
 import { Key } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import {
   useSignUpUser,
   type SignUpUserRequest,
 } from "~/hooks/api/useSignUpUser";
 import { PasswordInputWithStrength } from "../ui/password-input-with-strength";
+import emailIcon from "~/assets/icons/email.png";
 
 export default function SignUpForm() {
   const { t } = useTranslation();
   const { showNotification } = useShowNotification();
   const [isLoading, setIsLoading] = useState(false);
   const [passwordValue, setPasswordValue] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [verificationEmail, setVerificationEmail] = useState<string | null>(
+    null
+  );
 
   const { mutate: signUpUserMutate } = useSignUpUser({
-    onSuccess: () => {
+    onSuccess: (_, request) => {
       setIsLoading(false);
-      showNotification({
-        title: t("Sign Up Successful"),
-        message: t(
-          "You have successfully signed up! Check your email for a confirmation link."
-        ),
-        status: "success",
-        icon: <Key size={16} />,
-      });
+      setVerificationEmail(request.email);
+      setIsModalOpen(true);
     },
     onError: (error) => {
       const firstError = error[0];
       setIsLoading(false);
+      setVerificationEmail(null);
       showNotification({
         title: t("Sign Up Failed"),
         message: firstError?.message,
@@ -167,6 +168,46 @@ export default function SignUpForm() {
           </Anchor>
         </Text>
       </Paper>
+      <Modal
+        transitionProps={{
+          transition: "fade-up",
+          duration: 400,
+        }}
+        withCloseButton={false}
+        opened={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        centered
+      >
+        <Stack align="center" justify="center" gap={0}>
+          <img src={emailIcon} alt="Email Icon" width={80} height={80} />
+          <Text size="lg" fw={500} mt="md">
+            {t("Check Your Email")}
+          </Text>
+          <Text ta="center" size="sm" mt="xs">
+            <Trans>
+              We have sent you a verification email to{" "}
+              <Text component="span" c="white" fw={700}>
+                {verificationEmail}
+              </Text>
+              . Please check your inbox and click the link to verify your
+              account.
+            </Trans>
+            {/* {t(
+              `We have sent you a verification email to ${verificationEmail}. Please check your inbox and click the link to verify your account.`
+            )} */}
+          </Text>
+          <Button
+            variant="subtle"
+            color="blue"
+            mt="md"
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+          >
+            {t("Close")}
+          </Button>
+        </Stack>
+      </Modal>
     </div>
   );
 }

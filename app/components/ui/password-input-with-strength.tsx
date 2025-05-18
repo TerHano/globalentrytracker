@@ -1,4 +1,4 @@
-import { Popover, PasswordInput, Progress, Text, Box } from "@mantine/core";
+import { Popover, Progress, Text, Box } from "@mantine/core";
 import { Check, X } from "lucide-react";
 import { useMemo, useState } from "react";
 
