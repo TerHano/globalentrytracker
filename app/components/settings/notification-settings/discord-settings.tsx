@@ -25,7 +25,7 @@ import {
 import { useShowNotification } from "~/hooks/useShowNotification";
 
 interface DiscordSettingsProps {
-  settings: DiscordSettings;
+  settings?: DiscordSettings;
 }
 
 interface DiscordSettingsForm {
@@ -112,8 +112,8 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
   useEffect(() => {
     if (!form.initialized) {
       form.initialize({
-        webhookUrl: settings.webhookUrl,
-        enabled: settings.enabled,
+        webhookUrl: settings?.webhookUrl ?? "",
+        enabled: settings?.enabled ?? true,
       });
     }
   }, [form, settings]);

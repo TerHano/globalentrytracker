@@ -9,6 +9,8 @@ import {
 export default [
   index("routes/home.tsx"),
   route("/login", "routes/login.tsx"),
+  route("/signup", "routes/signup.tsx"),
+  route("/auth/confirm-email", "routes/auth.confirm.tsx"),
   layout("routes/layout/protected-layout.tsx", [
     route("dashboard", "routes/dashboard.tsx"),
     route("create-tracker", "routes/create-tracker.tsx"),
