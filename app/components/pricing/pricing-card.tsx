@@ -7,7 +7,11 @@ import {
   Text,
   ThemeIcon,
 } from "@mantine/core";
-import { CircleCheck, Star } from "lucide-react";
+import { CircleCheck, ExternalLink, Star } from "lucide-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { PlanFrequency } from "~/enum/PlanFrequency";
+import { useUpgradeSubscription } from "~/hooks/api/useUpgradeSubscription";
 
 interface PricingCardTagProps {
   text: string;
@@ -15,6 +19,7 @@ interface PricingCardTagProps {
 }
 
 export interface PricingCardProps {
+  priceId: string;
   isCurrentPlan?: boolean;
   tag?: PricingCardTagProps;
   className?: string;
@@ -24,10 +29,11 @@ export interface PricingCardProps {
   discountPrice?: string;
   features: string[];
   buttonText: string;
-  buttonLink: string;
+  frequency: PlanFrequency;
 }
 
 export const PricingCard = ({
+  priceId,
   className,
   title,
   description,
@@ -36,7 +42,34 @@ export const PricingCard = ({
   features,
   isCurrentPlan,
   tag,
+  frequency,
 }: PricingCardProps) => {
+  const [isNavigating, setIsNavigating] = useState(false);
+  const { t } = useTranslation();
+
+  const { mutate: mutateCheckout } = useUpgradeSubscription({
+    onError: (error) => {
+      console.error("Error during checkout:", error);
+      setIsNavigating(false);
+    },
+  });
+
+  const getPlanFrequencyText = (frequency: PlanFrequency) => {
+    switch (frequency) {
+      case PlanFrequency.Monthly:
+        return t("Month");
+      case PlanFrequency.Weekly:
+        return t("Week");
+      default:
+        return t("Unknown");
+    }
+  };
+
+  const getPlanPriceText = (price: string, frequency: PlanFrequency) => {
+    const frequencyText = getPlanFrequencyText(frequency);
+    return `$${price} / ${frequencyText}`;
+  };
+
   return (
     <Indicator
       radius="sm"
@@ -66,7 +99,7 @@ export const PricingCard = ({
           <Group align="baseline" gap="xs">
             {discountPrice && (
               <Text fz="xl" fw="bold">
-                ${discountPrice} <Text span>/ month</Text>
+                {getPlanPriceText(discountPrice, frequency)}
               </Text>
             )}
             <Text
@@ -76,7 +109,7 @@ export const PricingCard = ({
               fz={discountPrice ? "md" : "xl"}
               fw="bold"
             >
-              ${price} <Text span>{discountPrice ? undefined : "/ month"}</Text>
+              {getPlanPriceText(price, frequency)}
             </Text>
           </Group>
           {isCurrentPlan ? (
@@ -84,7 +117,16 @@ export const PricingCard = ({
               Current Plan
             </Button>
           ) : (
-            <Button>Change Plan</Button>
+            <Button
+              loading={isNavigating}
+              rightSection={<ExternalLink size={16} color="white" />}
+              onClick={() => {
+                setIsNavigating(true);
+                mutateCheckout(priceId);
+              }}
+            >
+              Select Plan
+            </Button>
           )}
           <Stack gap={3}>
             {features.map((feature, index) => (

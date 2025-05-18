@@ -120,7 +120,7 @@ export const CreateEditTrackerForm = ({
       enabled: true,
       locationId: "",
       notificationTypeId: defaultNotificationType,
-      cutOffDate: dayjs().add(2, "week").toString(),
+      cutOffDate: dayjs().add(2, "week").format("YYYY-MM-DD"),
     },
     validate: zodResolver(schema),
     onValuesChange: (newValues, oldValues) => {

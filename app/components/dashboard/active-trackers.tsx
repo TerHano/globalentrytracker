@@ -1,4 +1,14 @@
-import { Button, Image, Paper, Skeleton, Stack, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Group,
+  Image,
+  Paper,
+  Skeleton,
+  Stack,
+  Text,
+  Tooltip,
+} from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useMemo, useRef } from "react";
 import { NavLink } from "react-router";
@@ -9,15 +19,28 @@ import {
 import { Empty } from "../ui/empty";
 import notificationBellIcon from "~/assets/icons/notification-bell.png";
 import { LocationTrackerCard } from "../location-tracker-card";
-import { Bell, BellMinus, PencilLine, Trash2 } from "lucide-react";
+import { Bell, BellMinus, CircleHelp, PencilLine, Trash2 } from "lucide-react";
 import { modals } from "@mantine/modals";
 import { useDeleteTracker } from "~/hooks/api/useDeleteTracker";
 import { ConfirmDeleteTrackerBody } from "./confirm-delete-tracker-body";
 import { useShowNotification } from "~/hooks/useShowNotification";
 import { useCreateUpdateTracker } from "~/hooks/api/useCreateUpdateTracker";
+import { LabelValue } from "../ui/label-value";
+import { useTranslation } from "react-i18next";
+import { meQuery } from "~/api/me-api";
+import dayjs from "dayjs";
 
 export const ActiveTrackers = () => {
+  const { t } = useTranslation();
   const { data, isLoading } = useQuery(trackedLocationsQuery());
+  const { data: meData } = useQuery(meQuery());
+
+  const nextNotificationDate = useMemo(() => {
+    if (meData?.nextNotificationAt) {
+      return dayjs(meData.nextNotificationAt).format("MM/DD/YYYY, hh:mm A");
+    }
+    return null;
+  }, [meData]);
 
   const trackedLocationsList = useMemo(() => {
     if (!data && isLoading) {
@@ -59,12 +82,32 @@ export const ActiveTrackers = () => {
       <Paper shadow="sm" p="lg" radius="md" withBorder>
         <Stack>
           <Stack gap={0}>
-            <Text fw="bold" fz={{ base: "h5", sm: "h3" }}>
-              Trackers
-            </Text>
-            <Text c="dimmed" fz={{ base: "xs", sm: "sm" }}>
-              Here you can see all your trackers
-            </Text>
+            <Group justify="space-between">
+              <Stack gap={0}>
+                <Text fw="bold" fz={{ base: "h5", sm: "h3" }}>
+                  Trackers
+                </Text>
+                <Text c="dimmed" fz={{ base: "xs", sm: "sm" }}>
+                  Here you can see all your trackers
+                </Text>
+              </Stack>
+              <LabelValue
+                labelRightSection={
+                  <Tooltip
+                    multiline
+                    w={200}
+                    label={t(
+                      "This is the next time the application will scan for appointments that match your preferences."
+                    )}
+                  >
+                    <CircleHelp size={14} />
+                  </Tooltip>
+                }
+                label={t("Next Check")}
+              >
+                <Text c="dimmed">{nextNotificationDate}</Text>
+              </LabelValue>
+            </Group>
           </Stack>
 
           {trackedLocationsList}

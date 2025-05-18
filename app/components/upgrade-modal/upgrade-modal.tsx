@@ -2,16 +2,19 @@ import {
   Button,
   Modal,
   noop,
+  SimpleGrid,
   Stack,
   Text,
   useModalsStack,
 } from "@mantine/core";
-import { ExternalLink, Star } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { Star } from "lucide-react";
+import { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useUpgradeSubscription } from "~/hooks/api/useUpgradeSubscription";
 import { useValidateSubscription } from "~/hooks/api/useValidateSubscription";
 import { useReward } from "react-rewards";
+import { useQuery } from "@tanstack/react-query";
+import { planQuery } from "~/api/plans-api";
+import { PricingCard } from "../pricing/pricing-card";
 
 export interface UpgradeModalProps {
   stack: ReturnType<
@@ -29,15 +32,11 @@ export const UpgradeModal = ({
   stack,
 }: UpgradeModalProps) => {
   const { t } = useTranslation();
-  const [isNavigating, setIsNavigating] = useState(false);
-  // const stack = useModalsStack([
-  //   "upgrade-benefits",
-  //   "validation-successful",
-  //   "validation-failed",
-  // ]);
 
+  const { data: plans } = useQuery(planQuery());
   const { reward } = useReward("confettiId", "confetti", {
-    elementCount: 200,
+    elementCount: 400,
+    lifetime: 800,
     position: "absolute",
     spread: 90,
   });
@@ -45,15 +44,7 @@ export const UpgradeModal = ({
   const handleClose = useCallback(() => {
     stack.closeAll();
     onClose();
-    // setOpened(false);
   }, [onClose, stack]);
-
-  const { mutate: mutateCheckout } = useUpgradeSubscription({
-    onError: (error) => {
-      console.error("Error during checkout:", error);
-      setIsNavigating(false);
-    },
-  });
   const {
     mutate: mutateValidateSubscription,
     isPending: isValidateSubscriptionLoading,
@@ -75,23 +66,20 @@ export const UpgradeModal = ({
       console.log("open");
       stack.open("upgrade-benefits");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   return (
     <Modal.Stack>
       <Modal
+        size="xl"
         {...stack.register("upgrade-benefits")}
         //  opened={opened}
         //    onClose={handleClose}
         withCloseButton={false}
         onClose={handleClose}
       >
-        <Stack
-          style={{ width: "100%" }}
-          align="center"
-          justify="center"
-          gap="xs"
-        >
+        <Stack w="100%" align="center" justify="center" gap="xs">
           <Star size={24} />
 
           <Text fw="bold" fz="h4">
@@ -100,17 +88,22 @@ export const UpgradeModal = ({
           <Text fz="sm" c="dimmed">
             {t("Upgrade to Tracker Pro for more features and benefits.")}
           </Text>
+          <SimpleGrid w="100%" cols={{ xs: 1, sm: 2 }} spacing="lg">
+            {plans?.map((plan) => (
+              <PricingCard
+                priceId={plan.priceId}
+                key={plan.id}
+                title={plan.name}
+                description={plan.description}
+                price={plan.price.toString()}
+                discountPrice={plan.discountedPrice.toString()}
+                features={plan.features}
+                buttonText={"Upgrade"}
+                frequency={plan.frequency}
+              />
+            ))}
+          </SimpleGrid>
 
-          <Button
-            loading={isNavigating}
-            onClick={() => {
-              setIsNavigating(true);
-              mutateCheckout();
-            }}
-            rightSection={<ExternalLink size={16} />}
-          >
-            {t("Upgrade Now")}
-          </Button>
           <Button
             variant="subtle"
             c="yellow"
@@ -127,6 +120,7 @@ export const UpgradeModal = ({
         </Stack>
       </Modal>
       <Modal
+        size="lg"
         withCloseButton={false}
         onEnterTransitionEnd={() => {
           reward();
@@ -147,7 +141,24 @@ export const UpgradeModal = ({
         >
           <span id="confettiId" />
         </div>
-        Nice YOUR A PRO!
+        <Stack
+          style={{ width: "100%" }}
+          align="center"
+          justify="center"
+          gap="xs"
+        >
+          <Star size={24} />
+
+          <Text fw="bold" fz="h4">
+            {t("You're Now A Pro!")}
+          </Text>
+          <Text fz="sm" c="dimmed">
+            {t("Enjoy all the benefits of Tracker Pro.")}
+          </Text>
+          <Button variant="subtle" color="dimmed" onClick={handleClose}>
+            {t("Close")}
+          </Button>
+        </Stack>
       </Modal>
       <Modal
         withCloseButton={false}
@@ -170,7 +181,24 @@ export const UpgradeModal = ({
         >
           <span id="confettiId" />
         </div>
-        WOOPS!!
+        <Stack
+          style={{ width: "100%" }}
+          align="center"
+          justify="center"
+          gap="xs"
+        >
+          <Star size={24} />
+
+          <Text fw="bold" fz="h4">
+            {t("Oops! You're Now A Loser!")}
+          </Text>
+          <Text fz="sm" c="dimmed">
+            {t("Enjoy none of the benefits of Tracker Pro.")}
+          </Text>
+          <Button variant="subtle" color="dimmed" onClick={handleClose}>
+            {t("Close")}
+          </Button>
+        </Stack>
       </Modal>
     </Modal.Stack>
   );

@@ -116,7 +116,7 @@ export const LocationTrackerCard = ({
             </InputWrapper>
             <InputWrapper label="Cutoff Date">
               <Text size="xs" c="dimmed">
-                {dayjs(locationTracker.cutOffDate).format("MMM DD , YYYY")}
+                {dayjs(locationTracker.cutOffDate).format("MMM DD, YYYY")}
               </Text>
             </InputWrapper>
           </SimpleGrid>

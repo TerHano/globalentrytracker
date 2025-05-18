@@ -13,6 +13,7 @@ export default [
     route("dashboard", "routes/dashboard.tsx"),
     route("create-tracker", "routes/create-tracker.tsx"),
     route("edit-tracker/:trackerId", "routes/edit-tracker.tsx"),
+    route("subscribed", "routes/successful-subscription.tsx"),
     ...prefix("settings/", [
       layout("routes/layout/settings-page-layout.tsx", [
         index("routes/settings-page.tsx"),

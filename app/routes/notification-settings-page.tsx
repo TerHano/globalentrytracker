@@ -1,13 +1,7 @@
 import type { Route } from "./+types/notification-settings-page";
 import { redirect } from "react-router";
 import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
-import { allNotificationSettingsQuery } from "~/api/all-notification-settings-api";
 import { NotificationSettings } from "~/components/settings/notification-settings/notification-settings";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
 
 export function meta() {
   return [

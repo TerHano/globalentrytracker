@@ -19,21 +19,17 @@ import { useManageSubscription } from "~/hooks/api/useManageSubscription";
 import { useMemo, useState } from "react";
 import { LabelValue } from "../ui/label-value";
 import { CreditCardIcon } from "../ui/icons/CreditCardIcon";
-import { useUpgradeSubscription } from "~/hooks/api/useUpgradeSubscription";
+import { useShowUpgradeModalContext } from "~/hooks/useShowUpgradeModal";
 
 export const SubscriptionSettings = () => {
   const { t } = useTranslation();
   const [isNavigating, setIsNavigating] = useState(false);
+  const { showUpgradeModal } = useShowUpgradeModalContext();
   const {
     data: subscriptionInformation,
     isLoading: isSubscriptionInfoLoading,
   } = useQuery({ ...subscriptionInformationQuery(), staleTime: 1000000 });
   const { mutate: mutateManageSubscription } = useManageSubscription({
-    onError: () => {
-      setIsNavigating(false);
-    },
-  });
-  const { mutate: mutateCheckout } = useUpgradeSubscription({
     onError: () => {
       setIsNavigating(false);
     },
@@ -152,7 +148,7 @@ export const SubscriptionSettings = () => {
             </LabelValue>
           </Skeleton>
         </SimpleGrid>
-        <Divider my="md" />
+        <Divider />
         <Flex justify="flex-end">
           <Skeleton width="fit-content" visible={isSubscriptionInfoLoading}>
             {isSubscriptionActive ? (
@@ -167,15 +163,7 @@ export const SubscriptionSettings = () => {
                 {t("Manage Subscription")}
               </Button>
             ) : (
-              <Button
-                rightSection={<ExternalLink size={16} />}
-                loading={isNavigating}
-                onClick={() => {
-                  mutateCheckout();
-                  setIsNavigating(true);
-                }}
-                color="teal"
-              >
+              <Button onClick={showUpgradeModal} color="teal">
                 {t("Resubscribe")}
               </Button>
             )}

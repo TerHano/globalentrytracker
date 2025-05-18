@@ -40,7 +40,7 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
   const [isEnabled, setIsEnabled] = useState(settings?.enabled ?? true);
   const discordSettingsMutate = useCreateUpdateDiscordSettings({
     isUpdate,
-    onSuccess: (data, body) => {
+    onSuccess: () => {
       showNotification({
         title: "Settings saved",
         message: "Your settings have been saved successfully.",
@@ -60,7 +60,7 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
   });
 
   const testMessageMutate = useTestDiscordSettings({
-    onSuccess: (data, body) => {
+    onSuccess: () => {
       showNotification({
         title: "Test message sent",
         message: "Your test message has been sent successfully.",

@@ -15,8 +15,11 @@ import { CircleCheck } from "lucide-react";
 import { NavLink } from "react-router";
 import { Page } from "~/components/ui/page";
 import { PricingCard } from "~/components/pricing/pricing-card";
+import { planQuery } from "~/api/plans-api";
+import { useQuery } from "@tanstack/react-query";
 
 export const HomePage = () => {
+  const { data: plans } = useQuery(planQuery());
   return (
     <Container size="md">
       <div className={classes.inner}>
@@ -84,22 +87,21 @@ export const HomePage = () => {
             price={"0"}
             features={["Two Trackers", "Notifications Every 48 Hours"]}
             buttonText={"Upgrade"}
-            buttonLink={""}
+            onButtonPress={""}
             isCurrentPlan
           />
-          <PricingCard
-            tag={{
-              text: "Most Popular",
-              color: "blue",
-            }}
-            title="Pro"
-            description="Pro Plan"
-            price={"10"}
-            discountPrice={"5"}
-            features={["Unlimited Trackers", "Notifications Every One Hour"]}
-            buttonText={"Upgrade"}
-            buttonLink={""}
-          />
+          {plans?.map((plan) => (
+            <PricingCard
+              key={plan.id}
+              title={plan.name}
+              description={plan.description}
+              price={plan.price.toString()}
+              discountPrice={plan.discountedPrice.toString()}
+              features={plan.features}
+              buttonText={"Upgrade"}
+              onButtonPress={""}
+            />
+          ))}
         </SimpleGrid>
       </Page.Subsection>
     </Container>

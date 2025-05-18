@@ -10,13 +10,13 @@ export const useUpgradeSubscription = ({
   onError = noop,
 }: MutationHookOptions<void, string>) => {
   //const queryClient = useQueryClient();
-  return useMutation<string, ApiError[], void>({
-    mutationFn: async () => {
+  return useMutation<string, ApiError[], string>({
+    mutationFn: async (priceId: string) => {
       const token = await getSupabaseToken();
       if (!token) {
         throw new Error("No token found");
       }
-      return upgradeSubscriptionApi();
+      return upgradeSubscriptionApi(priceId);
     },
     onSuccess: (data) => {
       if (data) {
@@ -35,10 +35,10 @@ export const useUpgradeSubscription = ({
     },
   });
 };
-async function upgradeSubscriptionApi() {
+async function upgradeSubscriptionApi(priceId: string) {
   const token = await getSupabaseToken();
-  const successUrl = `${window.location.origin}/dashboard?subscribed=true`;
-  const cancelUrl = `${window.location.origin}/dashboard?cancelled=true`;
+  const successUrl = `${window.location.origin}/subscribed`;
+  const cancelUrl = `${window.location.origin}/subscribed`;
   if (!token) {
     throw new Error("No token found");
   }
@@ -49,6 +49,7 @@ async function upgradeSubscriptionApi() {
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
+      priceId: priceId,
       successUrl: successUrl,
       cancelUrl: cancelUrl,
     }),
