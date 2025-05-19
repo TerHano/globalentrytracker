@@ -17,6 +17,7 @@ import { Page } from "~/components/ui/page";
 import { PricingCard } from "~/components/pricing/pricing-card";
 import { planQuery } from "~/api/plans-api";
 import { useQuery } from "@tanstack/react-query";
+import { PlanFrequency } from "~/enum/PlanFrequency";
 
 export const HomePage = () => {
   const { data: plans } = useQuery(planQuery());
@@ -84,22 +85,23 @@ export const HomePage = () => {
           <PricingCard
             title="Free"
             description="Free forever"
-            price={"0"}
+            price={0}
             features={["Two Trackers", "Notifications Every 48 Hours"]}
             buttonText={"Upgrade"}
-            onButtonPress={""}
             isCurrentPlan
+            priceId={""}
+            frequency={PlanFrequency.Monthly}
           />
           {plans?.map((plan) => (
             <PricingCard
               key={plan.id}
               title={plan.name}
               description={plan.description}
-              price={plan.price.toString()}
-              discountPrice={plan.discountedPrice.toString()}
+              price={plan.price}
               features={plan.features}
               buttonText={"Upgrade"}
-              onButtonPress={""}
+              priceId={""}
+              frequency={plan.frequency}
             />
           ))}
         </SimpleGrid>

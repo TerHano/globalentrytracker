@@ -27,10 +27,9 @@ export const AppHeader = () => {
   const [isSigningOut, setIsSigningOut] = useState(false);
   const { showUpgradeModal } = useShowUpgradeModalContext();
 
-  const isProUser = meData ? meData.roles.includes(RoleEnum.Pro) : true;
+  const isProUser = meData ? meData.role != RoleEnum.Free : false;
 
   const onSettingsClick = useCallback(() => {
-    // Handle settings click
     navigate("/settings/profile");
   }, [navigate]);
 
@@ -63,7 +62,6 @@ export const AppHeader = () => {
   return (
     <Group
       className="container"
-      //mx="md"
       px="xs"
       h="100%"
       justify="space-between"

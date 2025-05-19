@@ -34,25 +34,6 @@ export default function SignUpForm() {
     null
   );
 
-  const { mutate: signUpUserMutate } = useSignUpUser({
-    onSuccess: (_, request) => {
-      setIsLoading(false);
-      setVerificationEmail(request.email);
-      setIsModalOpen(true);
-    },
-    onError: (error) => {
-      const firstError = error[0];
-      setIsLoading(false);
-      setVerificationEmail(null);
-      showNotification({
-        title: t("Sign Up Failed"),
-        message: firstError?.message,
-        status: "error",
-        icon: <Key size={16} />,
-      });
-    },
-  });
-
   const schema = z
     .object({
       email: z
@@ -88,6 +69,26 @@ export default function SignUpForm() {
     validate: zodResolver(schema),
     onValuesChange: (values) => {
       setPasswordValue(values.password);
+    },
+  });
+
+  const { mutate: signUpUserMutate } = useSignUpUser({
+    onSuccess: (_, request) => {
+      setIsLoading(false);
+      setVerificationEmail(request.email);
+      form.reset();
+      setIsModalOpen(true);
+    },
+    onError: (error) => {
+      const firstError = error[0];
+      setIsLoading(false);
+      setVerificationEmail(null);
+      showNotification({
+        title: t("Sign Up Failed"),
+        message: firstError?.message,
+        status: "error",
+        icon: <Key size={16} />,
+      });
     },
   });
 

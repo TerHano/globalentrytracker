@@ -5,11 +5,20 @@ import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 
 export const meQueryKey = "me";
 
+/**
+ * Represents the user profile information returned by the "me" API endpoint.
+ *
+ * @property firstName - The user's first name.
+ * @property lastName - The user's last name.
+ * @property email - The user's email address.
+ * @property role - The user's role within the system, as defined by the RoleEnum.
+ * @property nextNotificationAt - The ISO string representing the next scheduled notification time for the user.
+ */
 export interface me {
   firstName: string;
   lastName: string;
   email: string;
-  roles: RoleEnum[];
+  role: RoleEnum;
   nextNotificationAt: string;
 }
 

@@ -1,52 +1,42 @@
-import {
-  Button,
-  Divider,
-  Group,
-  Stack,
-  Switch,
-  Text,
-  Textarea,
-} from "@mantine/core";
+import { Button, Divider, Group, Stack, Switch, Text } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { Send } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Mail, Send } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router";
 import { z } from "zod";
-import type { DiscordSettings } from "~/api/discord-settings-api";
-import { DiscordIcon } from "~/components/ui/icons/DiscordIcon";
+import type { EmailSettings } from "~/api/email-settings-api";
+import { meQuery } from "~/api/me-api";
+import { LabelValue } from "~/components/ui/label-value";
 import { Page } from "~/components/ui/page";
 import {
-  useCreateUpdateDiscordSettings,
-  type CreateUpdateDiscordSettingsRequest,
-} from "~/hooks/api/useCreateUpdateDiscordSettings";
-import {
-  useTestDiscordSettings,
-  type TestDiscordSettingsRequest,
-} from "~/hooks/api/useTestDiscordSettings";
+  useCreateUpdateEmailSettings,
+  type CreateUpdateEmailSettingsRequest,
+} from "~/hooks/api/useCreateUpdateEmailSettings";
+import { useTestEmailSettings } from "~/hooks/api/useTestEmailSettings";
 import { useShowNotification } from "~/hooks/useShowNotification";
 
-interface DiscordSettingsProps {
-  settings?: DiscordSettings;
+interface EmailSettingsProps {
+  settings?: EmailSettings;
 }
 
-interface DiscordSettingsForm {
-  webhookUrl: string;
+interface EmailSettingsForm {
   enabled: boolean;
 }
 
-export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
+export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
   const isUpdate = !!settings;
   const { showNotification } = useShowNotification();
+  const { data: me } = useQuery(meQuery());
 
-  const [isEnabled, setIsEnabled] = useState(settings?.enabled ?? true);
-  const discordSettingsMutate = useCreateUpdateDiscordSettings({
+  // const [isEnabled, setIsEnabled] = useState(settings?.enabled ?? true);
+  const discordSettingsMutate = useCreateUpdateEmailSettings({
     isUpdate,
     onSuccess: () => {
       showNotification({
         title: "Settings saved",
         message: "Your settings have been saved successfully.",
         status: "success",
-        icon: <DiscordIcon size={16} />,
+        icon: <Mail size={16} />,
       });
     },
     onError: (error) => {
@@ -54,19 +44,19 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
         title: "Error saving settings",
         message: "There was an error saving your settings. Please try again.",
         status: "error",
-        icon: <DiscordIcon size={16} />,
+        icon: <Mail size={16} />,
       });
       console.error("Error saving settings", error);
     },
   });
 
-  const testMessageMutate = useTestDiscordSettings({
+  const testMessageMutate = useTestEmailSettings({
     onSuccess: () => {
       showNotification({
         title: "Test message sent",
         message: "Your test message has been sent successfully.",
         status: "success",
-        icon: <DiscordIcon size={16} />,
+        icon: <Mail size={16} />,
       });
     },
     onError: (error) => {
@@ -74,7 +64,7 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
         title: "Error testing settings",
         message: "There was an error testing your settings. Please try again.",
         status: "error",
-        icon: <DiscordIcon size={16} />,
+        icon: <Mail size={16} />,
       });
       console.error("Error testing settings", error);
     },
@@ -91,30 +81,25 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
       ),
   });
 
-  const form = useForm<DiscordSettingsForm>({
+  const form = useForm<EmailSettingsForm>({
     initialValues: {
-      webhookUrl: "",
       enabled: false,
     },
     onValuesChange: (values) => {
-      setIsEnabled(values.enabled);
+      // setIsEnabled(values.enabled);
     },
     validate: zodResolver(schema),
   });
 
   const handleTestMessage = useCallback(async () => {
-    const request: TestDiscordSettingsRequest = {
-      webhookUrl: form.values.webhookUrl,
-    };
-    await testMessageMutate.mutateAsync(request);
-  }, [testMessageMutate, form]);
+    await testMessageMutate.mutateAsync();
+  }, [testMessageMutate]);
 
   const handleSubmit = useCallback(
     async (values: typeof form.values) => {
       // Call your API to save the settings
-      const request: CreateUpdateDiscordSettingsRequest = {
+      const request: CreateUpdateEmailSettingsRequest = {
         id: settings?.id,
-        webhookUrl: values.webhookUrl,
         enabled: values.enabled,
       };
       await discordSettingsMutate.mutateAsync(request);
@@ -125,16 +110,14 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
   useEffect(() => {
     if (!form.initialized) {
       form.initialize({
-        webhookUrl: settings?.webhookUrl ?? "",
         enabled: settings?.enabled ?? true,
       });
     }
   }, [form, settings]);
   return (
     <Page.Subsection
-      header="Discord Settings"
-      description="  This is where you can configure your Discord settings. You can set up
-          webhooks, notifications, and other integrations with Discord."
+      header="Email Settings"
+      description="  This is where you can configure your Email settings."
     >
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Stack>
@@ -158,27 +141,9 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
               </Text>
             }
           />
-          <Textarea
-            withAsterisk
-            disabled={!isEnabled}
-            autosize
-            minRows={2}
-            label="Webhook URL"
-            description={
-              <Text component="span" size="xs">
-                If you need help locating your webhook url, please check out
-                this{" "}
-                <Link
-                  target="_blank"
-                  to="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks"
-                >
-                  discord article.
-                </Link>
-              </Text>
-            }
-            key={form.key("webhookUrl")}
-            {...form.getInputProps("webhookUrl")}
-          />
+          <LabelValue label="Email">
+            <>{me?.email}</>
+          </LabelValue>
           <Divider />
           <Group justify="end" gap="md" wrap="wrap">
             <Button

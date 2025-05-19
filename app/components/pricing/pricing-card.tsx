@@ -25,7 +25,7 @@ export interface PricingCardProps {
   className?: string;
   title: string;
   description: string;
-  price: string;
+  price: number;
   discountPrice?: string;
   features: string[];
   buttonText: string;
@@ -65,9 +65,10 @@ export const PricingCard = ({
     }
   };
 
-  const getPlanPriceText = (price: string, frequency: PlanFrequency) => {
+  const getPlanPriceText = (price: number, frequency: PlanFrequency) => {
     const frequencyText = getPlanFrequencyText(frequency);
-    return `$${price} / ${frequencyText}`;
+    const convertedPrice = price / 100;
+    return `$${convertedPrice} / ${frequencyText}`;
   };
 
   return (
@@ -97,11 +98,6 @@ export const PricingCard = ({
             </Text>
           </Stack>
           <Group align="baseline" gap="xs">
-            {discountPrice && (
-              <Text fz="xl" fw="bold">
-                {getPlanPriceText(discountPrice, frequency)}
-              </Text>
-            )}
             <Text
               span
               td={discountPrice ? "line-through" : undefined}

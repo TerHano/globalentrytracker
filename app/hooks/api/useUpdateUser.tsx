@@ -15,6 +15,8 @@ export const useUpdateUser = ({
   onError,
 }: MutationHookOptions<UpdateUserRequest, number>) => {
   const queryClient = useQueryClient();
+  // const supabaseBrowserClient = createSupabaseBrowserClient();
+
   return useMutation<number, ApiError[], UpdateUserRequest>({
     mutationFn: async (request: UpdateUserRequest) => {
       const token = await getSupabaseToken();
@@ -24,8 +26,13 @@ export const useUpdateUser = ({
       return updateUserApi(request);
     },
     onSuccess: (data, body) => {
-      // Default behavior
-
+      //Update the user in Supabase
+      // supabaseBrowserClient.auth.updateUser({
+      //   data: {
+      //     first_name: body.firstName,
+      //     last_name: body.lastName,
+      //   },
+      // });
       // Call user-provided handler if it exists
       if (onSuccess) {
         onSuccess(data, body);
@@ -33,8 +40,7 @@ export const useUpdateUser = ({
       }
     },
     onError: (error) => {
-      // Default behavior
-      console.error("Error deleting tracker:", error);
+      console.error("error", error);
 
       // Call user-provided handler if it exists
       if (onError) {

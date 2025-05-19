@@ -2,11 +2,13 @@ import { queryOptions } from "@tanstack/react-query";
 import { fetchData } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 import type { DiscordSettings } from "./discord-settings-api";
+import type { EmailSettings } from "./email-settings-api";
 
 export const allNotificationSettingsQueryKey = "all-notification-settings";
 
 export interface AllNotificationSettings {
   discordSettings: DiscordSettings;
+  emailSettings: EmailSettings;
 }
 
 export async function allNotificationSettingsApi(token: string) {
