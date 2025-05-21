@@ -10,6 +10,7 @@ export default [
   layout("routes/layout/default-layout.tsx", [index("routes/home.tsx")]),
   route("/login", "routes/login.tsx"),
   route("/signup", "routes/signup.tsx"),
+  route("/auth/reset-password", "routes/reset-password.tsx"),
   route("/auth/confirm-email", "routes/auth.confirm.tsx"),
   layout("routes/layout/protected-layout.tsx", [
     route("dashboard", "routes/dashboard.tsx"),

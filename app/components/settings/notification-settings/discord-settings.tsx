@@ -137,7 +137,7 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
   return (
     <Page.Subsection
       header="Discord Settings"
-      description="  This is where you can configure your Discord settings. You can set up
+      description="This is where you can configure your Discord settings. You can set up
           webhooks, notifications, and other integrations with Discord."
     >
       <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -157,8 +157,8 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
             {...form.getInputProps("enabled")}
             description={
               <Text component="span" size="xs">
-                You will not receive notifications for this service if the
-                setting is disabled
+                You will not receive notifications for this service if it is not
+                enabled
               </Text>
             }
           />

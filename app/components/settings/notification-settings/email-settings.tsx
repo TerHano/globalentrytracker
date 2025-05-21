@@ -1,4 +1,12 @@
-import { Button, Divider, Group, Stack, Switch, Text } from "@mantine/core";
+import {
+  Alert,
+  Button,
+  Divider,
+  Group,
+  Stack,
+  Switch,
+  Text,
+} from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { Mail, Send } from "lucide-react";
 import { useCallback, useEffect } from "react";
@@ -111,56 +119,71 @@ export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
     }
   }, [form, settings]);
   return (
-    <Page.Subsection
-      header="Email Settings"
-      description="  This is where you can configure your Email settings."
-    >
-      <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Stack>
-          <Switch
-            size="sm"
-            label={
-              <Text size="sm" fw={500}>
-                Enable
-              </Text>
-            }
-            // labelPosition="left"
-            defaultChecked={settings ? settings.enabled : false}
-            mt={3}
-            color="green"
-            key={form.key("enabled")}
-            {...form.getInputProps("enabled")}
-            description={
-              <Text component="span" size="xs">
-                You will not receive notifications for this service if the
-                setting is disabled
-              </Text>
-            }
-          />
-          <LabelValue label="Email">
-            <>{settings?.email}</>
-          </LabelValue>
-          <Divider />
-          <Group justify="end" gap="md" wrap="wrap">
-            <Button
+    <>
+      <Alert
+        variant="light"
+        mb="xs"
+        title="Important Note"
+        icon={<Mail size={16} />}
+        color="blue"
+      >
+        <Text size="xs">
+          {t(
+            "Due to the nature of how Gmail and other email providers flag emails, notification emails may end up in your spam or junk folder. Please send a test email and mark the sender as 'Not Spam' to ensure you receive future notifications."
+          )}
+        </Text>
+      </Alert>
+      <Page.Subsection
+        header="Email Settings"
+        description="  This is where you can configure your Email settings."
+      >
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+          <Stack>
+            <Switch
               size="sm"
-              onClick={handleTestMessage}
-              loading={testMessageMutate.isPending}
-              variant="light"
-              leftSection={<Send size={16} />}
-            >
-              Test Webhook
-            </Button>
-            <Button
-              size="sm"
-              loading={emailSettingsMutate.isPending}
-              type="submit"
-            >
-              Save Settings
-            </Button>
-          </Group>
-        </Stack>
-      </form>
-    </Page.Subsection>
+              label={
+                <Text size="sm" fw={500}>
+                  Enable
+                </Text>
+              }
+              // labelPosition="left"
+              defaultChecked={settings ? settings.enabled : false}
+              mt={3}
+              color="green"
+              key={form.key("enabled")}
+              {...form.getInputProps("enabled")}
+              description={
+                <Text component="span" size="xs">
+                  You will not receive notifications for this service if it is
+                  not enabled
+                </Text>
+              }
+            />
+            <LabelValue label="Email">
+              <>{settings?.email}</>
+            </LabelValue>
+            <Divider />
+            <Group justify="end" gap="md" wrap="wrap">
+              <Button
+                size="sm"
+                onClick={handleTestMessage}
+                loading={testMessageMutate.isPending}
+                variant="light"
+                leftSection={<Send size={16} />}
+              >
+                Test Email
+              </Button>
+              <Button
+                size="sm"
+                loading={emailSettingsMutate.isPending}
+                type="submit"
+              >
+                Save Settings
+              </Button>
+            </Group>
+          </Stack>
+        </form>
+      </Page.Subsection>
+    </>
   );
 };

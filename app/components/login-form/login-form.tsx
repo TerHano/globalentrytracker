@@ -8,25 +8,80 @@ import {
   Text,
   Input,
   Group,
+  Modal,
+  Stack,
+  useModalsStack,
+  Image,
 } from "@mantine/core";
 import classes from "./login-form.module.css";
-import { useActionData, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { z } from "zod";
-import { useForm, zodResolver } from "@mantine/form";
-import { useCallback, useEffect, useState } from "react";
+import { useField, useForm, zodResolver } from "@mantine/form";
+import { useCallback, useState } from "react";
 import { useShowNotification } from "~/hooks/useShowNotification";
-import { Key, Mail } from "lucide-react";
+import { ArrowLeft, Key, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { supabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClient";
+import mailImg from "~/assets/icons/email.png";
+import resetPasswordImg from "~/assets/icons/reset-password.png";
+import { useSendResetPasswordEmail } from "~/hooks/useSendResetPasswordEMail";
+import { useSignInUser } from "~/hooks/useSignIn";
 
 export default function LoginForm() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { showNotification } = useShowNotification();
-  const [isLoading, setIsLoading] = useState(false);
-  //const submit = useSubmit();
-  const submitResponse = useActionData<{ error?: string }>();
-  const [error, setError] = useState<string | null>(null);
+  const { mutate: signInUser, isPending: isSignInUserLoading } = useSignInUser({
+    onError: (error) => {
+      showNotification({
+        title: "Login Failed",
+        message:
+          error?.message ?? "An unexpected error occurred. Please try again.",
+        status: "error",
+        icon: <Key size={16} />,
+      });
+    },
+    onSuccess: () => {
+      navigate("/dashboard");
+    },
+  });
+  const {
+    mutate: sendResetPasswordEmail,
+    isPending: isSendResetPasswordEmailLoading,
+  } = useSendResetPasswordEmail({
+    onError: (error) => {
+      showNotification({
+        title: "Reset Password Failed",
+        message:
+          error?.message ?? "An unexpected error occurred. Please try again.",
+        status: "error",
+        icon: <Key size={16} />,
+      });
+    },
+    onSuccess: (_, request) => {
+      setSetResetPasswordEmail(request.email);
+      modalStack.open("reset-link-sent-modal");
+    },
+  });
+
+  const emailField = useField({
+    initialValue: "",
+    // validateOnChange: true,
+    validate: (value) => {
+      if (!value) {
+        return "Email is required";
+      }
+      if (!/\S+@\S+\.\S+/.test(value)) {
+        return "Invalid email format";
+      }
+      return null;
+    },
+  });
+  const [resetPasswordEmail, setSetResetPasswordEmail] = useState("");
+
+  const modalStack = useModalsStack([
+    "forgot-password-modal",
+    "reset-link-sent-modal",
+  ]);
 
   const schema = z.object({
     email: z
@@ -44,106 +99,159 @@ export default function LoginForm() {
     validate: zodResolver(schema),
   });
 
+  const handleResetPassword = useCallback(() => {
+    emailField.validate().then((error) => {
+      if (error) {
+        console.error("Email validation error:", error);
+        return;
+      }
+      sendResetPasswordEmail({
+        email: emailField.getValue(),
+      });
+      console.log("Resetting password for email:", emailField.getValue());
+    });
+    // Handle password reset logic here
+  }, [emailField, sendResetPasswordEmail]);
+
   const handleSubmit = useCallback(
     async (values: typeof form.values) => {
-      setError(null);
-      setIsLoading(true);
-      console.log("Submitting form", values);
-      // const requestBody = {
-      //   email: values.email,
-      //   password: values.password,
-      // };
-      supabaseBrowserClient.auth
-        .signInWithPassword({
-          email: values.email,
-          password: values.password,
-        })
-        .then(({ error }) => {
-          if (error) {
-            setError(error.message);
-            showNotification({
-              title: "Login Failed",
-              message: error.message,
-              status: "error",
-              icon: <Key size={16} />,
-            });
-          } else {
-            navigate("/dashboard");
-          }
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-      // await submit(requestBody, {
-      //   method: "post",
-      //   action: "/login",
-      // }).finally(() => {
-      //   setIsLoading(false);
-      // });
+      const { email, password } = values;
+      signInUser({ email, password });
     },
-    [form, navigate, showNotification]
+    [form, signInUser]
   );
 
-  useEffect(() => {
-    if (error) {
-      showNotification({
-        title: "Login Failed",
-        message: "An unexpected error occurred. Please try again.",
-        status: "error",
-        icon: <Key size={16} />,
-      });
-    }
-  }, [error, showNotification]);
-
-  useEffect(() => {
-    if (submitResponse?.error) {
-      setError(submitResponse.error);
-    }
-  }, [submitResponse]);
-
   return (
-    <div className={classes.wrapper}>
-      <Paper className={`${classes.form}`} radius={0} p={30}>
-        <Title order={2} className={classes.title} ta="center" mt="md">
-          {t("Welcome back to EasyEntry")}
-        </Title>
-        <form onSubmit={form.onSubmit(handleSubmit)}>
-          <Input.Label></Input.Label>
-          <TextInput
-            label="Email"
-            placeholder="hello@gmail.com"
-            size="md"
-            {...form.getInputProps("email")}
-            labelProps={{}}
-            rightSection={
-              <Mail size={16} color="gray" className={classes.icon} />
-            }
-          />
-          <PasswordInput
-            label="Password"
-            placeholder="Your password"
-            mt="md"
-            size="md"
-            {...form.getInputProps("password")}
-          />
+    <>
+      <div className={classes.wrapper}>
+        <Paper className={`${classes.form}`} radius={0} p={30}>
+          <Title order={2} className={classes.title} ta="center" mt="md">
+            {t("Welcome back to EasyEntry")}
+          </Title>
+          <form onSubmit={form.onSubmit(handleSubmit)}>
+            <Input.Label></Input.Label>
+            <TextInput
+              label="Email"
+              placeholder="hello@gmail.com"
+              size="md"
+              {...form.getInputProps("email")}
+              labelProps={{}}
+              rightSection={
+                <Mail size={16} color="gray" className={classes.icon} />
+              }
+            />
+            <PasswordInput
+              label="Password"
+              placeholder="Your password"
+              mt="md"
+              size="md"
+              {...form.getInputProps("password")}
+            />
 
-          <Group mt="xs" justify="end" align="center">
-            <Button size="xs" variant="subtle" color="gray">
-              Forgot Password?
+            <Group mt="xs" justify="end" align="center">
+              <Button
+                onClick={() => {
+                  modalStack.open("forgot-password-modal");
+                }}
+                size="xs"
+                variant="subtle"
+                color="gray"
+              >
+                Forgot Password?
+              </Button>
+            </Group>
+            <Button
+              loading={isSignInUserLoading}
+              type="submit"
+              fullWidth
+              mt="xl"
+              size="md"
+            >
+              Login
             </Button>
-          </Group>
-          <Button loading={isLoading} type="submit" fullWidth mt="xl" size="md">
-            Login
-          </Button>
-        </form>
+          </form>
 
-        <Text ta="center" mt="md">
-          Don&apos;t have an account?{" "}
-          <Anchor<"a"> href="/signup" fw={700}>
-            Register
-          </Anchor>
-        </Text>
-      </Paper>
-    </div>
+          <Text ta="center" mt="md">
+            Don&apos;t have an account?{" "}
+            <Anchor<"a"> href="/signup" fw={700}>
+              Register
+            </Anchor>
+          </Text>
+        </Paper>
+      </div>
+      <Modal.Stack>
+        <Modal
+          withCloseButton={false}
+          {...modalStack.register("forgot-password-modal")}
+        >
+          <Stack>
+            <Stack justify="center" align="center" gap="md">
+              <Image h="5rem" w="5rem" src={resetPasswordImg} />
+              <Stack justify="center" align="center" gap={0}>
+                <Text fw={800} size="lg">
+                  Forgot Password?
+                </Text>
+
+                <Text ta="center" size="sm" c="dimmed">
+                  Don&apos;t worry, we&apos;ll send you reset instructions to
+                  your email.
+                </Text>
+              </Stack>
+            </Stack>
+            <TextInput
+              {...emailField.getInputProps()}
+              label="Email"
+              placeholder=""
+            />
+            <Button
+              onClick={() => handleResetPassword()}
+              loading={isSendResetPasswordEmailLoading}
+              type="submit"
+              fullWidth
+              mt="xs"
+              size="sm"
+            >
+              Send Reset Password Link
+            </Button>
+            <Button
+              variant="subtle"
+              leftSection={<ArrowLeft size={16} />}
+              color="gray"
+              onClick={() => modalStack.close("forgot-password-modal")}
+            >
+              Back to Login
+            </Button>
+          </Stack>
+        </Modal>
+        <Modal
+          withCloseButton={false}
+          {...modalStack.register("reset-link-sent-modal")}
+        >
+          <Stack gap="xs">
+            <Stack justify="center" align="center" gap={0}>
+              <Image h="5rem" w="5rem" src={mailImg} />
+              <Text fw={800} size="lg">
+                Password Reset Link Sent
+              </Text>
+            </Stack>
+            <Text ta="center" size="sm" c="dimmed">
+              We have sent you a password reset link to{" "}
+              <Text component="span" c="white" fw={700}>
+                {resetPasswordEmail}
+              </Text>
+              . Please check your inbox and click the link to reset your
+              password.
+            </Text>
+            <Button
+              variant="subtle"
+              color="gray"
+              onClick={() => modalStack.closeAll()}
+            >
+              Close
+            </Button>
+          </Stack>
+        </Modal>
+      </Modal.Stack>
+    </>
   );
 }

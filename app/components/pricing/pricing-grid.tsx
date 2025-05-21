@@ -34,7 +34,7 @@ export const PricingGrid = ({ allowPurchase }: PricingGridProps) => {
           ]}
         />
       </Stack>
-      <SimpleGrid cols={{ xs: 1, sm: 2, lg: 2 }} spacing="lg">
+      <SimpleGrid cols={2} spacing="lg">
         {isPlansLoading ? (
           <>
             <SkeletonPriceCard />
