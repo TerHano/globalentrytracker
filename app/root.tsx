@@ -16,6 +16,7 @@ import "./app.css";
 
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import "~/i18n/i18n";
 
 dayjs.extend(customParseFormat);
 
@@ -30,6 +31,7 @@ import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import React from "react";
 import { UpgradeModalProvider } from "./provider/upgrade-modal-provider";
+import { AuthProvider } from "./provider/auth-provider";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -79,13 +81,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <MantineProvider theme={theme} defaultColorScheme="dark">
-          <ModalsProvider>
-            <Notifications autoClose={3000} />
-
-            <QueryClientProvider client={queryClient}>
-              <UpgradeModalProvider>{children}</UpgradeModalProvider>
-            </QueryClientProvider>
-          </ModalsProvider>
+          <AuthProvider>
+            <ModalsProvider>
+              <Notifications autoClose={3000} />
+              <QueryClientProvider client={queryClient}>
+                <UpgradeModalProvider>{children}</UpgradeModalProvider>
+              </QueryClientProvider>
+            </ModalsProvider>
+          </AuthProvider>
         </MantineProvider>
         <ScrollRestoration />
         <Scripts />

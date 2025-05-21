@@ -45,7 +45,7 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
   const { dehydratedState } = loaderData;
   return (
     <HydrationBoundary state={dehydratedState}>
-      <Stack className="fade-in-animation">
+      <Stack className="fade-in-up-animation">
         <Greeting />
         <NotificationSetupAlert />
         <ActiveTrackers />

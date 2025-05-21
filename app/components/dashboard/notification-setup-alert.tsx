@@ -10,20 +10,8 @@ export const NotificationSetupAlert = () => {
   if (isNotificationCheckLoading) {
     return null;
   }
-  if (!notificationCheck?.isNotificationsSetUp) {
-    return (
-      <Alert
-        variant="light"
-        color="blue"
-        title="Hey There!"
-        icon={<MessageSquare />}
-      >
-        You have not set up any notifications yet. Please set up your
-        notification settings to receive updates.
-      </Alert>
-    );
-  }
-  if (!notificationCheck.isAnyNotificationsEnabled) {
+
+  if (!notificationCheck?.isAnyNotificationsEnabled) {
     return (
       <Alert
         variant="light"

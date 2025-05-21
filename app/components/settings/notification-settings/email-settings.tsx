@@ -1,11 +1,10 @@
 import { Button, Divider, Group, Stack, Switch, Text } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useQuery } from "@tanstack/react-query";
 import { Mail, Send } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import type { EmailSettings } from "~/api/email-settings-api";
-import { meQuery } from "~/api/me-api";
 import { LabelValue } from "~/components/ui/label-value";
 import { Page } from "~/components/ui/page";
 import {
@@ -25,24 +24,26 @@ interface EmailSettingsForm {
 
 export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
   const isUpdate = !!settings;
+  const { t } = useTranslation();
   const { showNotification } = useShowNotification();
-  const { data: me } = useQuery(meQuery());
 
   // const [isEnabled, setIsEnabled] = useState(settings?.enabled ?? true);
-  const discordSettingsMutate = useCreateUpdateEmailSettings({
+  const emailSettingsMutate = useCreateUpdateEmailSettings({
     isUpdate,
     onSuccess: () => {
       showNotification({
-        title: "Settings saved",
-        message: "Your settings have been saved successfully.",
+        title: t("Email Settings Saved"),
+        message: t("Email Settings have been saved successfully."),
         status: "success",
         icon: <Mail size={16} />,
       });
     },
     onError: (error) => {
       showNotification({
-        title: "Error saving settings",
-        message: "There was an error saving your settings. Please try again.",
+        title: t("Failed to save Email Settings"),
+        message: t(
+          "There was an error saving your settings. Please try again."
+        ),
         status: "error",
         icon: <Mail size={16} />,
       });
@@ -53,16 +54,20 @@ export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
   const testMessageMutate = useTestEmailSettings({
     onSuccess: () => {
       showNotification({
-        title: "Test message sent",
-        message: "Your test message has been sent successfully.",
+        title: t("Test Email Sent"),
+        message: t(
+          "A test email has been sent to your email address. Please check your inbox."
+        ),
         status: "success",
         icon: <Mail size={16} />,
       });
     },
     onError: (error) => {
       showNotification({
-        title: "Error testing settings",
-        message: "There was an error testing your settings. Please try again.",
+        title: t("Failed To Send Test Email"),
+        message: t(
+          "There was an error testing your settings. Please try again."
+        ),
         status: "error",
         icon: <Mail size={16} />,
       });
@@ -72,22 +77,13 @@ export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
 
   const schema = z.object({
     enabled: z.boolean(),
-    webhookUrl: z
-      .string()
-      .nonempty("Webhook URL is required")
-      .regex(
-        /https:\/\/discord\.com\/api\/webhooks\/\d+\/[a-zA-Z0-9_-]+/,
-        "Invalid Discord Webhook URL"
-      ),
   });
 
   const form = useForm<EmailSettingsForm>({
     initialValues: {
       enabled: false,
     },
-    onValuesChange: (values) => {
-      // setIsEnabled(values.enabled);
-    },
+
     validate: zodResolver(schema),
   });
 
@@ -102,15 +98,15 @@ export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
         id: settings?.id,
         enabled: values.enabled,
       };
-      await discordSettingsMutate.mutateAsync(request);
+      await emailSettingsMutate.mutateAsync(request);
     },
-    [discordSettingsMutate, form, settings?.id]
+    [emailSettingsMutate, form, settings?.id]
   );
 
   useEffect(() => {
     if (!form.initialized) {
       form.initialize({
-        enabled: settings?.enabled ?? true,
+        enabled: settings ? settings.enabled : false,
       });
     }
   }, [form, settings]);
@@ -129,7 +125,7 @@ export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
               </Text>
             }
             // labelPosition="left"
-            defaultChecked={settings ? settings.enabled : true}
+            defaultChecked={settings ? settings.enabled : false}
             mt={3}
             color="green"
             key={form.key("enabled")}
@@ -142,7 +138,7 @@ export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
             }
           />
           <LabelValue label="Email">
-            <>{me?.email}</>
+            <>{settings?.email}</>
           </LabelValue>
           <Divider />
           <Group justify="end" gap="md" wrap="wrap">
@@ -157,7 +153,7 @@ export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
             </Button>
             <Button
               size="sm"
-              loading={discordSettingsMutate.isPending}
+              loading={emailSettingsMutate.isPending}
               type="submit"
             >
               Save Settings

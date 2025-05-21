@@ -3,26 +3,28 @@ import {
   Title,
   TextInput,
   PasswordInput,
-  Checkbox,
   Button,
   Anchor,
   Text,
+  Input,
+  Group,
 } from "@mantine/core";
 import classes from "./login-form.module.css";
-import { useActionData } from "react-router";
-import { useSubmit } from "react-router";
+import { useActionData, useNavigate } from "react-router";
 import { z } from "zod";
 import { useForm, zodResolver } from "@mantine/form";
 import { useCallback, useEffect, useState } from "react";
 import { useShowNotification } from "~/hooks/useShowNotification";
-import { Key } from "lucide-react";
+import { Key, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { supabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClient";
 
 export default function LoginForm() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { showNotification } = useShowNotification();
   const [isLoading, setIsLoading] = useState(false);
-  const submit = useSubmit();
+  //const submit = useSubmit();
   const submitResponse = useActionData<{ error?: string }>();
   const [error, setError] = useState<string | null>(null);
 
@@ -47,18 +49,39 @@ export default function LoginForm() {
       setError(null);
       setIsLoading(true);
       console.log("Submitting form", values);
-      const requestBody = {
-        email: values.email,
-        password: values.password,
-      };
-      await submit(requestBody, {
-        method: "post",
-        action: "/login",
-      }).finally(() => {
-        setIsLoading(false);
-      });
+      // const requestBody = {
+      //   email: values.email,
+      //   password: values.password,
+      // };
+      supabaseBrowserClient.auth
+        .signInWithPassword({
+          email: values.email,
+          password: values.password,
+        })
+        .then(({ error }) => {
+          if (error) {
+            setError(error.message);
+            showNotification({
+              title: "Login Failed",
+              message: error.message,
+              status: "error",
+              icon: <Key size={16} />,
+            });
+          } else {
+            navigate("/dashboard");
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+      // await submit(requestBody, {
+      //   method: "post",
+      //   action: "/login",
+      // }).finally(() => {
+      //   setIsLoading(false);
+      // });
     },
-    [form, submit]
+    [form, navigate, showNotification]
   );
 
   useEffect(() => {
@@ -80,16 +103,21 @@ export default function LoginForm() {
 
   return (
     <div className={classes.wrapper}>
-      <Paper className={`${classes.form} fade-in-animation`} radius={0} p={30}>
-        <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
-          {t("Welcome back to Global Entry Appointment Tracker")}
+      <Paper className={`${classes.form}`} radius={0} p={30}>
+        <Title order={2} className={classes.title} ta="center" mt="md">
+          {t("Welcome back to EasyEntry")}
         </Title>
         <form onSubmit={form.onSubmit(handleSubmit)}>
+          <Input.Label></Input.Label>
           <TextInput
-            label="Email address"
+            label="Email"
             placeholder="hello@gmail.com"
             size="md"
             {...form.getInputProps("email")}
+            labelProps={{}}
+            rightSection={
+              <Mail size={16} color="gray" className={classes.icon} />
+            }
           />
           <PasswordInput
             label="Password"
@@ -99,7 +127,11 @@ export default function LoginForm() {
             {...form.getInputProps("password")}
           />
 
-          <Checkbox label="Keep me logged in" mt="xl" size="md" />
+          <Group mt="xs" justify="end" align="center">
+            <Button size="xs" variant="subtle" color="gray">
+              Forgot Password?
+            </Button>
+          </Group>
           <Button loading={isLoading} type="submit" fullWidth mt="xl" size="md">
             Login
           </Button>

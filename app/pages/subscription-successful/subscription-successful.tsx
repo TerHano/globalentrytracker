@@ -36,7 +36,7 @@ export const SubscriptionSuccessfulPage = () => {
         <span id="confettiId" />
       </div>
       <Stack
-        className="fade-in-animation"
+        className="fade-in-up-animation"
         justify="center"
         align="center"
         gap="md"

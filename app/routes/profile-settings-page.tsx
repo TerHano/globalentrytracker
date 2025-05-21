@@ -1,13 +1,7 @@
 import type { Route } from "./+types/profile-settings-page";
 import { redirect } from "react-router";
 import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
-import { meQuery } from "~/api/me-api";
 import { ProfileSettings } from "~/components/settings/profile-settings";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
 
 export function meta() {
   return [
@@ -25,18 +19,8 @@ export async function loader({ request }: Route.LoaderArgs) {
     // If the user is already logged in, redirect to the home page
     return redirect("/login", { headers });
   }
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(meQuery(session.access_token));
-  return { dehydratedState: dehydrate(queryClient) };
 }
 
-export default function ProfileSettingsPage({
-  loaderData,
-}: Route.ComponentProps) {
-  const { dehydratedState } = loaderData;
-  return (
-    <HydrationBoundary state={dehydratedState}>
-      <ProfileSettings />
-    </HydrationBoundary>
-  );
+export default function ProfileSettingsPage() {
+  return <ProfileSettings />;
 }

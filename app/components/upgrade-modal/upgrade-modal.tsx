@@ -2,7 +2,6 @@ import {
   Button,
   Modal,
   noop,
-  SimpleGrid,
   Stack,
   Text,
   useModalsStack,
@@ -13,8 +12,9 @@ import { useTranslation } from "react-i18next";
 import { useValidateSubscription } from "~/hooks/api/useValidateSubscription";
 import { useReward } from "react-rewards";
 import { useQuery } from "@tanstack/react-query";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { planQuery } from "~/api/plans-api";
-import { PricingCard } from "../pricing/pricing-card";
+import { PricingGrid } from "../pricing/pricing-grid";
 
 export interface UpgradeModalProps {
   stack: ReturnType<
@@ -33,7 +33,6 @@ export const UpgradeModal = ({
 }: UpgradeModalProps) => {
   const { t } = useTranslation();
 
-  const { data: plans } = useQuery(planQuery());
   const { reward } = useReward("confettiId", "confetti", {
     elementCount: 400,
     lifetime: 800,
@@ -61,18 +60,16 @@ export const UpgradeModal = ({
   });
 
   useEffect(() => {
-    console.log("open", open, stack);
     if (open) {
-      console.log("open");
       stack.open("upgrade-benefits");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   return (
     <Modal.Stack>
       <Modal
         size="xl"
+        transitionProps={{ duration: 300, transition: "fade-up" }}
         {...stack.register("upgrade-benefits")}
         //  opened={opened}
         //    onClose={handleClose}
@@ -88,7 +85,8 @@ export const UpgradeModal = ({
           <Text fz="sm" c="dimmed">
             {t("Upgrade to Tracker Pro for more features and benefits.")}
           </Text>
-          <SimpleGrid w="100%" cols={{ xs: 1, sm: 2 }} spacing="lg">
+          <PricingGrid allowPurchase={true} />
+          {/* <SimpleGrid w="100%" cols={{ xs: 1, sm: 2 }} spacing="lg">
             {plans?.map((plan) => (
               <PricingCard
                 priceId={plan.priceId}
@@ -101,7 +99,7 @@ export const UpgradeModal = ({
                 frequency={plan.frequency}
               />
             ))}
-          </SimpleGrid>
+          </SimpleGrid> */}
 
           <Button
             variant="subtle"

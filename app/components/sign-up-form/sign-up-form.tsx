@@ -110,7 +110,7 @@ export default function SignUpForm() {
 
   return (
     <div className={classes.wrapper}>
-      <Paper className={`${classes.form} fade-in-animation`} radius={0} p={30}>
+      <Paper className={`${classes.form}`} radius={0} p={30}>
         <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
           {t("Ready To Get That Appointment?")}
         </Title>

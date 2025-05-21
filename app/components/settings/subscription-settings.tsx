@@ -35,15 +35,11 @@ export const SubscriptionSettings = () => {
     },
   });
 
-  const isSubscriptionActive = useMemo(() => {
-    if (subscriptionInformation?.active) {
-      return subscriptionInformation.active;
-    }
-    return false;
-  }, [subscriptionInformation]);
+  const hasActiveBilling =
+    subscriptionInformation?.activeBilledSubscription ?? false;
 
   const subscriptionAmount = useMemo(() => {
-    if (subscriptionInformation?.planPrice) {
+    if (subscriptionInformation?.planPrice !== undefined) {
       return new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: subscriptionInformation.currency,
@@ -63,33 +59,33 @@ export const SubscriptionSettings = () => {
   }, [subscriptionInformation, t]);
 
   const paymentAmountText = useMemo(() => {
-    if (isSubscriptionActive) {
+    if (hasActiveBilling) {
       return (
         <Text span>
           {subscriptionAmount} / {intervalText}
         </Text>
       );
     } else return "--";
-  }, [intervalText, isSubscriptionActive, subscriptionAmount]);
+  }, [intervalText, hasActiveBilling, subscriptionAmount]);
 
   const nextPaymentDateText = useMemo(() => {
-    if (isSubscriptionActive) {
+    if (hasActiveBilling) {
       return (
         <Text>
           {subscriptionInformation?.nextPaymentDate
             ? new Date(
                 subscriptionInformation.nextPaymentDate
               ).toLocaleDateString()
-            : t("No payment date available")}
+            : "--"}
         </Text>
       );
     }
     return "--";
-  }, [isSubscriptionActive, subscriptionInformation, t]);
+  }, [hasActiveBilling, subscriptionInformation]);
 
   return (
     <Page.Subsection
-      className="fade-in-animation"
+      className="fade-in-up-animation"
       header="Subscription Settings"
       description="Check out your subscription information"
     >
@@ -99,15 +95,8 @@ export const SubscriptionSettings = () => {
             <LabelValue
               label={t("Plan")}
               labelRightSection={
-                <Badge
-                  color={subscriptionInformation?.active ? "green" : "red"}
-                  variant="light"
-                  size="xs"
-                  radius="xs"
-                >
-                  {subscriptionInformation?.active
-                    ? t("Active")
-                    : t("Inactive")}
+                <Badge color={"green"} variant="light" size="xs" radius="xs">
+                  {t("Active")}
                 </Badge>
               }
             >
@@ -133,13 +122,13 @@ export const SubscriptionSettings = () => {
           </Skeleton>
           <Skeleton visible={isSubscriptionInfoLoading}>
             <LabelValue label={t("Payment Method")}>
-              {isSubscriptionActive ? (
+              {hasActiveBilling ? (
                 <Group>
                   <CreditCardIcon name={subscriptionInformation?.cardBrand} />
                   <Text>
                     {subscriptionInformation?.cardLast4Digits
                       ? `**** **** **** ${subscriptionInformation.cardLast4Digits}`
-                      : t("No payment method available")}
+                      : "--"}
                   </Text>
                 </Group>
               ) : (
@@ -151,7 +140,7 @@ export const SubscriptionSettings = () => {
         <Divider />
         <Flex justify="flex-end">
           <Skeleton width="fit-content" visible={isSubscriptionInfoLoading}>
-            {isSubscriptionActive ? (
+            {hasActiveBilling ? (
               <Button
                 loading={isNavigating}
                 onClick={() => {
@@ -163,9 +152,7 @@ export const SubscriptionSettings = () => {
                 {t("Manage Subscription")}
               </Button>
             ) : (
-              <Button onClick={showUpgradeModal} color="teal">
-                {t("Resubscribe")}
-              </Button>
+              <Button onClick={showUpgradeModal}>{t("Upgrade")}</Button>
             )}
           </Skeleton>
         </Flex>

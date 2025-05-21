@@ -25,7 +25,7 @@ interface ProfileSettingsFormSchema {
 }
 
 export const ProfileSettings = () => {
-  const { data: me, isLoading: isMeLoading } = useQuery(meQuery());
+  const { data: me, isFetching: isMeLoading } = useQuery(meQuery());
 
   const { showNotification } = useShowNotification();
 
@@ -41,18 +41,21 @@ export const ProfileSettings = () => {
   });
 
   const form = useForm<ProfileSettingsFormSchema>({
+    initialValues: {
+      firstName: me?.firstName ?? "",
+      lastName: me?.lastName ?? "",
+    },
     validate: zodResolver(schema),
   });
 
   const updateUserMutation = useUpdateUser({
-    onSuccess: (data, request) => {
+    onSuccess: (_, request) => {
       showNotification({
         title: "Profile updated",
         message: "Your profile has been updated successfully.",
         status: "success",
         icon: <UserRoundCheck size={16} />,
       });
-
       form.setInitialValues({
         firstName: request.firstName,
         lastName: request.lastName,
@@ -93,7 +96,7 @@ export const ProfileSettings = () => {
 
   return (
     <Page.Subsection
-      className="fade-in-animation"
+      className="fade-in-up-animation"
       header="Profile Settings"
       description="You can change your profile settings here"
     >
@@ -126,7 +129,13 @@ export const ProfileSettings = () => {
           </SimpleGrid>
           <Divider />
           <Flex justify="end">
-            <Button type="submit">Update Profile</Button>
+            <Button
+              disabled={updateUserMutation.isPending || isMeLoading}
+              loading={updateUserMutation.isPending}
+              type="submit"
+            >
+              Update Profile
+            </Button>
           </Flex>
         </Stack>
       </form>

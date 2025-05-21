@@ -10,6 +10,7 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { Send } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { z } from "zod";
 import type { DiscordSettings } from "~/api/discord-settings-api";
@@ -35,6 +36,7 @@ interface DiscordSettingsForm {
 }
 
 export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
+  const { t } = useTranslation();
   const isUpdate = !!settings;
   const { showNotification } = useShowNotification();
 
@@ -43,16 +45,18 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
     isUpdate,
     onSuccess: () => {
       showNotification({
-        title: "Settings saved",
-        message: "Your settings have been saved successfully.",
+        title: t("Discord Settings Saved"),
+        message: t("Discord Settings have been saved successfully."),
         status: "success",
         icon: <DiscordIcon size={16} />,
       });
     },
     onError: (error) => {
       showNotification({
-        title: "Error saving settings",
-        message: "There was an error saving your settings. Please try again.",
+        title: t("Failed to save Discord Settings"),
+        message: t(
+          "There was an error saving your settings. Please try again."
+        ),
         status: "error",
         icon: <DiscordIcon size={16} />,
       });
@@ -126,7 +130,7 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
     if (!form.initialized) {
       form.initialize({
         webhookUrl: settings?.webhookUrl ?? "",
-        enabled: settings?.enabled ?? true,
+        enabled: settings ? settings.enabled : false,
       });
     }
   }, [form, settings]);
@@ -137,7 +141,7 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
           webhooks, notifications, and other integrations with Discord."
     >
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Stack>
+        <Stack className="discord-settings">
           <Switch
             size="sm"
             label={
@@ -146,7 +150,7 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
               </Text>
             }
             // labelPosition="left"
-            defaultChecked={settings ? settings.enabled : true}
+            defaultChecked={settings ? settings.enabled : false}
             mt={3}
             color="green"
             key={form.key("enabled")}

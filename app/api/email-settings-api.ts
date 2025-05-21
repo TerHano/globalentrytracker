@@ -7,7 +7,7 @@ export const emailNotificationSettingsQueryKey = "email-notification-settings";
 export interface EmailSettings {
   id: number;
   enabled: boolean;
-  webhookUrl: string;
+  email: string;
 }
 
 export async function emailNotificationSettingsApi(token: string) {

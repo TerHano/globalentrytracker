@@ -59,7 +59,7 @@ export default function EditTracker({ loaderData }: Route.ComponentProps) {
   return (
     <HydrationBoundary state={dehydratedState}>
       <Page
-        className="fade-in-animation"
+        className="fade-in-up-animation"
         breadcrumbs={[
           <Anchor
             key="Dashboard"

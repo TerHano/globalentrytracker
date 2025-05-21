@@ -5,7 +5,7 @@ import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 export const subscriptionInformationQueryKey = "subscription-information";
 
 export interface subscriptionInformation {
-  active: boolean;
+  activeBilledSubscription: boolean;
   planName: string;
   planPrice: number;
   currency: string;

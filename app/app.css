@@ -13,11 +13,14 @@ body {
   margin: 0 auto;
 }
 
-.fade-in-animation {
+.fade-in-up-animation {
   animation: fade-in-up 0.5s ease forwards;
 }
 
-/* View Transition animations */
+.fade-in-left-animation {
+  animation: fade-in-left 0.5s ease forwards;
+}
+
 @keyframes fade-in-up {
   from {
     opacity: 0;
@@ -29,11 +32,143 @@ body {
   }
 }
 
+@keyframes fade-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes plane-fade-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(30px) rotate(-6deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(-6deg);
+  }
+}
+
 @keyframes fade-out {
   from {
     opacity: 1;
   }
   to {
+    opacity: 0;
+  }
+}
+
+/* Bob up and down */
+@keyframes planeBob {
+  0% {
+    transform: translateY(0) rotate(-6deg);
+  }
+  10% {
+    transform: translateY(-3px) rotate(-4deg);
+  }
+  20% {
+    transform: translateY(-6px) rotate(-2deg);
+  }
+  30% {
+    transform: translateY(-9px) rotate(0deg);
+  }
+  40% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(4deg);
+  }
+  60% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+  70% {
+    transform: translateY(-9px) rotate(0deg);
+  }
+  80% {
+    transform: translateY(-6px) rotate(-2deg);
+  }
+  90% {
+    transform: translateY(-3px) rotate(-4deg);
+  }
+  100% {
+    transform: translateY(0) rotate(-6deg);
+  }
+}
+.plane-fade-bob {
+  animation: plane-fade-in-left 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards
+      0.25s,
+    planeBob 15s linear 1.05s infinite;
+  /* The second animation starts after fade-in completes */
+  /* Start hidden, fadeInLeft will set to 1 */
+  opacity: 0;
+}
+
+.plane-col {
+  position: relative;
+  overflow: visible;
+}
+
+.cloud {
+  position: absolute;
+  bottom: 10%; /* 10% of container's height from bottom */
+  left: 0;
+  width: 20%; /* 20% of container's width */
+  height: 10%;
+  background: #fff;
+  border-radius: 50px 50px 40px 40px / 30px 30px 20px 20px;
+  opacity: 0.7;
+  box-shadow: 20px 0 0 0 #fff, 40px 10px 0 0 #fff, 25px 15px 0 0 #fff;
+  z-index: 1;
+  animation: cloud-move 12s linear infinite forwards;
+}
+
+.cloud-1 {
+  left: 5%;
+  bottom: 15%;
+  width: 22%;
+  height: 11%;
+  animation-duration: 22s;
+  animation-delay: 0s;
+}
+
+.cloud-2 {
+  left: 25%;
+  bottom: 20%;
+  width: 16%;
+  height: 8%;
+  opacity: 0;
+  animation-duration: 28s;
+  animation-delay: 6s;
+}
+
+.cloud-3 {
+  left: 50%;
+  bottom: 8%;
+  width: 28%;
+  height: 14%;
+  opacity: 0;
+  animation-duration: 32s;
+  animation-delay: 12s;
+}
+
+@keyframes cloud-move {
+  0% {
+    transform: translateX(-150px); /* Start off-screen left */
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  90% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(100vw); /* Move fully off-screen right */
     opacity: 0;
   }
 }

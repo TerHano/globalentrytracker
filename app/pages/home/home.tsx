@@ -1,111 +1,111 @@
 import {
   Button,
   Container,
+  Grid,
   Group,
   Image,
-  List,
-  SimpleGrid,
+  Paper,
+  Stack,
   Text,
-  ThemeIcon,
-  Title,
 } from "@mantine/core";
-import travelersImage from "~/assets/images/travelers.svg";
-import classes from "./home.module.css";
-import { CircleCheck } from "lucide-react";
+import planeImg from "~/assets/images/plane.png";
+import { CircleCheckBig } from "lucide-react";
 import { NavLink } from "react-router";
-import { Page } from "~/components/ui/page";
-import { PricingCard } from "~/components/pricing/pricing-card";
-import { planQuery } from "~/api/plans-api";
-import { useQuery } from "@tanstack/react-query";
-import { PlanFrequency } from "~/enum/PlanFrequency";
+import { PricingGrid } from "~/components/pricing/pricing-grid";
+import { FAQ } from "./faq";
+import { HowItWorks } from "./how-it-works";
+import useIdScroll from "~/hooks/useIdScroll";
 
 export const HomePage = () => {
-  const { data: plans } = useQuery(planQuery());
+  const { scrollToId } = useIdScroll();
   return (
-    <Container size="md">
-      <div className={classes.inner}>
-        <div className={classes.content}>
-          <Title className={classes.title}>
-            A <span className={classes.highlight}>modern</span> <br /> Global
-            Entry Appointment Tracker
-          </Title>
-          <Text c="dimmed" mt="md">
-            Build fully functional accessible web applications faster than ever
-            – Mantine includes more than 120 customizable components and hooks
-            to cover you in any situation
-          </Text>
-
-          <List
-            mt={30}
-            spacing="sm"
-            size="sm"
-            icon={
-              <ThemeIcon size={20} radius="xl">
-                <CircleCheck size={12} />
-              </ThemeIcon>
-            }
+    <Container size="xl">
+      <Stack mt="lg" gap="xl">
+        <Grid justify="center" id="hero">
+          <Grid.Col span={{ xs: 12, sm: 8 }}>
+            <Stack className="fade-in-up-animation" gap="xs">
+              <Text span fw={800} lh="1em" fz="2rem">
+                Get Your Global Entry Interview Sooner
+              </Text>
+              <Text fz="1rem" c="dimmed">
+                Get instant notifications when Global Entry interview slots
+                become available at your preferred locations.
+              </Text>
+              <Group mt="md" gap="xs">
+                <NavLink to="/signup">
+                  {({ isPending }) => (
+                    <Button loading={isPending} size="sm">
+                      Start Tracking Now
+                    </Button>
+                  )}
+                </NavLink>
+                <Button
+                  onClick={() => {
+                    scrollToId("howItWorks");
+                    // const el = document.getElementById("howItWorks");
+                    // if (el) {
+                    //   scrollTo({ y: el.offsetTop - 80 });
+                    // }
+                  }}
+                  variant="light"
+                  size="sm"
+                >
+                  How It Works
+                </Button>
+              </Group>
+              <Group align="center" mt="xs" gap="xs">
+                <FeatureTagLine label="Real-time Alerts" />
+                <FeatureTagLine label=" Multiple Locations" />
+                <FeatureTagLine label="  24/7 Monitoring" />
+              </Group>
+            </Stack>
+          </Grid.Col>
+          <Grid.Col
+            maw={300}
+            //style={{ animationDelay: "200ms" }}
+            className="plane-fade-bob plane-col"
+            span={{ xs: 12, sm: 4 }}
           >
-            <List.Item>
-              <b>TypeScript based</b> – build type safe applications, all
-              components and hooks export types
-            </List.Item>
-            <List.Item>
-              <b>Free and open source</b> – all packages have MIT license, you
-              can use Mantine in any project
-            </List.Item>
-            <List.Item>
-              <b>No annoying focus ring</b> – focus ring will appear only when
-              user navigates with keyboard
-            </List.Item>
-          </List>
-
-          <Group mt={30}>
-            <NavLink to="/login">
-              <Button size="md" className={classes.control}>
-                Login
-              </Button>
-            </NavLink>
-            <Button
-              variant="default"
-              radius="xl"
-              size="md"
-              className={classes.control}
-            >
-              Source code
-            </Button>
-          </Group>
-        </div>
-        <Image src={travelersImage} className={classes.image} />
-      </div>
-      <Page.Subsection
-        header="Pricing"
-        description="Choose a plan that works for you"
-      >
-        <SimpleGrid maw={800} cols={2} spacing="lg" mt="lg">
-          <PricingCard
-            title="Free"
-            description="Free forever"
-            price={0}
-            features={["Two Trackers", "Notifications Every 48 Hours"]}
-            buttonText={"Upgrade"}
-            isCurrentPlan
-            priceId={""}
-            frequency={PlanFrequency.Monthly}
-          />
-          {plans?.map((plan) => (
-            <PricingCard
-              key={plan.id}
-              title={plan.name}
-              description={plan.description}
-              price={plan.price}
-              features={plan.features}
-              buttonText={"Upgrade"}
-              priceId={""}
-              frequency={plan.frequency}
-            />
-          ))}
-        </SimpleGrid>
-      </Page.Subsection>
+            <div className="cloud cloud-1" />
+            <div className="cloud cloud-2" />
+            <div className="cloud cloud-3" />
+            <Image src={planeImg} alt="plane" />
+          </Grid.Col>
+        </Grid>
+        <Paper p="md" radius="xs">
+          <HowItWorks />
+        </Paper>
+        <Stack
+          className="fade-in-up-animation"
+          justify="center"
+          align="center"
+          gap="xs"
+        >
+          <Stack gap={1} justify="center" align="center">
+            <Text span fw={800} lh="1em" fz="2rem">
+              Pricing
+            </Text>
+            <Text fw={500} ta="center" fz="1rem" c="dimmed">
+              Choose a plan that suits your needs
+            </Text>
+          </Stack>
+          <PricingGrid allowPurchase={false} />
+        </Stack>
+        <Paper p="md" radius="md">
+          <FAQ />
+        </Paper>
+      </Stack>
     </Container>
+  );
+};
+
+const FeatureTagLine = ({ label }: { label: string }) => {
+  return (
+    <Group gap={4}>
+      <CircleCheckBig size={14} />
+      <Text fw="bold" fz="sm" c="white">
+        {label}
+      </Text>
+    </Group>
   );
 };

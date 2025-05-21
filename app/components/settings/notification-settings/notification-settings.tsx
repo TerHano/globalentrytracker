@@ -13,19 +13,19 @@ export const NotificationSettings = () => {
 
   if (isSettingsLoading || !settings) {
     return (
-      <div className="fade-in-animation">
+      <div className="fade-in-up-animation">
         <Skeleton h={300} visible />
       </div>
     );
   }
   return (
-    <div className="fade-in-animation">
-      <Tabs radius="md" defaultValue="discord">
+    <div className="fade-in-up-animation">
+      <Tabs radius="md" defaultValue="email">
         <TabsList>
-          <TabsTab value="email" leftSection={<Mail />}>
+          <TabsTab value="email" leftSection={<Mail size={14} />}>
             Email
           </TabsTab>
-          <TabsTab value="discord" leftSection={<DiscordIcon />}>
+          <TabsTab value="discord" leftSection={<DiscordIcon size={14} />}>
             Discord
           </TabsTab>
         </TabsList>

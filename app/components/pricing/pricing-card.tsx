@@ -28,7 +28,7 @@ export interface PricingCardProps {
   price: number;
   discountPrice?: string;
   features: string[];
-  buttonText: string;
+  showButton?: boolean;
   frequency: PlanFrequency;
 }
 
@@ -43,6 +43,7 @@ export const PricingCard = ({
   isCurrentPlan,
   tag,
   frequency,
+  showButton = false,
 }: PricingCardProps) => {
   const [isNavigating, setIsNavigating] = useState(false);
   const { t } = useTranslation();
@@ -66,6 +67,9 @@ export const PricingCard = ({
   };
 
   const getPlanPriceText = (price: number, frequency: PlanFrequency) => {
+    if (price === 0) {
+      return t("Free");
+    }
     const frequencyText = getPlanFrequencyText(frequency);
     const convertedPrice = price / 100;
     return `$${convertedPrice} / ${frequencyText}`;
@@ -108,22 +112,24 @@ export const PricingCard = ({
               {getPlanPriceText(price, frequency)}
             </Text>
           </Group>
-          {isCurrentPlan ? (
-            <Button variant="white" disabled>
-              Current Plan
-            </Button>
-          ) : (
-            <Button
-              loading={isNavigating}
-              rightSection={<ExternalLink size={16} color="white" />}
-              onClick={() => {
-                setIsNavigating(true);
-                mutateCheckout(priceId);
-              }}
-            >
-              Select Plan
-            </Button>
-          )}
+          {showButton ? (
+            isCurrentPlan ? (
+              <Button variant="white" disabled>
+                Current Plan
+              </Button>
+            ) : (
+              <Button
+                loading={isNavigating}
+                rightSection={<ExternalLink size={16} color="white" />}
+                onClick={() => {
+                  setIsNavigating(true);
+                  mutateCheckout(priceId);
+                }}
+              >
+                Select Plan
+              </Button>
+            )
+          ) : null}
           <Stack gap={3}>
             {features.map((feature, index) => (
               <Group gap="xs" key={index}>

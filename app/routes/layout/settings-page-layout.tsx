@@ -81,7 +81,7 @@ export default function SettingsPageLayout({
 
   return (
     <Page
-      className="fade-in-animation"
+      className="fade-in-up-animation"
       header="Settings"
       description="You can change your settings here"
     >

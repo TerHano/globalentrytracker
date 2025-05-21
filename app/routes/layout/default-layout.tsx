@@ -1,9 +1,10 @@
 import { Outlet } from "react-router";
+import { GlobalEntryTrackerShell } from "~/components/appshell/global-entry-tracker-shell";
 
 export default function DefaultLayout() {
   return (
-    <div className="container">
+    <GlobalEntryTrackerShell>
       <Outlet />
-    </div>
+    </GlobalEntryTrackerShell>
   );
 }

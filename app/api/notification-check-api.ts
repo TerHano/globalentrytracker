@@ -5,7 +5,6 @@ import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 export const notificationCheckQueryKey = "notification-check";
 
 export interface NotificationCheck {
-  isNotificationsSetUp: boolean;
   isAnyNotificationsEnabled: boolean;
 }
 

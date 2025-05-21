@@ -1,6 +1,7 @@
 import { CreditCard } from "lucide-react";
 import { useMemo } from "react";
 import AmexIcon from "~/assets/icons/credit-card/amex.png";
+import discoverIcon from "~/assets/icons/credit-card/discover.png";
 import VisaIcon from "~/assets/icons/credit-card/visa.png";
 import MasterCardIcon from "~/assets/icons/credit-card/master-card.png";
 import { Image } from "@mantine/core";
@@ -22,6 +23,8 @@ export const CreditCardIcon = ({ name }: { name: string | undefined }) => {
         return VisaIcon;
       case "mastercard":
         return MasterCardIcon;
+      case "discover":
+        return discoverIcon;
       default:
         return null;
     }

@@ -1,14 +1,15 @@
-import { Outlet, redirect } from "react-router";
+import { Outlet, redirect, useNavigate } from "react-router";
 import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 import type { Route } from "./+types/protected-layout";
-import { AppShell, AppShellHeader, AppShellMain } from "@mantine/core";
 import { meQuery } from "~/api/me-api";
-import { AppHeader } from "~/components/appshell/app-header";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { supabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClient";
+import { GlobalEntryTrackerShell } from "~/components/appshell/global-entry-tracker-shell";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const { supabase, headers } = createSupabaseServerClient(request);
@@ -30,18 +31,28 @@ export async function loader({ request }: Route.LoaderArgs) {
 export default function ProtectedLayout({ loaderData }: Route.ComponentProps) {
   const { dehydratedState } = loaderData;
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const { data: listener } = supabaseBrowserClient.auth.onAuthStateChange(
+      (event, session) => {
+        if (!session) {
+          // Session expired or user logged out
+          navigate("/login"); // or your login route
+        }
+      }
+    );
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, [navigate]);
+
   return (
     <HydrationBoundary state={dehydratedState}>
-      <AppShell padding="md" header={{ height: 50 }}>
-        <AppShellHeader>
-          <AppHeader />
-        </AppShellHeader>
-        <AppShellMain>
-          <div className="container">
-            <Outlet />
-          </div>
-        </AppShellMain>
-      </AppShell>
+      <GlobalEntryTrackerShell>
+        <Outlet />
+      </GlobalEntryTrackerShell>
     </HydrationBoundary>
   );
 }

@@ -1,16 +1,13 @@
 "use client";
-import { createSupabaseBrowserClient } from "./createSupbaseBrowerClient";
-
-const supabase = createSupabaseBrowserClient();
+import { supabaseBrowserClient } from "./createSupbaseBrowerClient";
 
 export async function getSupabaseToken() {
   const {
     data: { session },
     error,
-  } = await supabase.auth.getSession();
+  } = await supabaseBrowserClient.auth.getSession();
 
   if (error || !session) {
-    console.error("Error retrieving session:", error);
     return null;
   }
 
