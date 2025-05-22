@@ -12,14 +12,12 @@ export const meQueryKey = "me";
  * @property lastName - The user's last name.
  * @property email - The user's email address.
  * @property role - The user's role within the system, as defined by the RoleEnum.
- * @property nextNotificationAt - The ISO string representing the next scheduled notification time for the user.
  */
 export interface me {
   firstName: string;
   lastName: string;
   email: string;
   role: RoleEnum;
-  nextNotificationAt: string;
 }
 
 export async function meApi(token: string) {

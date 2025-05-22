@@ -3,7 +3,6 @@ import {
   SimpleGrid,
   Stack,
   Skeleton,
-  Button,
   Text,
   Image,
 } from "@mantine/core";

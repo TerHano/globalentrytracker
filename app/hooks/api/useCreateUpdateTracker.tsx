@@ -6,6 +6,7 @@ import { trackedLocationQueryKey } from "~/api/tracked-location-api";
 import { permissionQueryKey } from "~/api/permissions-api";
 import type { ApiError } from "~/models/ApiError";
 import { trackedLocationsQueryKey } from "~/api/tracked-locations-api";
+import { nextNotificationQueryKey } from "~/api/next-notification-api";
 
 export interface CreateUpdateTrackerRequest {
   id?: number;
@@ -46,7 +47,9 @@ export const useCreateUpdateTracker = ({
         queryClient.invalidateQueries({
           queryKey: [trackedLocationsQueryKey],
         });
-
+        queryClient.invalidateQueries({
+          queryKey: [nextNotificationQueryKey],
+        });
         queryClient.invalidateQueries({ queryKey: [permissionQueryKey] });
       }
     },

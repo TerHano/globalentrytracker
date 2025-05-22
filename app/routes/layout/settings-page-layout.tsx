@@ -1,7 +1,7 @@
-import { SegmentedControl, Group, Text } from "@mantine/core";
+import { SegmentedControl, Group, Text, Button, Stack } from "@mantine/core";
 import { useCallback, useEffect, useMemo } from "react";
-import { Bell, CreditCard, User } from "lucide-react";
-import { Outlet, useNavigate } from "react-router";
+import { ArrowLeft, Bell, CreditCard, User } from "lucide-react";
+import { NavLink, Outlet, useNavigate } from "react-router";
 import { Page } from "~/components/ui/page";
 import type { Route } from "./+types/settings-page-layout";
 import { useField } from "@mantine/form";
@@ -80,14 +80,29 @@ export default function SettingsPageLayout({
   );
 
   return (
-    <Page
-      className="fade-in-up-animation"
-      header="Settings"
-      description="You can change your settings here"
-    >
-      {settingsTabs}
-      <Outlet />
-    </Page>
+    <Stack gap="xs">
+      <NavLink to="/dashboard">
+        {({ isPending }) => (
+          <Button
+            variant="subtle"
+            color="gray"
+            size="sm"
+            leftSection={<ArrowLeft size={14} />}
+            loading={isPending}
+          >
+            Dashboard
+          </Button>
+        )}
+      </NavLink>
+      <Page
+        className="fade-in-up-animation"
+        header="Settings"
+        description="You can change your settings here"
+      >
+        {settingsTabs}
+        <Outlet />
+      </Page>
+    </Stack>
   );
 }
 

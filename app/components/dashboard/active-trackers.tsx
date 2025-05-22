@@ -26,20 +26,24 @@ import { useShowNotification } from "~/hooks/useShowNotification";
 import { useCreateUpdateTracker } from "~/hooks/api/useCreateUpdateTracker";
 import { LabelValue } from "../ui/label-value";
 import { useTranslation } from "react-i18next";
-import { meQuery } from "~/api/me-api";
 import dayjs from "dayjs";
+import { nextNotificationQuery } from "~/api/next-notification-api";
 
 export const ActiveTrackers = () => {
   const { t } = useTranslation();
   const { data, isLoading } = useQuery(trackedLocationsQuery());
-  const { data: meData } = useQuery(meQuery());
+  const { data: nextNotification } = useQuery({
+    ...nextNotificationQuery(),
+    refetchInterval: 1000 * 60 * 5,
+    throwOnError: false,
+  });
 
   const nextNotificationDate = useMemo(() => {
-    if (meData?.nextNotificationAt) {
-      return dayjs(meData.nextNotificationAt).format("MM/DD/YYYY, hh:mm A");
+    if (nextNotification) {
+      return dayjs(nextNotification).format("MM/DD/YYYY, hh:mm A");
     }
-    return null;
-  }, [meData]);
+    return "--";
+  }, [nextNotification]);
 
   const trackedLocationsList = useMemo(() => {
     if (!data && isLoading) {
@@ -102,7 +106,7 @@ export const ActiveTrackers = () => {
                     <CircleHelp size={14} />
                   </Tooltip>
                 }
-                label={t("Next Check")}
+                label={t("Next Check By")}
               >
                 <Text c="dimmed">{nextNotificationDate}</Text>
               </LabelValue>
