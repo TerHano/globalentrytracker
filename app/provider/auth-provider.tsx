@@ -4,6 +4,7 @@ import { supabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClien
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     console.log("being created");
 
@@ -19,6 +20,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     // Check initial session
     supabaseBrowserClient.auth.getSession().then(({ data: { session } }) => {
       setIsUserAuthenticated(!!session);
+      setIsLoading(false);
     });
 
     return () => {
@@ -27,7 +29,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isUserAuthenticated }}>
+    <AuthContext.Provider value={{ isUserAuthenticated, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

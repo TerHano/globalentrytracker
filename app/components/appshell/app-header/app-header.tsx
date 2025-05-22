@@ -1,4 +1,4 @@
-import { Button, Group, Text } from "@mantine/core";
+import { Button, Group, Skeleton, Text } from "@mantine/core";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { DoorOpen, PlaneLanding } from "lucide-react";
 import { useCallback } from "react";
@@ -15,7 +15,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { AvatarMenu } from "./avatar-menu";
 
 export const AppHeader = () => {
-  const isAuthenticated = useUserAuthenticated();
+  const { isUserAuthenticated, isLoading } = useUserAuthenticated();
   return (
     <Group
       className="container"
@@ -30,7 +30,7 @@ export const AppHeader = () => {
           EasyEntry
         </Text>
       </Group>
-      {isAuthenticated ? (
+      {isLoading ? null : isUserAuthenticated ? (
         <AppHeaderAuthenticated />
       ) : (
         <AppHeaderUnAuthenticated />
@@ -42,7 +42,14 @@ export const AppHeader = () => {
 const AppHeaderAuthenticated = () => {
   const { showNotification } = useShowNotification();
   const navigate = useNavigate();
-  const { data: meData } = useQuery(meQuery());
+  const {
+    data: meData,
+    isPending: isMeLoading,
+    isError: isMeErrored,
+  } = useQuery({
+    ...meQuery(),
+    throwOnError: false,
+  });
   const queryClient = useQueryClient();
   const matches = useMediaQuery("(min-width: 720px)");
   const { showUpgradeModal } = useShowUpgradeModalContext();
@@ -72,6 +79,14 @@ const AppHeaderAuthenticated = () => {
       });
   }, [navigate, queryClient, showNotification]);
 
+  if (isMeErrored) {
+    return null;
+  }
+
+  if (isMeLoading) {
+    return <Skeleton circle visible width={100} height={40} radius="sm" />;
+  }
+
   return (
     <Group>
       {!isProUser ? (
@@ -79,6 +94,7 @@ const AppHeaderAuthenticated = () => {
           Upgrade To Pro
         </Button>
       ) : null}
+
       {matches ? (
         <AvatarMenu onSignOut={handleSignOut} meData={meData} />
       ) : (

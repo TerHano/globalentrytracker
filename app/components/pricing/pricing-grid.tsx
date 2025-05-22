@@ -1,19 +1,50 @@
-import { SegmentedControl, SimpleGrid, Stack, Skeleton } from "@mantine/core";
+import {
+  SegmentedControl,
+  SimpleGrid,
+  Stack,
+  Skeleton,
+  Button,
+  Text,
+  Image,
+} from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { planQuery } from "~/api/plans-api";
 import { PricingCard } from "./pricing-card";
 import { PlanFrequency } from "~/enum/PlanFrequency";
 import { useState } from "react";
+import serverErrorImg from "~/assets/icons/500.png";
 
 export interface PricingGridProps {
   allowPurchase: boolean;
 }
 
 export const PricingGrid = ({ allowPurchase }: PricingGridProps) => {
-  const { data: plans, isFetching: isPlansLoading } = useQuery(planQuery());
+  const {
+    data: plans,
+    isFetching: isPlansLoading,
+    isError: isPlansErrored,
+  } = useQuery({
+    ...planQuery(),
+    throwOnError: false,
+  });
   const [selectedFrequency, setSelectedFrequency] = useState(
     PlanFrequency.Monthly.toString()
   );
+
+  if (isPlansErrored) {
+    return (
+      <Stack maw="40rem" justify="center" align="center" gap="md">
+        <Image src={serverErrorImg} w="6rem" />
+        <Text span fw={800} lh="1em" fz="1.5rem">
+          Uh oh! Something went wrong
+        </Text>
+        <Text ta="center" span fw={500} lh="1em" fz={14}>
+          We encountered an error getting our pricing plans. Please try again
+          later.
+        </Text>
+      </Stack>
+    );
+  }
 
   return (
     <Stack gap="sm">

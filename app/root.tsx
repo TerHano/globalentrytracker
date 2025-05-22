@@ -1,5 +1,6 @@
 import {
   isRouteErrorResponse,
+  Link,
   Links,
   Meta,
   Outlet,
@@ -17,14 +18,21 @@ import "./app.css";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import "~/i18n/i18n";
+import pageNotFoundImg from "~/assets/icons/404.png";
+import serverErrorImg from "~/assets/icons/500.png";
 
 dayjs.extend(customParseFormat);
 
 import {
+  Button,
   ColorSchemeScript,
+  Image,
   MantineProvider,
+  Stack,
   createTheme,
   mantineHtmlProps,
+  Text,
+  Container,
 } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Notifications } from "@mantine/notifications";
@@ -32,6 +40,7 @@ import { ModalsProvider } from "@mantine/modals";
 import React from "react";
 import { UpgradeModalProvider } from "./provider/upgrade-modal-provider";
 import { AuthProvider } from "./provider/auth-provider";
+import { ArrowLeft } from "lucide-react";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -65,6 +74,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             // With SSR, we usually want to set some default staleTime
             // above 0 to avoid refetching immediately on the client
             staleTime: 60 * 1000,
+            throwOnError: true,
           },
         },
       })
@@ -105,6 +115,72 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;
+  const showFriendlyError = true;
+
+  if (showFriendlyError) {
+    if (isRouteErrorResponse(error)) {
+      return (
+        <Container
+          className="fade-in-up-animation"
+          fluid
+          style={{ justifyItems: "center" }}
+          p="lg"
+        >
+          <Stack maw="40rem" justify="center" align="center" gap="md">
+            <Image src={pageNotFoundImg} w="8rem" />
+            <Stack w="100%" justify="center" align="center" gap="xs">
+              <Text span fw={800} lh="1em" fz="1.5rem">
+                Oops! Page not found
+              </Text>
+              <Text ta="center" span fw={500} lh="1em" fz={14}>
+                We couldn&apos;t find the page you&apos;re looking for. It might
+                have been removed, had its name changed, or is temporarily
+                unavailable.
+              </Text>
+            </Stack>
+            <Button
+              variant="subtle"
+              color="gray"
+              component={Link}
+              to="/"
+              leftSection={<ArrowLeft size={16} />}
+            >
+              Back to Home
+            </Button>
+          </Stack>
+        </Container>
+      );
+    } else {
+      return (
+        <Container
+          className="fade-in-up-animation"
+          fluid
+          style={{ justifyItems: "center" }}
+          p="lg"
+        >
+          <Stack maw="40rem" justify="center" align="center" gap="md">
+            <Image src={serverErrorImg} w="8rem" />
+            <Text span fw={800} lh="1em" fz="1.5rem">
+              Uh oh! Something went wrong
+            </Text>
+            <Text ta="center" span fw={500} lh="1em" fz={14}>
+              We encountered an error while processing your request. Please try
+              again later.
+            </Text>
+            <Button
+              variant="subtle"
+              color="gray"
+              component={Link}
+              to="/"
+              leftSection={<ArrowLeft size={16} />}
+            >
+              Back to Home
+            </Button>
+          </Stack>
+        </Container>
+      );
+    }
+  }
 
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? "404" : "Error";

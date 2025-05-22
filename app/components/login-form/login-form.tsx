@@ -22,6 +22,7 @@ import { useShowNotification } from "~/hooks/useShowNotification";
 import { ArrowLeft, Key, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import mailImg from "~/assets/icons/email.png";
+import emailLinkImg from "~/assets/icons/email-link.png";
 import resetPasswordImg from "~/assets/icons/reset-password.png";
 import { useSendResetPasswordEmail } from "~/hooks/useSendResetPasswordEMail";
 import { useSignInUser } from "~/hooks/useSignIn";
@@ -183,6 +184,11 @@ export default function LoginForm() {
         <Modal
           withCloseButton={false}
           {...modalStack.register("forgot-password-modal")}
+          transitionProps={{
+            transition: "fade-up",
+            duration: 200,
+            timingFunction: "ease",
+          }}
         >
           <Stack>
             <Stack justify="center" align="center" gap="md">
@@ -193,8 +199,8 @@ export default function LoginForm() {
                 </Text>
 
                 <Text ta="center" size="sm" c="dimmed">
-                  Don&apos;t worry, we&apos;ll send you reset instructions to
-                  your email.
+                  Don&apos;t worry, we&apos;ll send reset instructions to your
+                  email.
                 </Text>
               </Stack>
             </Stack>
@@ -229,7 +235,7 @@ export default function LoginForm() {
         >
           <Stack gap="xs">
             <Stack justify="center" align="center" gap={0}>
-              <Image h="5rem" w="5rem" src={mailImg} />
+              <Image h="5rem" w="5rem" src={emailLinkImg} />
               <Text fw={800} size="lg">
                 Password Reset Link Sent
               </Text>
