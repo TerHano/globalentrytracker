@@ -1,16 +1,17 @@
-import { Avatar, Menu, UnstyledButton, Text } from "@mantine/core";
+import { Avatar, Menu, UnstyledButton, Text, Loader } from "@mantine/core";
 import { Star, LayoutDashboard, Cog, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import type { me } from "~/api/me-api";
 import { RoleEnum } from "~/enum/RoleEnum";
 import { useShowUpgradeModalContext } from "~/hooks/useShowUpgradeModal";
+import type { useSignOutUser } from "~/hooks/useSignOut";
 
 interface AvaterMenuProps {
   meData?: me;
-  onSignOut: () => void;
+  signOutMutation: ReturnType<typeof useSignOutUser>;
 }
 
-export const AvatarMenu = ({ meData, onSignOut }: AvaterMenuProps) => {
+export const AvatarMenu = ({ meData, signOutMutation }: AvaterMenuProps) => {
   const { showUpgradeModal } = useShowUpgradeModalContext();
   const navigate = useNavigate();
   const isProUser = meData ? meData.role != RoleEnum.Free : false;
@@ -54,8 +55,14 @@ export const AvatarMenu = ({ meData, onSignOut }: AvaterMenuProps) => {
         </Menu.Item>
         <Menu.Item
           color="red"
-          onClick={onSignOut}
-          leftSection={<LogOut size={14} />}
+          onClick={() => signOutMutation.mutate()}
+          leftSection={
+            signOutMutation.isPending ? (
+              <Loader color="red" size={14} />
+            ) : (
+              <LogOut size={14} />
+            )
+          }
         >
           Sign Out
         </Menu.Item>

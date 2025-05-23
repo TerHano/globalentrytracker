@@ -1,5 +1,4 @@
 import {
-  Paper,
   Title,
   TextInput,
   PasswordInput,
@@ -10,7 +9,6 @@ import {
   Stack,
   Modal,
 } from "@mantine/core";
-import classes from "./sign-up-form.module.css";
 import { z } from "zod";
 import { useForm, zodResolver } from "@mantine/form";
 import { useCallback, useState } from "react";
@@ -109,66 +107,59 @@ export default function SignUpForm() {
   );
 
   return (
-    <div className={classes.wrapper}>
-      <Paper className={`${classes.form}`} radius={0} p={30}>
-        <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
-          {t("Ready To Get That Appointment?")}
-        </Title>
-        <form onSubmit={form.onSubmit(handleSubmit)}>
-          <Stack gap="sm">
-            <SimpleGrid cols={{ xs: 1, sm: 2 }} spacing="lg">
-              <TextInput
-                label="First name"
-                placeholder="John"
-                size="md"
-                {...form.getInputProps("firstName")}
-              />
-              <TextInput
-                label="Last name"
-                placeholder="Doe"
-                size="md"
-                {...form.getInputProps("lastName")}
-              />
-            </SimpleGrid>
+    <>
+      <Title order={2} ta="center" mt="md" mb={30}>
+        {t("Ready To Get That Appointment?")}
+      </Title>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <Stack gap="sm">
+          <SimpleGrid cols={{ xs: 1, sm: 2 }} spacing="lg">
             <TextInput
-              label="Email address"
-              placeholder="hello@gmail.com"
+              label="First name"
+              placeholder="John"
               size="md"
-              {...form.getInputProps("email")}
+              {...form.getInputProps("firstName")}
             />
-            <PasswordInputWithStrength value={passwordValue}>
-              <PasswordInput
-                label="Password"
-                placeholder="Your password"
-                size="md"
-                {...form.getInputProps("password")}
-              />
-            </PasswordInputWithStrength>
+            <TextInput
+              label="Last name"
+              placeholder="Doe"
+              size="md"
+              {...form.getInputProps("lastName")}
+            />
+          </SimpleGrid>
+          <TextInput
+            label="Email address"
+            placeholder="hello@gmail.com"
+            size="md"
+            {...form.getInputProps("email")}
+          />
+          <PasswordInputWithStrength value={passwordValue}>
             <PasswordInput
-              label="Confirm password"
-              placeholder="Confirm password"
+              label="Password"
+              placeholder="Your password"
               size="md"
-              {...form.getInputProps("confirmPassword")}
+              {...form.getInputProps("password")}
             />
-            <Button
-              loading={isLoading}
-              type="submit"
-              fullWidth
-              mt="xl"
-              size="md"
-            >
-              Sign Up
-            </Button>
-          </Stack>
-        </form>
+          </PasswordInputWithStrength>
+          <PasswordInput
+            label="Confirm password"
+            placeholder="Confirm password"
+            size="md"
+            {...form.getInputProps("confirmPassword")}
+          />
+          <Button loading={isLoading} type="submit" fullWidth mt="xl" size="md">
+            Sign Up
+          </Button>
+        </Stack>
+      </form>
 
-        <Text ta="center" mt="md">
-          Have an account?{" "}
-          <Anchor<"a"> href="/login" fw={700}>
-            Login
-          </Anchor>
-        </Text>
-      </Paper>
+      <Text ta="center" mt="md">
+        Have an account?{" "}
+        <Anchor<"a"> href="/login" fw={700}>
+          Login
+        </Anchor>
+      </Text>
+
       <Modal
         transitionProps={{
           transition: "fade-up",
@@ -209,6 +200,6 @@ export default function SignUpForm() {
           </Button>
         </Stack>
       </Modal>
-    </div>
+    </>
   );
 }

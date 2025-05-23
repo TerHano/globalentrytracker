@@ -1,7 +1,6 @@
-import { Button, Group, Skeleton, Text } from "@mantine/core";
+import { Button, Group, Skeleton } from "@mantine/core";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { DoorOpen, PlaneLanding } from "lucide-react";
-import { useCallback } from "react";
+import { DoorOpen } from "lucide-react";
 import { NavLink, useNavigate } from "react-router";
 import { meQuery } from "~/api/me-api";
 import { RoleEnum } from "~/enum/RoleEnum";
@@ -9,10 +8,11 @@ import { useShowNotification } from "~/hooks/useShowNotification";
 
 import { useShowUpgradeModalContext } from "~/hooks/useShowUpgradeModal";
 import { useUserAuthenticated } from "~/hooks/useUserAuthenticated";
-import { supabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClient";
 import { MobileAvatarMenu } from "./mobile-avatar-menu";
 import { useMediaQuery } from "@mantine/hooks";
 import { AvatarMenu } from "./avatar-menu";
+import { SiteLogo } from "~/components/ui/site-logo";
+import { useSignOutUser } from "~/hooks/useSignOut";
 
 export const AppHeader = () => {
   const { isUserAuthenticated, isLoading } = useUserAuthenticated();
@@ -24,12 +24,7 @@ export const AppHeader = () => {
       justify="space-between"
       align="center"
     >
-      <Group gap={4}>
-        <PlaneLanding size={24} />
-        <Text component={NavLink} to="/" fz="1.2rem" fw="bold">
-          EasyEntry
-        </Text>
-      </Group>
+      <SiteLogo />
       {isLoading ? null : isUserAuthenticated ? (
         <AppHeaderAuthenticated />
       ) : (
@@ -56,28 +51,21 @@ const AppHeaderAuthenticated = () => {
 
   const isProUser = meData ? meData.role != RoleEnum.Free : false;
 
-  const handleSignOut = useCallback(() => {
-    // Clear the query cache
-    supabaseBrowserClient.auth
-      .signOut()
-      .then(({ error }) => {
-        if (error) {
-          console.error("Error signing out:", error.message);
-        } else {
-          queryClient.clear();
-          navigate("/login");
-        }
-      })
-      .finally(() => {
-        showNotification({
-          icon: <DoorOpen size={16} />,
-          title: "Signed out",
-          message: "You have been signed out successfully.",
-          status: "success",
-        });
-        // Optionally, you can show a notification or perform any other action after sign out
+  const signOutMutation = useSignOutUser({
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+      navigate("/login");
+      showNotification({
+        icon: <DoorOpen size={16} />,
+        title: "Signed out",
+        message: "You have been signed out successfully.",
+        status: "success",
       });
-  }, [navigate, queryClient, showNotification]);
+    },
+    onError: (error) => {
+      console.error("Error signing out:", error.message);
+    },
+  });
 
   if (isMeErrored) {
     return null;
@@ -96,9 +84,9 @@ const AppHeaderAuthenticated = () => {
       ) : null}
 
       {matches ? (
-        <AvatarMenu onSignOut={handleSignOut} meData={meData} />
+        <AvatarMenu signOutMutation={signOutMutation} meData={meData} />
       ) : (
-        <MobileAvatarMenu onSignOut={handleSignOut} meData={meData} />
+        <MobileAvatarMenu signOutMutation={signOutMutation} meData={meData} />
       )}
     </Group>
   );

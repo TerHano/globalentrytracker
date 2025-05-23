@@ -16,7 +16,7 @@ export const Empty = ({ icon, title, description, action }: EmptyProps) => {
           {title}
         </Text>
       </Stack>
-      <Text ta="center" fz="sm" c="dimmed">
+      <Text ta="center" fw={500} fz="sm" c="dimmed">
         {description}
       </Text>
       {action}

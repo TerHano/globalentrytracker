@@ -72,7 +72,14 @@ export const PricingCard = ({
     }
     const frequencyText = getPlanFrequencyText(frequency);
     const convertedPrice = price / 100;
-    return `$${convertedPrice} / ${frequencyText}`;
+    return (
+      <>
+        ${convertedPrice}{" "}
+        <Text span fz="sm" fw="bold">
+          / {frequencyText}
+        </Text>
+      </>
+    );
   };
 
   return (

@@ -23,7 +23,7 @@ export const useSignInUser = ({
     mutationFn: async (request: SignInRequest) => {
       return signInUser(request);
     },
-    onSuccess: (data, body) => {
+    onSuccess: async (data, body) => {
       // Default behavior
 
       // Call user-provided handler if it exists

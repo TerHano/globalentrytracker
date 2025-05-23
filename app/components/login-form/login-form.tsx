@@ -1,5 +1,4 @@
 import {
-  Paper,
   Title,
   TextInput,
   PasswordInput,
@@ -21,7 +20,6 @@ import { useCallback, useState } from "react";
 import { useShowNotification } from "~/hooks/useShowNotification";
 import { ArrowLeft, Key, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import mailImg from "~/assets/icons/email.png";
 import emailLinkImg from "~/assets/icons/email-link.png";
 import resetPasswordImg from "~/assets/icons/reset-password.png";
 import { useSendResetPasswordEmail } from "~/hooks/useSendResetPasswordEMail";
@@ -124,62 +122,59 @@ export default function LoginForm() {
 
   return (
     <>
-      <div className={classes.wrapper}>
-        <Paper className={`${classes.form}`} radius={0} p={30}>
-          <Title order={2} className={classes.title} ta="center" mt="md">
-            {t("Welcome back to EasyEntry")}
-          </Title>
-          <form onSubmit={form.onSubmit(handleSubmit)}>
-            <Input.Label></Input.Label>
-            <TextInput
-              label="Email"
-              placeholder="hello@gmail.com"
-              size="md"
-              {...form.getInputProps("email")}
-              labelProps={{}}
-              rightSection={
-                <Mail size={16} color="gray" className={classes.icon} />
-              }
-            />
-            <PasswordInput
-              label="Password"
-              placeholder="Your password"
-              mt="md"
-              size="md"
-              {...form.getInputProps("password")}
-            />
+      <Title order={2} ta="center" mt="md">
+        {t("Welcome back to EntryAlert")}
+      </Title>
 
-            <Group mt="xs" justify="end" align="center">
-              <Button
-                onClick={() => {
-                  modalStack.open("forgot-password-modal");
-                }}
-                size="xs"
-                variant="subtle"
-                color="gray"
-              >
-                Forgot Password?
-              </Button>
-            </Group>
-            <Button
-              loading={isSignInUserLoading}
-              type="submit"
-              fullWidth
-              mt="xl"
-              size="md"
-            >
-              Login
-            </Button>
-          </form>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <Input.Label></Input.Label>
+        <TextInput
+          label="Email"
+          placeholder="hello@gmail.com"
+          size="md"
+          {...form.getInputProps("email")}
+          labelProps={{}}
+          rightSection={
+            <Mail size={16} color="gray" className={classes.icon} />
+          }
+        />
+        <PasswordInput
+          label="Password"
+          placeholder="Your password"
+          mt="md"
+          size="md"
+          {...form.getInputProps("password")}
+        />
 
-          <Text ta="center" mt="md">
-            Don&apos;t have an account?{" "}
-            <Anchor<"a"> href="/signup" fw={700}>
-              Register
-            </Anchor>
-          </Text>
-        </Paper>
-      </div>
+        <Group mt="xs" justify="end" align="center">
+          <Button
+            onClick={() => {
+              modalStack.open("forgot-password-modal");
+            }}
+            size="xs"
+            variant="subtle"
+            color="gray"
+          >
+            Forgot Password?
+          </Button>
+        </Group>
+        <Button
+          loading={isSignInUserLoading}
+          type="submit"
+          fullWidth
+          mt="xl"
+          size="md"
+        >
+          Login
+        </Button>
+      </form>
+
+      <Text ta="center" mt="md">
+        Don&apos;t have an account?{" "}
+        <Anchor<"a"> href="/signup" fw={700}>
+          Register
+        </Anchor>
+      </Text>
       <Modal.Stack>
         <Modal
           withCloseButton={false}

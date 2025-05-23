@@ -123,10 +123,18 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         <Container
           className="fade-in-up-animation"
           fluid
-          style={{ justifyItems: "center" }}
+          style={{ justifyItems: "center", alignItems: "center" }}
           p="lg"
+          h="100vh"
         >
-          <Stack maw="40rem" justify="center" align="center" gap="md">
+          <Stack
+            className="fade-in-up-animation"
+            w="100%"
+            maw="40rem"
+            justify="center"
+            align="center"
+            gap="md"
+          >
             <Image src={pageNotFoundImg} w="8rem" />
             <Stack w="100%" justify="center" align="center" gap="xs">
               <Text span fw={800} lh="1em" fz="1.5rem">
@@ -155,8 +163,9 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         <Container
           className="fade-in-up-animation"
           fluid
-          style={{ justifyItems: "center" }}
+          style={{ justifyItems: "center", alignContent: "center" }}
           p="lg"
+          h="100vh"
         >
           <Stack maw="40rem" justify="center" align="center" gap="md">
             <Image src={serverErrorImg} w="8rem" />

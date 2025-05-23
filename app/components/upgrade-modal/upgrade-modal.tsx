@@ -7,14 +7,12 @@ import {
   useModalsStack,
 } from "@mantine/core";
 import { Star } from "lucide-react";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useValidateSubscription } from "~/hooks/api/useValidateSubscription";
-import { useReward } from "react-rewards";
-import { useQuery } from "@tanstack/react-query";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { planQuery } from "~/api/plans-api";
 import { PricingGrid } from "../pricing/pricing-grid";
+import { Confetti, type ConfettiHandle } from "../ui/confetti";
 
 export interface UpgradeModalProps {
   stack: ReturnType<
@@ -32,13 +30,13 @@ export const UpgradeModal = ({
   stack,
 }: UpgradeModalProps) => {
   const { t } = useTranslation();
+  const confettiRef = useRef<ConfettiHandle>(null);
 
-  const { reward } = useReward("confettiId", "confetti", {
-    elementCount: 400,
-    lifetime: 800,
-    position: "absolute",
-    spread: 90,
-  });
+  const shootConfetti = () => {
+    if (confettiRef.current) {
+      confettiRef.current.shootConfetti();
+    }
+  };
 
   const handleClose = useCallback(() => {
     stack.closeAll();
@@ -63,11 +61,15 @@ export const UpgradeModal = ({
     if (open) {
       stack.open("upgrade-benefits");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   return (
     <Modal.Stack>
       <Modal
+        onEnterTransitionEnd={() => {
+          shootConfetti();
+        }}
         size="xl"
         transitionProps={{ duration: 300, transition: "fade-up" }}
         {...stack.register("upgrade-benefits")}
@@ -85,7 +87,7 @@ export const UpgradeModal = ({
           <Text fz="sm" c="dimmed">
             {t("Upgrade to Tracker Pro for more features and benefits.")}
           </Text>
-          <PricingGrid allowPurchase={true} />
+          <PricingGrid showFreePlan={false} allowPurchase={true} />
           {/* <SimpleGrid w="100%" cols={{ xs: 1, sm: 2 }} spacing="lg">
             {plans?.map((plan) => (
               <PricingCard
@@ -120,24 +122,12 @@ export const UpgradeModal = ({
         size="lg"
         withCloseButton={false}
         onEnterTransitionEnd={() => {
-          reward();
+          shootConfetti();
         }}
         {...stack.register("validation-successful")}
         onClose={handleClose}
       >
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            pointerEvents: "none", // So it doesn't block clicks
-            overflow: "hidden", // Prevent scrollbars from confetti
-            justifyContent: "center",
-            justifyItems: "center",
-            display: "flex",
-          }}
-        >
-          <span id="confettiId" />
-        </div>
+        <Confetti ref={confettiRef} />
         <Stack
           style={{ width: "100%" }}
           align="center"
@@ -160,24 +150,12 @@ export const UpgradeModal = ({
       <Modal
         withCloseButton={false}
         onEnterTransitionEnd={() => {
-          reward();
+          shootConfetti();
         }}
         {...stack.register("validation-failed")}
         onClose={handleClose}
       >
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            pointerEvents: "none", // So it doesn't block clicks
-            overflow: "hidden", // Prevent scrollbars from confetti
-            justifyContent: "center",
-            justifyItems: "center",
-            display: "flex",
-          }}
-        >
-          <span id="confettiId" />
-        </div>
+        <Confetti ref={confettiRef} />
         <Stack
           style={{ width: "100%" }}
           align="center"

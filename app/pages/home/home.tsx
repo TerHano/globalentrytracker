@@ -9,15 +9,17 @@ import {
   Text,
 } from "@mantine/core";
 import planeImg from "~/assets/images/plane.png";
-import { CircleCheckBig } from "lucide-react";
+import { CircleCheckBig, LayoutDashboard } from "lucide-react";
 import { NavLink } from "react-router";
 import { PricingGrid } from "~/components/pricing/pricing-grid";
 import { FAQ } from "./faq";
 import { HowItWorks } from "./how-it-works";
 import useIdScroll from "~/hooks/useIdScroll";
+import { useUserAuthenticated } from "~/hooks/useUserAuthenticated";
 
 export const HomePage = () => {
   const { scrollToId } = useIdScroll();
+  const { isUserAuthenticated } = useUserAuthenticated();
   return (
     <Container size="xl">
       <Stack mt="lg" gap="xl">
@@ -31,28 +33,38 @@ export const HomePage = () => {
                 Get instant notifications when Global Entry interview slots
                 become available at your preferred locations.
               </Text>
-              <Group mt="md" gap="xs">
-                <NavLink to="/signup">
+              {isUserAuthenticated ? (
+                <NavLink to="/dashboard">
                   {({ isPending }) => (
-                    <Button loading={isPending} size="sm">
-                      Start Tracking Now
+                    <Button
+                      loading={isPending}
+                      size="sm"
+                      leftSection={<LayoutDashboard size={16} />}
+                    >
+                      Go To Dashboard
                     </Button>
                   )}
                 </NavLink>
-                <Button
-                  onClick={() => {
-                    scrollToId("howItWorks");
-                    // const el = document.getElementById("howItWorks");
-                    // if (el) {
-                    //   scrollTo({ y: el.offsetTop - 80 });
-                    // }
-                  }}
-                  variant="light"
-                  size="sm"
-                >
-                  How It Works
-                </Button>
-              </Group>
+              ) : (
+                <Group mt="md" gap="xs">
+                  <NavLink to="/signup">
+                    {({ isPending }) => (
+                      <Button loading={isPending} size="sm">
+                        Start Tracking Now
+                      </Button>
+                    )}
+                  </NavLink>
+                  <Button
+                    onClick={() => {
+                      scrollToId("howItWorks");
+                    }}
+                    variant="light"
+                    size="sm"
+                  >
+                    How It Works
+                  </Button>
+                </Group>
+              )}
               <Group align="center" mt="xs" gap="xs">
                 <FeatureTagLine label="Real-time Alerts" />
                 <FeatureTagLine label=" Multiple Locations" />

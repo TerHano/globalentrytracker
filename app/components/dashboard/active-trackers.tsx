@@ -16,9 +16,16 @@ import {
   type TrackedLocation,
 } from "~/api/tracked-locations-api";
 import { Empty } from "../ui/empty";
-import notificationBellIcon from "~/assets/icons/notification-bell.png";
+import noTrackersImg from "~/assets/icons/no-trackers-bell.png";
 import { LocationTrackerCard } from "../location-tracker-card";
-import { Bell, BellMinus, CircleHelp, PencilLine, Trash2 } from "lucide-react";
+import {
+  Bell,
+  BellMinus,
+  CalendarX,
+  CircleHelp,
+  PencilLine,
+  Trash2,
+} from "lucide-react";
 import { modals } from "@mantine/modals";
 import { useDeleteTracker } from "~/hooks/api/useDeleteTracker";
 import { ConfirmDeleteTrackerBody } from "./confirm-delete-tracker-body";
@@ -28,6 +35,7 @@ import { LabelValue } from "../ui/label-value";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { nextNotificationQuery } from "~/api/next-notification-api";
+import { DeleteAllTrackersButton } from "../delete-all-trackers-button";
 
 export const ActiveTrackers = () => {
   const { t } = useTranslation();
@@ -60,14 +68,7 @@ export const ActiveTrackers = () => {
                 )}
               </NavLink>
             }
-            icon={
-              <Image
-                h={60}
-                w={60}
-                src={notificationBellIcon}
-                alt="No Trackers"
-              />
-            }
+            icon={<Image h={60} w={60} src={noTrackersImg} alt="No Trackers" />}
             title="No Trackers"
             description="You have no active trackers. Add one to start tracking your
             locations."
@@ -116,6 +117,22 @@ export const ActiveTrackers = () => {
           {trackedLocationsList}
         </Stack>
       </Paper>
+      {data && data.length > 0 ? (
+        <Group p="xs" justify="center" gap={3}>
+          <Text fw={600} c="dimmed" fz="sm">
+            Got your appointment?
+          </Text>
+          <DeleteAllTrackersButton
+            buttonProps={{
+              children: "Delete All Your Trackers",
+              variant: "subtle",
+              color: "red",
+              size: "compact-xs",
+              rightSection: <CalendarX size={12} />,
+            }}
+          />
+        </Group>
+      ) : null}
     </section>
   );
 };
@@ -185,6 +202,7 @@ const ActionableLocationTrackerCard = ({
         color: "red",
         loading: deleteTrackerMutation.isPending,
       },
+      withCloseButton: false,
       onConfirm: () => handleDelete(),
     });
   }, [deleteTrackerMutation.isPending, handleDelete, tracker]);

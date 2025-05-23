@@ -1,40 +1,28 @@
 import { Paper, Title, Text, Stack, Button } from "@mantine/core";
 import { Star } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { useReward } from "react-rewards";
 import { NavLink } from "react-router";
+import { Confetti, type ConfettiHandle } from "~/components/ui/confetti";
 
 export const SubscriptionSuccessfulPage = () => {
+  const confettiRef = useRef<ConfettiHandle>(null);
   const { t } = useTranslation();
-  const { reward } = useReward("confettiId", "confetti", {
-    elementCount: 200,
-    lifetime: 300,
-    position: "absolute",
-    spread: 180,
-  });
+
+  const shootConfetti = () => {
+    if (confettiRef.current) {
+      confettiRef.current.shootConfetti();
+    }
+  };
 
   useEffect(() => {
-    // Start the confetti animation when the component mounts
-    reward();
+    shootConfetti();
   }, []);
   // useEffect(() => {
 
   return (
     <Paper shadow="xs" p="md" withBorder>
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          pointerEvents: "none", // So it doesn't block clicks
-          overflow: "hidden", // Prevent scrollbars from confetti
-          justifyContent: "center",
-          justifyItems: "center",
-          display: "flex",
-        }}
-      >
-        <span id="confettiId" />
-      </div>
+      <Confetti />
       <Stack
         className="fade-in-up-animation"
         justify="center"

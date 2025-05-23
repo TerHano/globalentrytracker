@@ -1,10 +1,10 @@
 import {
   SegmentedControl,
-  SimpleGrid,
   Stack,
   Skeleton,
   Text,
   Image,
+  Group,
 } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { planQuery } from "~/api/plans-api";
@@ -15,9 +15,13 @@ import serverErrorImg from "~/assets/icons/500.png";
 
 export interface PricingGridProps {
   allowPurchase: boolean;
+  showFreePlan?: boolean;
 }
 
-export const PricingGrid = ({ allowPurchase }: PricingGridProps) => {
+export const PricingGrid = ({
+  allowPurchase,
+  showFreePlan = true,
+}: PricingGridProps) => {
   const {
     data: plans,
     isFetching: isPlansLoading,
@@ -53,18 +57,18 @@ export const PricingGrid = ({ allowPurchase }: PricingGridProps) => {
           onChange={setSelectedFrequency}
           data={[
             {
-              label: "Weekly",
+              label: <Text fw="bold">Weekly</Text>,
               value: PlanFrequency.Weekly.toString(),
             },
 
             {
-              label: "Monthly",
+              label: <Text fw="bold">Monthly</Text>,
               value: PlanFrequency.Monthly.toString(),
             },
           ]}
         />
       </Stack>
-      <SimpleGrid cols={2} spacing="lg">
+      <Group gap="lg">
         {isPlansLoading ? (
           <>
             <SkeletonPriceCard />
@@ -72,10 +76,12 @@ export const PricingGrid = ({ allowPurchase }: PricingGridProps) => {
           </>
         ) : (
           plans
-            ?.filter(
-              (p) =>
-                p.frequency.toString() == selectedFrequency || p.price === 0
-            )
+            ?.filter((p) => {
+              if (p.price == 0) {
+                return showFreePlan;
+              }
+              return p.frequency.toString() == selectedFrequency;
+            })
             .map((plan) => (
               <PricingCard
                 key={plan.id}
@@ -89,14 +95,14 @@ export const PricingGrid = ({ allowPurchase }: PricingGridProps) => {
               />
             ))
         )}
-      </SimpleGrid>
+      </Group>
     </Stack>
   );
 };
 
 const SkeletonPriceCard = () => {
   return (
-    <Skeleton visible>
+    <Skeleton maw={200} visible>
       <PricingCard
         key={"key"}
         priceId={""}

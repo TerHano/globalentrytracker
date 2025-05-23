@@ -4,6 +4,7 @@ import {
   Divider,
   Drawer,
   Group,
+  Loader,
   Stack,
   Text,
 } from "@mantine/core";
@@ -12,14 +13,16 @@ import { Cog, DoorClosed, LayoutDashboard } from "lucide-react";
 import { useEffect } from "react";
 import { Link, useNavigation } from "react-router";
 import { type me } from "~/api/me-api";
+import type { useSignOutUser } from "~/hooks/useSignOut";
 
 interface MobileAvatarMenuProps {
-  onSignOut: () => void;
+  signOutMutation: ReturnType<typeof useSignOutUser>;
+
   meData?: me;
 }
 
 export const MobileAvatarMenu = ({
-  onSignOut,
+  signOutMutation,
   meData,
 }: MobileAvatarMenuProps) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -86,10 +89,16 @@ export const MobileAvatarMenu = ({
               fullWidth
               justify="start"
               size="md"
-              leftSection={<DoorClosed size={16} />}
+              leftSection={
+                signOutMutation.isPending ? (
+                  <Loader color="red" size={16} />
+                ) : (
+                  <DoorClosed size={16} />
+                )
+              }
               variant="subtle"
               color="red"
-              onClick={onSignOut}
+              onClick={() => signOutMutation.mutate()}
             >
               Sign Out
             </Button>

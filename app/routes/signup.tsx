@@ -2,6 +2,7 @@ import type { Route } from "./+types/login";
 import { redirect } from "react-router";
 import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 import SignUpForm from "~/components/sign-up-form/sign-up-form";
+import { SignInSignUpWrapper } from "~/components/ui/SignInSignUpWrapper";
 
 export function meta() {
   return [
@@ -23,5 +24,12 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function SignUp() {
-  return <SignUpForm />;
+  return (
+    <SignInSignUpWrapper
+      position="right"
+      image="https://images.unsplash.com/photo-1571306603861-20c055ab2e5c?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    >
+      <SignUpForm />
+    </SignInSignUpWrapper>
+  );
 }

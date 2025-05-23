@@ -6,7 +6,6 @@ export async function getSupabaseToken() {
     data: { session },
     error,
   } = await supabaseBrowserClient.auth.getSession();
-
   if (error || !session) {
     return null;
   }

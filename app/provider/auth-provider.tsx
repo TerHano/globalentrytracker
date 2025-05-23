@@ -6,10 +6,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    console.log("being created");
-
     const sub = supabaseBrowserClient.auth.onAuthStateChange((_, session) => {
-      console.log("useUserAuthenticated", session, _);
       if (session) {
         setIsUserAuthenticated(true);
       } else {

@@ -133,7 +133,13 @@ export const CreateEditTrackerForm = ({
           (location) => location.state === newValues.state
         );
         setFilteredAppointmentLocations(filteredLocations);
-        form.setFieldValue("locationId", "");
+        if (
+          !filteredLocations
+            ?.map((location) => location.id.toString())
+            .includes(newValues.locationId)
+        ) {
+          form.setFieldValue("locationId", "");
+        }
       }
     },
   });
@@ -170,6 +176,7 @@ export const CreateEditTrackerForm = ({
         locationId: trackedLocation.location.id.toString(),
         notificationTypeId: trackedLocation.notificationType.id.toString(),
         cutOffDate: dayjs(trackedLocation.cutOffDate).format("YYYY-MM-DD"),
+        state: trackedLocation.location.state,
       });
     }
   }, [defaultNotificationType, form, trackedLocation]);

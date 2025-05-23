@@ -40,7 +40,6 @@ export const useCreateUpdateTracker = ({
 
       // Call user-provided handler if it exists
       if (onSuccess) {
-        onSuccess(data, body);
         queryClient.invalidateQueries({
           queryKey: [trackedLocationQueryKey],
         });
@@ -50,11 +49,13 @@ export const useCreateUpdateTracker = ({
         queryClient.invalidateQueries({
           queryKey: [nextNotificationQueryKey],
         });
-        queryClient.invalidateQueries({ queryKey: [permissionQueryKey] });
+        queryClient.invalidateQueries({
+          queryKey: [permissionQueryKey],
+        });
+        onSuccess(data, body);
       }
     },
     onError: (error) => {
-      // Default behavior
       console.error("Error deleting tracker:", error);
 
       // Call user-provided handler if it exists
