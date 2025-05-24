@@ -13,14 +13,12 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import dayjs from "dayjs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { locationQuery } from "~/api/location-api";
 import { notificationTypesQuery } from "~/api/notification-types-api";
 import { DatePickerInput } from "@mantine/dates";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import notificationRadioCardStles from "./notification-type-radio-card.module.css";
 import { Bell, BellOff, BellRing, TicketsPlane, Watch } from "lucide-react";
-import type { TrackedLocation } from "~/api/tracked-locations-api";
 import { useNavigate } from "react-router";
 import {
   useCreateUpdateTracker,
@@ -29,9 +27,11 @@ import {
 import { useShowNotification } from "~/hooks/useShowNotification";
 import { NotificationTypeEnum } from "~/enum/NotificationType";
 import { locationStatesQuery } from "~/api/location-states-api";
+import type { components } from "~/types/api";
+import { locationsQuery } from "~/api/location-api";
 
 interface CreateEditTrackerFormProps {
-  trackedLocation?: TrackedLocation;
+  trackedLocation?: components["schemas"]["TrackedLocationForUserDto"];
 }
 
 interface FormValues {
@@ -50,7 +50,7 @@ export const CreateEditTrackerForm = ({
   const navigate = useNavigate();
 
   const { data: appointmentLocations, isLoading: isLocationsLoading } =
-    useQuery(locationQuery());
+    useQuery(locationsQuery());
   const { data: notificationTypes, isLoading: isNotificationTypesLoading } =
     useQuery(notificationTypesQuery());
   const { data: states, isLoading: isStatesLoading } = useQuery(
@@ -99,7 +99,8 @@ export const CreateEditTrackerForm = ({
     },
   });
 
-  const defaultNotificationType = notificationTypes?.[0].id.toString() ?? "";
+  const defaultNotificationType =
+    notificationTypes?.at(0)?.id?.toString() ?? "";
 
   const schema = z.object({
     //make state optional
@@ -162,7 +163,7 @@ export const CreateEditTrackerForm = ({
       cutOffDate: values.cutOffDate,
     };
 
-    await createUpdateTrackerMutation.mutateAsync(requestBody);
+    await createUpdateTrackerMutation.mutateAsync({ body: requestBody });
   };
 
   useEffect(() => {

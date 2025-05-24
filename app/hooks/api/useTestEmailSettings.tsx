@@ -1,55 +1,24 @@
-import { useMutation } from "@tanstack/react-query";
-import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 import type { MutationHookOptions } from "./mutationOptions";
-import { fetchData } from "~/utils/fetchData";
-import type { ApiError } from "~/models/ApiError";
-
-interface useTestEmailSettingsProps extends MutationHookOptions<void, number> {
-  isUpdate?: boolean;
-}
+import { $api } from "~/utils/fetchData";
 
 export const useTestEmailSettings = ({
   onSuccess,
   onError,
-}: useTestEmailSettingsProps) => {
-  return useMutation<number, ApiError[], void>({
-    mutationFn: async () => {
-      const token = await getSupabaseToken();
-      if (!token) {
-        throw new Error("No token found");
-      }
-      return testEmailNotificationSettingsApi();
-    },
-    onSuccess: (data, body) => {
-      // Default behavior
-
+}: MutationHookOptions<void, unknown>) => {
+  return $api.useMutation("post", "/api/v1/notification-settings/email/test", {
+    onSuccess: (data, request) => {
       // Call user-provided handler if it exists
       if (onSuccess) {
-        onSuccess(data, body);
+        onSuccess(data?.data, request?.body);
       }
     },
-    onError: (error) => {
+    onError: (response) => {
       // Default behavior
-      console.error("Error deleting tracker:", error);
 
       // Call user-provided handler if it exists
       if (onError) {
-        onError(error);
+        onError(response.errors);
       }
     },
   });
 };
-
-async function testEmailNotificationSettingsApi() {
-  const token = await getSupabaseToken();
-  if (!token) {
-    throw new Error("No token found");
-  }
-  return fetchData<number>(`/api/v1/notification-settings/Email/test`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}

@@ -1,54 +1,30 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
-import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
-import type { ApiError } from "~/models/ApiError";
-import { meQueryKey } from "~/api/me-api";
+import { useQueryClient } from "@tanstack/react-query";
 import { permissionQuery } from "~/api/permissions-api";
 import type { MutationHookOptions } from "./mutationOptions";
 import { noop } from "@mantine/core";
+import { meQuery } from "~/api/me-api";
+import { $api } from "~/utils/fetchData";
 
 export const useValidateSubscription = ({
   onSuccess = noop,
   onError = noop,
-}: MutationHookOptions<void, boolean>) => {
+}: MutationHookOptions<undefined, boolean>) => {
   const queryClient = useQueryClient();
-  return useMutation<boolean, ApiError[], void>({
-    mutationFn: async () => {
-      const token = await getSupabaseToken();
-      if (!token) {
-        throw new Error("No token found");
-      }
-      return validateSubscriptionApi();
-    },
+
+  return $api.useMutation("patch", "/api/v1/validate-subscription", {
     onSuccess: (data, request) => {
       queryClient.invalidateQueries({
-        queryKey: [meQueryKey],
+        queryKey: [meQuery.name],
       });
       queryClient.invalidateQueries({
         queryKey: [permissionQuery],
       });
-      onSuccess(data, request);
-      // Default behavior
+      onSuccess(data?.data, request?.body);
     },
+
     onError: (error) => {
       // Default behavior
-      console.error("Error deleting tracker:", error);
-      onError(error);
-      // Call user-provided handler if it exists
+      onError(error.errors);
     },
   });
 };
-async function validateSubscriptionApi() {
-  const token = await getSupabaseToken();
-  if (!token) {
-    throw new Error("No token found");
-  }
-  return fetchData<boolean>("/api/v1/validate-subscription", {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({}),
-  });
-}

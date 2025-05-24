@@ -22,7 +22,7 @@ import { ArrowLeft, Key, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import emailLinkImg from "~/assets/icons/email-link.png";
 import resetPasswordImg from "~/assets/icons/reset-password.png";
-import { useSendResetPasswordEmail } from "~/hooks/useSendResetPasswordEMail";
+import { useSendResetPasswordEmail } from "~/hooks/useSendResetPasswordEmail";
 import { useSignInUser } from "~/hooks/useSignIn";
 
 export default function LoginForm() {

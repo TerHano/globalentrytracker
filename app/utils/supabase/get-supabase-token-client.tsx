@@ -7,7 +7,7 @@ export async function getSupabaseToken() {
     error,
   } = await supabaseBrowserClient.auth.getSession();
   if (error || !session) {
-    return null;
+    return undefined;
   }
 
   return session.access_token; // Return the access token

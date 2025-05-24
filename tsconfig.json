@@ -9,8 +9,10 @@
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "types": ["node", "vite/client"],
     "target": "ES2022",
-    "module": "ES2022",
-    "moduleResolution": "bundler",
+    "module": "ESNext", // or "NodeNext"
+    "moduleResolution": "Bundler", // or "NodeNext"
+    // "module": "ES2022",
+    // "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "rootDirs": [".", "./.react-router/types"],
     "baseUrl": ".",
@@ -22,6 +24,8 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "strict": true
-  }
+    "strict": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "exclude": ["node_modules", "app/types"]
 }

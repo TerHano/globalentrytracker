@@ -1,28 +1,14 @@
 import { queryOptions } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
+import type { components } from "~/types/api";
+import { fetchClient, validateResponse } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 
-export const emailNotificationSettingsQueryKey = "email-notification-settings";
-
-export interface EmailSettings {
-  id: number;
-  enabled: boolean;
-  email: string;
-}
-
-export async function emailNotificationSettingsApi(token: string) {
-  return fetchData<EmailSettings>("/api/v1/notification-settings/email", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
+export type EmailNotificationSettings =
+  components["schemas"]["EmailNotificationSettingsDtoApiResponse"]["data"];
 
 export const emailNotificationSettingsQuery = (token?: string) =>
   queryOptions({
-    queryKey: [emailNotificationSettingsQueryKey],
+    queryKey: [emailNotificationSettingsQuery.name],
     queryFn: async () => {
       if (!token) {
         const _token = await getSupabaseToken();
@@ -31,6 +17,12 @@ export const emailNotificationSettingsQuery = (token?: string) =>
         }
         token = _token;
       }
-      return emailNotificationSettingsApi(token);
+      return fetchClient
+        .GET("/api/v1/notification-settings/email", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => validateResponse(response.data));
     },
   });

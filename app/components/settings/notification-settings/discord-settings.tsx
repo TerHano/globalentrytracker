@@ -13,7 +13,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { z } from "zod";
-import type { DiscordSettings } from "~/api/discord-settings-api";
+import type { DiscordNotificationSettings } from "~/api/discord-settings-api";
 import { DiscordIcon } from "~/components/ui/icons/DiscordIcon";
 import { Page } from "~/components/ui/page";
 import {
@@ -27,7 +27,7 @@ import {
 import { useShowNotification } from "~/hooks/useShowNotification";
 
 interface DiscordSettingsProps {
-  settings?: DiscordSettings;
+  settings?: DiscordNotificationSettings;
 }
 
 interface DiscordSettingsForm {
@@ -110,18 +110,18 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
     const request: TestDiscordSettingsRequest = {
       webhookUrl: form.values.webhookUrl,
     };
-    await testMessageMutate.mutateAsync(request);
+    await testMessageMutate.mutateAsync({ body: request });
   }, [testMessageMutate, form]);
 
   const handleSubmit = useCallback(
     async (values: typeof form.values) => {
       // Call your API to save the settings
       const request: CreateUpdateDiscordSettingsRequest = {
-        id: settings?.id,
+        id: settings?.id ?? 0,
         webhookUrl: values.webhookUrl,
         enabled: values.enabled,
       };
-      await discordSettingsMutate.mutateAsync(request);
+      await discordSettingsMutate.mutateAsync({ body: request });
     },
     [discordSettingsMutate, form, settings?.id]
   );

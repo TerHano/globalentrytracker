@@ -1,28 +1,10 @@
 import { queryOptions } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
+import { fetchClient, validateResponse } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 
-export const notificationTypesQueryKey = "notification-types";
-
-export interface NotificationType {
-  id: number;
-  name: string;
-  description: string;
-  type: number;
-}
-
-export async function notificationTypesApi(token: string) {
-  return fetchData<NotificationType[]>("/api/v1/notification-types", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
 export const notificationTypesQuery = (token?: string) =>
   queryOptions({
-    queryKey: [notificationTypesQueryKey],
+    queryKey: [notificationTypesQuery.name],
     queryFn: async () => {
       if (!token) {
         const _token = await getSupabaseToken();
@@ -31,6 +13,12 @@ export const notificationTypesQuery = (token?: string) =>
         }
         token = _token;
       }
-      return notificationTypesApi(token);
+      return fetchClient
+        .GET("/api/v1/notification-types", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => validateResponse(response.data));
     },
   });

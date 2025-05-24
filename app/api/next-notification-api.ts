@@ -1,21 +1,10 @@
 import { queryOptions } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
+import { fetchClient, validateResponse } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
-
-export const nextNotificationQueryKey = "next-notification";
-
-export async function nextNotificationApi(token: string) {
-  return fetchData<Date>("/api/v1/next-notification", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
 
 export const nextNotificationQuery = (token?: string) =>
   queryOptions({
-    queryKey: [nextNotificationQueryKey],
+    queryKey: [nextNotificationQuery.name],
     queryFn: async () => {
       if (!token) {
         const _token = await getSupabaseToken();
@@ -24,6 +13,12 @@ export const nextNotificationQuery = (token?: string) =>
         }
         token = _token;
       }
-      return nextNotificationApi(token);
+      return fetchClient
+        .GET("/api/v1/next-notification", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => validateResponse(response.data));
     },
   });

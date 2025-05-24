@@ -1,14 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
-import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 import type { MutationHookOptions } from "./mutationOptions";
-import { fetchData } from "~/utils/fetchData";
-import type { ApiError } from "~/models/ApiError";
+import { $api } from "~/utils/fetchData";
 
 export interface TestDiscordSettingsRequest {
   webhookUrl: string;
 }
 interface useTestDiscordSettingsProps
-  extends MutationHookOptions<TestDiscordSettingsRequest, number> {
+  extends MutationHookOptions<TestDiscordSettingsRequest, unknown> {
   isUpdate?: boolean;
 }
 
@@ -16,47 +13,24 @@ export const useTestDiscordSettings = ({
   onSuccess,
   onError,
 }: useTestDiscordSettingsProps) => {
-  return useMutation<number, ApiError[], TestDiscordSettingsRequest>({
-    mutationFn: async (request: TestDiscordSettingsRequest) => {
-      const token = await getSupabaseToken();
-      if (!token) {
-        throw new Error("No token found");
-      }
-      return testDiscordNotificationSettingsApi(request);
-    },
-    onSuccess: (data, body) => {
-      // Default behavior
-
-      // Call user-provided handler if it exists
-      if (onSuccess) {
-        onSuccess(data, body);
-      }
-    },
-    onError: (error) => {
-      // Default behavior
-      console.error("Error deleting tracker:", error);
-
-      // Call user-provided handler if it exists
-      if (onError) {
-        onError(error);
-      }
-    },
-  });
+  return $api.useMutation(
+    "post",
+    "/api/v1/notification-settings/discord/test",
+    {
+      onSuccess: (data, request) => {
+        // Call user-provided handler if it exists
+        if (onSuccess) {
+          onSuccess(data?.data, request?.body);
+        }
+      },
+      onError: (response) => {
+        // Default behavior
+        // console.error("Error deleting tracker:", response);
+        // Call user-provided handler if it exists
+        if (onError) {
+          onError(response.errors);
+        }
+      },
+    }
+  );
 };
-
-async function testDiscordNotificationSettingsApi(
-  request: TestDiscordSettingsRequest
-) {
-  const token = await getSupabaseToken();
-  if (!token) {
-    throw new Error("No token found");
-  }
-  return fetchData<number>(`/api/v1/notification-settings/discord/test`, {
-    method: "POST",
-    body: JSON.stringify(request),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}

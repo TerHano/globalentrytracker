@@ -7,13 +7,13 @@ import type { Route } from "./+types/create-tracker";
 import { notificationCheckQuery } from "~/api/notification-check-api";
 import { CreateTrackerNotificationWarning } from "~/components/create-tracker/create-tracker-notification-warning";
 import { locationStatesQuery } from "~/api/location-states-api";
-import { locationQuery } from "~/api/location-api";
 import { notificationTypesQuery } from "~/api/notification-types-api";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { locationsQuery } from "~/api/location-api";
 
 export function meta() {
   return [
@@ -34,7 +34,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const token = session.access_token;
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(notificationCheckQuery(token));
-  await queryClient.prefetchQuery(locationQuery(token));
+  await queryClient.prefetchQuery(locationsQuery(token));
   await queryClient.prefetchQuery(notificationTypesQuery(token));
   await queryClient.prefetchQuery(locationStatesQuery(token));
   return { dehydratedState: dehydrate(queryClient) };

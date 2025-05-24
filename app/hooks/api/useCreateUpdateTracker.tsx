@@ -1,20 +1,23 @@
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
-import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
+import { useQueryClient } from "@tanstack/react-query";
+import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "./mutationOptions";
-import { trackedLocationQueryKey } from "~/api/tracked-location-api";
-import { permissionQueryKey } from "~/api/permissions-api";
-import type { ApiError } from "~/models/ApiError";
-import { trackedLocationsQueryKey } from "~/api/tracked-locations-api";
-import { nextNotificationQueryKey } from "~/api/next-notification-api";
+import { trackedLocationQuery } from "~/api/tracked-location-api";
+import { permissionQuery } from "~/api/permissions-api";
+import { trackedLocationsQuery } from "~/api/tracked-locations-api";
+import { nextNotificationQuery } from "~/api/next-notification-api";
+import type { paths } from "~/types/api";
 
-export interface CreateUpdateTrackerRequest {
-  id?: number;
-  locationId: number;
-  enabled: boolean;
-  notificationTypeId: number;
-  cutOffDate: string;
-}
+export type CreateUpdateTrackerRequest =
+  | paths["/api/v1/track-location"]["post"]["requestBody"]["content"]["application/json"]
+  | paths["/api/v1/track-location"]["put"]["requestBody"]["content"]["application/json"];
+
+// export interface CreateUpdateTrackerRequest {
+//   id?: number;
+//   locationId: number;
+//   enabled: boolean;
+//   notificationTypeId: number;
+//   cutOffDate: string;
+// }
 
 interface useCreateUpdateTrackerProps
   extends MutationHookOptions<CreateUpdateTrackerRequest, number> {
@@ -27,58 +30,56 @@ export const useCreateUpdateTracker = ({
   onError,
 }: useCreateUpdateTrackerProps) => {
   const queryClient = useQueryClient();
-  return useMutation<number, ApiError[], CreateUpdateTrackerRequest>({
-    mutationFn: async (request: CreateUpdateTrackerRequest) => {
-      const token = await getSupabaseToken();
-      if (!token) {
-        throw new Error("No token found");
-      }
-      return trackedLocationApi(request, isUpdate);
-    },
-    onSuccess: (data, body) => {
-      // Default behavior
 
-      // Call user-provided handler if it exists
-      if (onSuccess) {
-        queryClient.invalidateQueries({
-          queryKey: [trackedLocationQueryKey],
+  const queriesToInvalidate = [
+    trackedLocationQuery.name,
+    trackedLocationsQuery.name,
+    nextNotificationQuery.name,
+    permissionQuery.name,
+  ];
+  if (!isUpdate) {
+    return $api.useMutation("post", "/api/v1/track-location", {
+      onSuccess: (data, request) => {
+        // Default behavior
+        // Call user-provided handler if it exists
+        // Invalidate queries
+        queriesToInvalidate.forEach((query) => {
+          queryClient.invalidateQueries({
+            queryKey: [query],
+          });
         });
-        queryClient.invalidateQueries({
-          queryKey: [trackedLocationsQueryKey],
+        if (onSuccess) {
+          onSuccess(data.data, request?.body);
+        }
+      },
+      onError: (r) => {
+        // Default behavior
+        // Call user-provided handler if it exists
+        if (onError) {
+          onError(r.errors);
+        }
+      },
+    });
+  } else
+    return $api.useMutation("put", "/api/v1/track-location", {
+      onSuccess: (data, request) => {
+        // Default behavior
+        // Call user-provided handler if it exists
+        queriesToInvalidate.forEach((query) => {
+          queryClient.invalidateQueries({
+            queryKey: [query],
+          });
         });
-        queryClient.invalidateQueries({
-          queryKey: [nextNotificationQueryKey],
-        });
-        queryClient.invalidateQueries({
-          queryKey: [permissionQueryKey],
-        });
-        onSuccess(data, body);
-      }
-    },
-    onError: (error) => {
-      console.error("Error deleting tracker:", error);
-
-      // Call user-provided handler if it exists
-      if (onError) {
-        onError(error);
-      }
-    },
-  });
+        if (onSuccess) {
+          onSuccess(data.data, request?.body);
+        }
+      },
+      onError: (r) => {
+        // Default behavior
+        // Call user-provided handler if it exists
+        if (onError) {
+          onError(r.errors);
+        }
+      },
+    });
 };
-async function trackedLocationApi(
-  request: CreateUpdateTrackerRequest,
-  isUpdate: boolean
-) {
-  const token = await getSupabaseToken();
-  if (!token) {
-    throw new Error("No token found");
-  }
-  return fetchData<number>("/api/v1/track-location", {
-    method: isUpdate ? "PUT" : "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(request),
-  });
-}

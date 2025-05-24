@@ -1,33 +1,10 @@
 import { queryOptions } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
+import { fetchClient, validateResponse } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
-
-export const subscriptionInformationQueryKey = "subscription-information";
-
-export interface subscriptionInformation {
-  activeBilledSubscription: boolean;
-  planName: string;
-  planPrice: number;
-  currency: string;
-  planInterval: string;
-  isEnding: boolean;
-  nextPaymentDate: Date;
-  cardLast4Digits: string;
-  cardBrand: string;
-}
-
-export async function subscriptionInformationApi(token: string) {
-  return fetchData<subscriptionInformation>("/api/v1/subscription", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
 
 export const subscriptionInformationQuery = (token?: string) =>
   queryOptions({
-    queryKey: [subscriptionInformationQueryKey],
+    queryKey: [subscriptionInformationQuery.name],
     queryFn: async () => {
       if (!token) {
         const _token = await getSupabaseToken();
@@ -36,6 +13,12 @@ export const subscriptionInformationQuery = (token?: string) =>
         }
         token = _token;
       }
-      return subscriptionInformationApi(token);
+      return fetchClient
+        .GET("/api/v1/subscription", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => validateResponse(response.data));
     },
   });

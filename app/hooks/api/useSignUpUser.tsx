@@ -1,46 +1,29 @@
-import { useMutation } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
+import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "./mutationOptions";
-import type { ApiError } from "~/models/ApiError";
 
-export interface SignUpUserRequest {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  redirectUrl: string;
-}
+import type { paths } from "~/types/api";
+
+export type SignUpUserRequest =
+  paths["/api/v1/sign-up"]["post"]["requestBody"]["content"]["application/json"];
 
 export const useSignUpUser = ({
   onSuccess,
   onError,
-}: MutationHookOptions<SignUpUserRequest, number>) => {
-  return useMutation<number, ApiError[], SignUpUserRequest>({
-    mutationFn: async (request: SignUpUserRequest) => {
-      return signUpUserApi(request);
+}: MutationHookOptions<SignUpUserRequest, unknown>) => {
+  return $api.useMutation("post", "/api/v1/sign-up", {
+    onSuccess: (data, request) => {
+      // Call user-provided handler if it exists
+      if (onSuccess) {
+        onSuccess(data.data, request?.body);
+      }
     },
-    onSuccess: (data, body) => {
+    onError: (response) => {
       // Default behavior
 
       // Call user-provided handler if it exists
-      if (onSuccess) {
-        onSuccess(data, body);
-      }
-    },
-    onError: (error) => {
-      // Call user-provided handler if it exists
       if (onError) {
-        onError(error);
+        onError(response.errors);
       }
     },
   });
 };
-async function signUpUserApi(request: SignUpUserRequest) {
-  return fetchData<number>("/api/v1/sign-up", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(request),
-  });
-}

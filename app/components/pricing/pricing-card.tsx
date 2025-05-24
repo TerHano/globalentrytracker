@@ -130,7 +130,13 @@ export const PricingCard = ({
                 rightSection={<ExternalLink size={16} color="white" />}
                 onClick={() => {
                   setIsNavigating(true);
-                  mutateCheckout(priceId);
+                  mutateCheckout({
+                    body: {
+                      priceId,
+                      successUrl: `${window.location.origin}/dashboard`,
+                      cancelUrl: `${window.location.origin}/pricing`,
+                    },
+                  });
                 }}
               >
                 Select Plan

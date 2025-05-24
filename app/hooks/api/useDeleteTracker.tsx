@@ -1,11 +1,9 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
-import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
+import { useQueryClient } from "@tanstack/react-query";
+import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "./mutationOptions";
-import { trackedLocationsQueryKey } from "~/api/tracked-locations-api";
-import { trackedLocationQueryKey } from "~/api/tracked-location-api";
-import { permissionQueryKey } from "~/api/permissions-api";
-import type { ApiError } from "~/models/ApiError";
+import { trackedLocationsQuery } from "~/api/tracked-locations-api";
+import { trackedLocationQuery } from "~/api/tracked-location-api";
+import { permissionQuery } from "~/api/permissions-api";
 
 export interface DeleteTrackerResponse {
   success: boolean;
@@ -15,50 +13,70 @@ export interface DeleteTrackerResponse {
 export function useDeleteTracker({
   onSuccess,
   onError,
-}: MutationHookOptions<number, void>) {
+}: MutationHookOptions<number, number>) {
   const queryClient = useQueryClient();
-  return useMutation<void, ApiError[], number>({
-    mutationFn: async (id: number) => {
-      const token = await getSupabaseToken();
-      if (!token) {
-        throw new Error("No token found");
-      }
-      return deleteTrackedLocationApi(id);
-    },
-    onSuccess: (data, id) => {
-      // Default behavior
-      // Call user-provided handler if it exists
-      if (onSuccess) {
-        onSuccess(data, id);
-        queryClient.invalidateQueries({ queryKey: [trackedLocationsQueryKey] });
+
+  return $api.useMutation(
+    "delete",
+    "/api/v1/track-location/{locationTrackerId}",
+    {
+      onSuccess: (data, request) => {
+        // Default behavior
+        // Call user-provided handler if it exists
         queryClient.invalidateQueries({
-          queryKey: [trackedLocationQueryKey, id],
+          queryKey: [trackedLocationsQuery.name],
         });
-        queryClient.invalidateQueries({ queryKey: [permissionQueryKey] });
-      }
-    },
-    onError: (error) => {
-      // Default behavior
-      console.error("Error deleting tracker:", error);
+        queryClient.invalidateQueries({
+          queryKey: [
+            trackedLocationQuery.name,
+            request.params.path.locationTrackerId,
+          ],
+        });
+        queryClient.invalidateQueries({ queryKey: [permissionQuery.name] });
+        if (onSuccess) {
+          onSuccess(data.data, request.params.path.locationTrackerId);
+        }
+      },
+      onError: (r) => {
+        // Default behavior
+        console.error("Error deleting tracker:", r.errors);
 
-      // Call user-provided handler if it exists
-      if (onError) {
-        onError(error);
-      }
-    },
-  });
-}
+        // Call user-provided handler if it exists
+        if (onError) {
+          onError(r.errors);
+        }
+      },
+    }
+  );
 
-async function deleteTrackedLocationApi(trackerId: number) {
-  const token = await getSupabaseToken();
-  if (!token) {
-    throw new Error("No token found");
-  }
-  return fetchData<void>(`/api/v1/track-location/${trackerId}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  // return useMutation<void, ApiError[], number>({
+  //   mutationFn: async (id: number) => {
+  //     const token = await getSupabaseToken();
+  //     if (!token) {
+  //       throw new Error("No token found");
+  //     }
+  //     return deleteTrackedLocationApi(id);
+  //   },
+  //   onSuccess: (data, id) => {
+  //     // Default behavior
+  //     // Call user-provided handler if it exists
+  //     if (onSuccess) {
+  //       onSuccess(data, id);
+  //       queryClient.invalidateQueries({ queryKey: [trackedLocationsQueryKey] });
+  //       queryClient.invalidateQueries({
+  //         queryKey: [trackedLocationQueryKey, id],
+  //       });
+  //       queryClient.invalidateQueries({ queryKey: [permissionQueryKey] });
+  //     }
+  //   },
+  //   onError: (error) => {
+  //     // Default behavior
+  //     console.error("Error deleting tracker:", error);
+
+  //     // Call user-provided handler if it exists
+  //     if (onError) {
+  //       onError(error);
+  //     }
+  //   },
+  // });
 }

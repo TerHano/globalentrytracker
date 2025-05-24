@@ -42,7 +42,7 @@ export const SubscriptionSettings = () => {
     if (subscriptionInformation?.planPrice !== undefined) {
       return new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: subscriptionInformation.currency,
+        currency: subscriptionInformation.currency ?? undefined,
       }).format(subscriptionInformation.planPrice / 100);
     }
     return "";
@@ -124,7 +124,9 @@ export const SubscriptionSettings = () => {
             <LabelValue label={t("Payment Method")}>
               {hasActiveBilling ? (
                 <Group>
-                  <CreditCardIcon name={subscriptionInformation?.cardBrand} />
+                  <CreditCardIcon
+                    name={subscriptionInformation?.cardBrand ?? undefined}
+                  />
                   <Text>
                     {subscriptionInformation?.cardLast4Digits
                       ? `**** **** **** ${subscriptionInformation.cardLast4Digits}`
@@ -144,7 +146,11 @@ export const SubscriptionSettings = () => {
               <Button
                 loading={isNavigating}
                 onClick={() => {
-                  mutateManageSubscription();
+                  mutateManageSubscription({
+                    body: {
+                      returnUrl: window.location.href,
+                    },
+                  });
                   setIsNavigating(true);
                 }}
                 rightSection={<ExternalLink size={16} />}

@@ -1,13 +1,13 @@
 import { Avatar, Menu, UnstyledButton, Text, Loader } from "@mantine/core";
 import { Star, LayoutDashboard, Cog, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router";
-import type { me } from "~/api/me-api";
 import { RoleEnum } from "~/enum/RoleEnum";
 import { useShowUpgradeModalContext } from "~/hooks/useShowUpgradeModal";
 import type { useSignOutUser } from "~/hooks/useSignOut";
+import type { components } from "~/types/api";
 
 interface AvaterMenuProps {
-  meData?: me;
+  meData?: components["schemas"]["UserDto"];
   signOutMutation: ReturnType<typeof useSignOutUser>;
 }
 

@@ -1,57 +1,29 @@
-import { useMutation } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
-import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
-import type { ApiError } from "~/models/ApiError";
+import { useQueryClient } from "@tanstack/react-query";
+import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "./mutationOptions";
 import { noop } from "@mantine/core";
+import { subscriptionInformationQuery } from "~/api/subscription-information-api";
+import type { paths } from "~/types/api";
+
+type UpgradeSubscriptionRequest =
+  paths["/api/v1/subscribe"]["post"]["requestBody"]["content"]["application/json"];
 
 export const useUpgradeSubscription = ({
   onSuccess = noop,
   onError = noop,
-}: MutationHookOptions<void, string>) => {
-  //const queryClient = useQueryClient();
-  return useMutation<string, ApiError[], string>({
-    mutationFn: async (priceId: string) => {
-      const token = await getSupabaseToken();
-      if (!token) {
-        throw new Error("No token found");
-      }
-      return upgradeSubscriptionApi(priceId);
-    },
-    onSuccess: (data) => {
-      if (data) {
-        window.location.href = data;
-      }
-      onSuccess(data);
+}: MutationHookOptions<UpgradeSubscriptionRequest, string>) => {
+  const queryClient = useQueryClient();
 
-      // Default behavior
+  return $api.useMutation("post", "/api/v1/subscribe", {
+    onSuccess: (data, request) => {
+      queryClient.invalidateQueries({
+        queryKey: [subscriptionInformationQuery.name],
+      });
+      onSuccess(data.data, request?.body);
     },
-    onError: (error) => {
+    onError: (response) => {
       // Default behavior
-      console.error("Error deleting tracker:", error);
-      onError(error);
-
-      // Call user-provided handler if it exists
+      onError(response.errors);
     },
   });
 };
-async function upgradeSubscriptionApi(priceId: string) {
-  const token = await getSupabaseToken();
-  const successUrl = `${window.location.origin}/subscribed`;
-  const cancelUrl = `${window.location.origin}/subscribed`;
-  if (!token) {
-    throw new Error("No token found");
-  }
-  return fetchData<string>("/api/v1/subscribe", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      priceId: priceId,
-      successUrl: successUrl,
-      cancelUrl: cancelUrl,
-    }),
-  });
-}

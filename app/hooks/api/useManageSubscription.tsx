@@ -1,7 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
-import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
-import type { ApiError } from "~/models/ApiError";
+import { $api } from "~/utils/fetchData";
 import { noop } from "@mantine/core";
 import type { MutationHookOptions } from "./mutationOptions";
 
@@ -9,43 +6,16 @@ export const useManageSubscription = ({
   onSuccess = noop,
   onError = noop,
 }: MutationHookOptions<void, string>) => {
-  return useMutation<string, ApiError[], void>({
-    mutationFn: async () => {
-      const token = await getSupabaseToken();
-      if (!token) {
-        throw new Error("No token found");
-      }
-      return manageSubscriptionApi();
-    },
+  return $api.useMutation("post", "/api/v1/manage-subscription", {
     onSuccess: (data) => {
-      if (data) {
-        window.location.href = data;
-      }
-      onSuccess(data);
+      window.location.href = data.data;
+      onSuccess(data.data);
       // Default behavior
     },
-    onError: (e) => {
+    onError: (r) => {
       // Default behavior
-      console.error("Error deleting tracker:", e);
-      onError(e);
-
+      onError(r.errors);
       // Call user-provided handler if it exists
     },
   });
 };
-async function manageSubscriptionApi() {
-  const token = await getSupabaseToken();
-  if (!token) {
-    throw new Error("No token found");
-  }
-  return fetchData<string>("/api/v1/manage-subscription", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      returnUrl: `${window.location.origin}/settings/subscription`,
-    }),
-  });
-}

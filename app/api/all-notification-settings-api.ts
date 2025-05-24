@@ -1,29 +1,10 @@
 import { queryOptions } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
+import { fetchClient, validateResponse } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
-import type { DiscordSettings } from "./discord-settings-api";
-import type { EmailSettings } from "./email-settings-api";
-
-export const allNotificationSettingsQueryKey = "all-notification-settings";
-
-export interface AllNotificationSettings {
-  discordSettings: DiscordSettings;
-  emailSettings: EmailSettings;
-}
-
-export async function allNotificationSettingsApi(token: string) {
-  return fetchData<AllNotificationSettings>("/api/v1/notification-settings", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
 
 export const allNotificationSettingsQuery = (token?: string) =>
   queryOptions({
-    queryKey: [allNotificationSettingsQueryKey],
+    queryKey: [allNotificationSettingsQuery.name],
     queryFn: async () => {
       if (!token) {
         const _token = await getSupabaseToken();
@@ -32,6 +13,12 @@ export const allNotificationSettingsQuery = (token?: string) =>
         }
         token = _token;
       }
-      return allNotificationSettingsApi(token);
+      return fetchClient
+        .GET("/api/v1/notification-settings", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => validateResponse(response.data));
     },
   });

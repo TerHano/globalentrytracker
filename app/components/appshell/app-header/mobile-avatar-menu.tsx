@@ -12,13 +12,13 @@ import { useDisclosure } from "@mantine/hooks";
 import { Cog, DoorClosed, LayoutDashboard } from "lucide-react";
 import { useEffect } from "react";
 import { Link, useNavigation } from "react-router";
-import { type me } from "~/api/me-api";
+import type { components } from "~/types/api";
 import type { useSignOutUser } from "~/hooks/useSignOut";
 
 interface MobileAvatarMenuProps {
   signOutMutation: ReturnType<typeof useSignOutUser>;
 
-  meData?: me;
+  meData?: components["schemas"]["UserDto"];
 }
 
 export const MobileAvatarMenu = ({

@@ -1,65 +1,34 @@
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
-import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
+import { useQueryClient } from "@tanstack/react-query";
+import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "./mutationOptions";
-import { meQueryKey } from "~/api/me-api";
-import type { ApiError } from "~/models/ApiError";
+import { meQuery } from "~/api/me-api";
+import type { paths } from "~/types/api";
 
-export interface UpdateUserRequest {
-  firstName: string;
-  lastName: string;
-}
+type UpdateUserRequest =
+  paths["/api/v1/me"]["put"]["requestBody"]["content"]["application/json"];
 
 export const useUpdateUser = ({
   onSuccess,
   onError,
-}: MutationHookOptions<UpdateUserRequest, number>) => {
+}: MutationHookOptions<UpdateUserRequest, unknown>) => {
   const queryClient = useQueryClient();
   // const supabaseBrowserClient = createSupabaseBrowserClient();
 
-  return useMutation<number, ApiError[], UpdateUserRequest>({
-    mutationFn: async (request: UpdateUserRequest) => {
-      const token = await getSupabaseToken();
-      if (!token) {
-        throw new Error("No token found");
-      }
-      return updateUserApi(request);
-    },
-    onSuccess: (data, body) => {
-      //Update the user in Supabase
-      // supabaseBrowserClient.auth.updateUser({
-      //   data: {
-      //     first_name: body.firstName,
-      //     last_name: body.lastName,
-      //   },
-      // });
+  return $api.useMutation("put", "/api/v1/me", {
+    onSuccess: (data, request) => {
+      queryClient.invalidateQueries({ queryKey: [meQuery.name] });
       // Call user-provided handler if it exists
       if (onSuccess) {
-        onSuccess(data, body);
-        queryClient.invalidateQueries({ queryKey: [meQueryKey] });
+        onSuccess(data?.data, request?.body);
       }
     },
-    onError: (error) => {
-      console.error("error", error);
+    onError: (response) => {
+      // Default behavior
 
       // Call user-provided handler if it exists
       if (onError) {
-        onError(error);
+        onError(response.errors);
       }
     },
   });
 };
-async function updateUserApi(request: UpdateUserRequest) {
-  const token = await getSupabaseToken();
-  if (!token) {
-    throw new Error("No token found");
-  }
-  return fetchData<number>("/api/v1/me", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(request),
-  });
-}

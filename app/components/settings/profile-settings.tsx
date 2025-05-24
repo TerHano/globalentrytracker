@@ -78,8 +78,10 @@ export const ProfileSettings = () => {
     async (values: typeof form.values) => {
       // Handle form submission
       updateUserMutation.mutate({
-        firstName: values.firstName,
-        lastName: values.lastName,
+        body: {
+          firstName: values.firstName,
+          lastName: values.lastName,
+        },
       });
     },
     [form, updateUserMutation]

@@ -1,25 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
+import { fetchClient, validateResponse } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
-import type { TrackedLocation } from "./tracked-locations-api";
-
-export const trackedLocationQueryKey = "tracked-location";
-
-export async function trackedLocationApi(
-  token: string,
-  trackedLocationId: number
-) {
-  return fetchData<TrackedLocation>(
-    `/api/v1/tracked-locations/${trackedLocationId}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-}
 
 export const trackedLocationQuery = ({
   trackedLocationId,
@@ -29,7 +10,7 @@ export const trackedLocationQuery = ({
   token?: string;
 }) =>
   queryOptions({
-    queryKey: [trackedLocationQueryKey, trackedLocationId],
+    queryKey: [trackedLocationQuery.name],
     queryFn: async () => {
       if (!token) {
         const _token = await getSupabaseToken();
@@ -38,6 +19,13 @@ export const trackedLocationQuery = ({
         }
         token = _token;
       }
-      return trackedLocationApi(token, trackedLocationId);
+      return fetchClient
+        .GET("/api/v1/tracked-locations/{id}", {
+          params: { path: { id: trackedLocationId } },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => validateResponse(response.data));
     },
   });

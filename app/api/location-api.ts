@@ -1,32 +1,13 @@
 import { queryOptions } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
+import type { components } from "~/types/api";
+import { fetchClient, validateResponse } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
 
-export const locationQueryKey = "all-locations";
+export type Location = components["schemas"]["AppointmentLocationDto"];
 
-export interface Location {
-  id: number;
-  name: string;
-  address: string;
-  addressAdditional: string | null;
-  city: string;
-  state: string;
-  postalCode: string;
-}
-
-export async function locationApi(token: string) {
-  return fetchData<Location[]>("/api/v1/location", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
-
-export const locationQuery = (token?: string) =>
+export const locationsQuery = (token?: string) =>
   queryOptions({
-    queryKey: [locationQueryKey],
+    queryKey: [locationsQuery.name],
     queryFn: async () => {
       if (!token) {
         const _token = await getSupabaseToken();
@@ -35,6 +16,12 @@ export const locationQuery = (token?: string) =>
         }
         token = _token;
       }
-      return locationApi(token);
+      return fetchClient
+        .GET("/api/v1/location", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => validateResponse(response.data));
     },
   });

@@ -83,7 +83,7 @@ export default function SignUpForm() {
       setVerificationEmail(null);
       showNotification({
         title: t("Sign Up Failed"),
-        message: firstError?.message,
+        message: firstError?.message ?? "An error occurred",
         status: "error",
         icon: <Key size={16} />,
       });
@@ -101,7 +101,7 @@ export default function SignUpForm() {
         lastName: values.lastName,
         redirectUrl: `${window.location.origin}/dashboard`,
       };
-      signUpUserMutate(requestBody);
+      signUpUserMutate({ body: requestBody });
     },
     [form, signUpUserMutate]
   );

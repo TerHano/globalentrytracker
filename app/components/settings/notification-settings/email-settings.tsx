@@ -12,7 +12,7 @@ import { Mail, Send } from "lucide-react";
 import { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
-import type { EmailSettings } from "~/api/email-settings-api";
+import type { EmailNotificationSettings } from "~/api/email-settings-api";
 import { LabelValue } from "~/components/ui/label-value";
 import { Page } from "~/components/ui/page";
 import {
@@ -23,7 +23,7 @@ import { useTestEmailSettings } from "~/hooks/api/useTestEmailSettings";
 import { useShowNotification } from "~/hooks/useShowNotification";
 
 interface EmailSettingsProps {
-  settings?: EmailSettings;
+  settings?: EmailNotificationSettings;
 }
 
 interface EmailSettingsForm {
@@ -96,17 +96,16 @@ export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
   });
 
   const handleTestMessage = useCallback(async () => {
-    await testMessageMutate.mutateAsync();
+    await testMessageMutate.mutateAsync({});
   }, [testMessageMutate]);
 
   const handleSubmit = useCallback(
     async (values: typeof form.values) => {
-      // Call your API to save the settings
       const request: CreateUpdateEmailSettingsRequest = {
         id: settings?.id,
         enabled: values.enabled,
       };
-      await emailSettingsMutate.mutateAsync(request);
+      await emailSettingsMutate.mutateAsync({ body: request });
     },
     [emailSettingsMutate, form, settings?.id]
   );

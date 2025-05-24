@@ -51,8 +51,7 @@ export const DeleteAllTrackersButton = ({
           <Stack align="center" justify="center" gap="lg">
             <Empty
               title="Delete All Trackers?"
-              description="
-            Are you sure you want to delete all trackers? This action cannot be
+              description="Are you sure you want to delete all trackers? This action cannot be
             undone."
               icon={<Image src={deleteAllTrackersImg} w="5rem" />}
             />
@@ -63,7 +62,7 @@ export const DeleteAllTrackersButton = ({
               <Button
                 loading={deleteAllTrackersMutation.isPending}
                 onClick={() => {
-                  deleteAllTrackersMutation.mutate();
+                  deleteAllTrackersMutation.mutate({});
                 }}
                 color="red"
                 variant="filled"

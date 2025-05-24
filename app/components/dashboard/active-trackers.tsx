@@ -11,10 +11,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useMemo, useRef } from "react";
 import { NavLink } from "react-router";
-import {
-  trackedLocationsQuery,
-  type TrackedLocation,
-} from "~/api/tracked-locations-api";
+import { trackedLocationsQuery } from "~/api/tracked-locations-api";
 import { Empty } from "../ui/empty";
 import noTrackersImg from "~/assets/icons/no-trackers-bell.png";
 import { LocationTrackerCard } from "../location-tracker-card";
@@ -36,6 +33,7 @@ import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { nextNotificationQuery } from "~/api/next-notification-api";
 import { DeleteAllTrackersButton } from "../delete-all-trackers-button";
+import type { components } from "~/types/api";
 
 export const ActiveTrackers = () => {
   const { t } = useTranslation();
@@ -140,7 +138,7 @@ export const ActiveTrackers = () => {
 const ActionableLocationTrackerCard = ({
   tracker,
 }: {
-  tracker: TrackedLocation;
+  tracker: components["schemas"]["TrackedLocationForUserDto"];
 }) => {
   const { showNotification, showErrorCodeNotification } = useShowNotification();
 
@@ -179,16 +177,24 @@ const ActionableLocationTrackerCard = ({
   });
 
   const handleDelete = useCallback(async () => {
-    await deleteTrackerMutation.mutateAsync(tracker.id);
+    await deleteTrackerMutation.mutateAsync({
+      params: {
+        path: {
+          locationTrackerId: tracker.id,
+        },
+      },
+    });
   }, [deleteTrackerMutation, tracker.id]);
 
   const toggleTracker = useCallback(async () => {
     await updateTrackerMutation.mutateAsync({
-      id: tracker.id,
-      locationId: tracker.location.id,
-      notificationTypeId: tracker.notificationType.id,
-      cutOffDate: tracker.cutOffDate,
-      enabled: !tracker.enabled,
+      body: {
+        id: tracker.id,
+        locationId: tracker.location.id,
+        notificationTypeId: tracker.notificationType.id,
+        cutOffDate: tracker.cutOffDate,
+        enabled: !tracker.enabled,
+      },
     });
   }, [tracker, updateTrackerMutation]);
 

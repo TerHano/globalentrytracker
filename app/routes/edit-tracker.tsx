@@ -5,15 +5,16 @@ import { CreateEditTrackerForm } from "~/components/create-tracker/create-edit-t
 import { Page } from "~/components/ui/page";
 import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 import type { Route } from "../routes/+types/edit-tracker";
-import { trackedLocationApi } from "~/api/tracked-location-api";
 import { locationStatesQuery } from "~/api/location-states-api";
-import { locationQuery } from "~/api/location-api";
 import { notificationTypesQuery } from "~/api/notification-types-api";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { locationsQuery } from "~/api/location-api";
+import { trackedLocationQuery } from "~/api/tracked-location-api";
+import { fetchClient } from "~/utils/fetchData";
 
 export function meta() {
   return [
@@ -40,17 +41,21 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(notificationCheckQuery(token));
-  await queryClient.prefetchQuery(locationQuery(token));
+  await queryClient.prefetchQuery(locationsQuery(token));
   await queryClient.prefetchQuery(notificationTypesQuery(token));
   await queryClient.prefetchQuery(locationStatesQuery(token));
-  // await queryClient.prefetchQuery(
-  //   trackedLocationQuery({ trackedLocationId: trackerIdNumber })
-  // );
-
-  const trackedLocation = await trackedLocationApi(
-    session.access_token,
-    trackerIdNumber
+  await queryClient.prefetchQuery(
+    trackedLocationQuery({ trackedLocationId: trackerIdNumber })
   );
+
+  const trackedLocation = await fetchClient
+    .GET(`/api/v1/tracked-locations/{id}`, {
+      params: { path: { id: trackerIdNumber } },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((response) => response.data?.data);
 
   return { trackedLocation, dehydratedState: dehydrate(queryClient) };
 }

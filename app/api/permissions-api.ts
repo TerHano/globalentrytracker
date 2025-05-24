@@ -1,25 +1,10 @@
 import { queryOptions } from "@tanstack/react-query";
-import { fetchData } from "~/utils/fetchData";
+import { fetchClient, validateResponse } from "~/utils/fetchData";
 import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
-
-export const permissionQueryKey = "permission";
-
-export interface Permission {
-  canCreateTracker: boolean;
-}
-
-export async function permissionApi(token: string) {
-  return fetchData<Permission>("/api/v1/me/permissions", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
 
 export const permissionQuery = (token?: string) =>
   queryOptions({
-    queryKey: [permissionQueryKey],
+    queryKey: [permissionQuery.name],
     queryFn: async () => {
       if (!token) {
         const _token = await getSupabaseToken();
@@ -28,6 +13,12 @@ export const permissionQuery = (token?: string) =>
         }
         token = _token;
       }
-      return permissionApi(token);
+      return fetchClient
+        .GET("/api/v1/me/permissions", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => validateResponse(response.data));
     },
   });

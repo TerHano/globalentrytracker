@@ -10,7 +10,6 @@ import { Star } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useValidateSubscription } from "~/hooks/api/useValidateSubscription";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { PricingGrid } from "../pricing/pricing-grid";
 import { Confetti, type ConfettiHandle } from "../ui/confetti";
 
@@ -108,7 +107,7 @@ export const UpgradeModal = ({
             c="yellow"
             loading={isValidateSubscriptionLoading}
             onClick={() => {
-              mutateValidateSubscription();
+              mutateValidateSubscription({});
             }}
           >
             {t("Validate Subscription")}
