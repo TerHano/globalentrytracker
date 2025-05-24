@@ -1,11 +1,11 @@
 import {
   Button,
   Modal,
-  type ButtonProps,
   Image,
   Stack,
   Group,
   useModalsStack,
+  Text,
 } from "@mantine/core";
 import { Empty } from "./ui/empty";
 import deleteAllTrackersImg from "~/assets/icons/delete-all-trackers.png";
@@ -13,14 +13,9 @@ import { useDeleteAllTrackers } from "~/hooks/api/useDeleteAllTrackers";
 import celebrationImg from "~/assets/icons/celebrate.png";
 import { Confetti, type ConfettiHandle } from "./ui/confetti";
 import { useRef } from "react";
+import { CalendarX } from "lucide-react";
 
-type DeleteAllTrackersButtonProps = Omit<ButtonProps, "onClick">;
-
-export const DeleteAllTrackersButton = ({
-  buttonProps,
-}: {
-  buttonProps: DeleteAllTrackersButtonProps;
-}) => {
+export const DeleteAllTrackers = ({ visible }: { visible: boolean }) => {
   const confettiRef = useRef<ConfettiHandle>(null);
   const modalStack = useModalsStack([
     "delete-all-trackers-confirm",
@@ -35,6 +30,7 @@ export const DeleteAllTrackersButton = ({
 
   const deleteAllTrackersMutation = useDeleteAllTrackers({
     onSuccess: () => {
+      console.log("All trackers deleted successfully");
       modalStack.open("trackers-deleted");
     },
     onError: (error) => {
@@ -102,10 +98,31 @@ export const DeleteAllTrackersButton = ({
           </Stack>
         </Modal>
       </Modal.Stack>
-      <Button
-        onClick={() => modalStack.open("delete-all-trackers-confirm")}
-        {...buttonProps}
-      />
+      {visible ? (
+        <Group p="xs" justify="center" gap={3}>
+          <Text fw={600} c="dimmed" fz="sm">
+            Got your appointment?
+          </Text>
+          <Button
+            onClick={() => modalStack.open("delete-all-trackers-confirm")}
+            variant="subtle"
+            color="red"
+            size="compact-xs"
+            rightSection={<CalendarX size={12} />}
+          >
+            Delete All Your Trackers
+          </Button>
+          {/* <DeleteAllTrackersButton
+            buttonProps={{
+              children: "",
+              variant: "subtle",
+              color: "red",
+              size: "compact-xs",
+             ,
+            }}
+          /> */}
+        </Group>
+      ) : null}
     </>
   );
 };

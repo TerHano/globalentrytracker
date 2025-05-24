@@ -32,8 +32,8 @@ import { LabelValue } from "../ui/label-value";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { nextNotificationQuery } from "~/api/next-notification-api";
-import { DeleteAllTrackersButton } from "../delete-all-trackers-button";
 import type { components } from "~/types/api";
+import { DeleteAllTrackers } from "../delete-all-trackers-button";
 
 export const ActiveTrackers = () => {
   const { t } = useTranslation();
@@ -115,22 +115,7 @@ export const ActiveTrackers = () => {
           {trackedLocationsList}
         </Stack>
       </Paper>
-      {data && data.length > 0 ? (
-        <Group p="xs" justify="center" gap={3}>
-          <Text fw={600} c="dimmed" fz="sm">
-            Got your appointment?
-          </Text>
-          <DeleteAllTrackersButton
-            buttonProps={{
-              children: "Delete All Your Trackers",
-              variant: "subtle",
-              color: "red",
-              size: "compact-xs",
-              rightSection: <CalendarX size={12} />,
-            }}
-          />
-        </Group>
-      ) : null}
+      <DeleteAllTrackers visible={(data && data.length > 0) ?? false} />
     </section>
   );
 };
