@@ -131,7 +131,7 @@ export default function LoginForm() {
   );
 
   return (
-    <>
+    <div className="fade-in-up-animation">
       <Title order={2} ta="center" mt="md">
         {t("Welcome back to EntryAlert")}
       </Title>
@@ -263,6 +263,6 @@ export default function LoginForm() {
           </Stack>
         </Modal>
       </Modal.Stack>
-    </>
+    </div>
   );
 }

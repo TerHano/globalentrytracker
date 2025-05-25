@@ -1,7 +1,7 @@
 import LoginForm from "~/components/login-form/login-form";
 import type { Route } from "./+types/login";
 import { redirect } from "react-router";
-import { SignInSignUpWrapper } from "~/components/ui/SignInSignUpWrapper";
+import { SignInSignUpWrapper } from "~/components/ui/sign-in-sign-up-wrapper/SignInSignUpWrapper";
 import { isAuthenticated } from "~/utils/auth";
 
 export function meta() {

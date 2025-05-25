@@ -1,0 +1,17 @@
+@keyframes zoomout {
+  from {
+    transform: scale(1.1);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.zoomOutAnimation {
+  animation: zoomout 20s ease-in-out forwards;
+}
+
+.imgContainer {
+  overflow: hidden;
+  border-radius: var(--mantine-radius-sm);
+}

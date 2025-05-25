@@ -107,7 +107,7 @@ export default function SignUpForm() {
   );
 
   return (
-    <>
+    <div className="fade-in-up-animation">
       <Title order={2} ta="center" mt="md" mb={30}>
         {t("Ready To Get That Appointment?")}
       </Title>
@@ -200,6 +200,6 @@ export default function SignUpForm() {
           </Button>
         </Stack>
       </Modal>
-    </>
+    </div>
   );
 }
