@@ -17,7 +17,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     return redirect("/login");
   }
 
-  await queryClient.prefetchQuery(meQuery());
+  await queryClient.prefetchQuery(meQuery(request));
 
   return { dehydratedState: dehydrate(queryClient) };
 }

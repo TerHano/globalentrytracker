@@ -24,41 +24,48 @@ function validateResponse<T>(
   }
   return apiResponse.data;
 }
+let refreshPromise: Promise<Response | null> | null = null;
 
 const authMiddleware: Middleware = {
   onResponse: async ({ request, response }) => {
     // Check if the response status is 401 (Unauthorized)
 
     if (response.status === 401) {
+      console.log("401 error occurred");
       //Handle the 401 error here, e.g., redirect to login page
       const cookie = request.headers.get("cookie") || "";
-      const accessTokenMatch = cookie.match(/access_token=([^;]+)/);
-      const refreshTokenMatch = cookie.match(/refresh_token=([^;]+)/);
-      const missingAccessTokenOrRefreshToken =
-        !accessTokenMatch || !refreshTokenMatch;
-
-      if (missingAccessTokenOrRefreshToken) {
-        throw redirect("/login");
+      if (!refreshPromise) {
+        refreshPromise = (async () => {
+          const refreshResponse = await fetch(
+            BASE_URL + "/api/auth/v1/refresh-token",
+            {
+              headers: { cookie },
+              method: "POST",
+              credentials: "include",
+            }
+          );
+          return refreshResponse;
+        })();
       }
-      const refreshResponse = await fetch(
-        BASE_URL + "/api/auth/v1/refresh-token",
-        {
-          headers: { cookie },
-          method: "POST",
-          credentials: "include",
-        }
-      );
-      const refreshedAccessTokenBody: RefreshTokenResponse =
-        await refreshResponse.json();
-      const refreshedAccessToken = refreshedAccessTokenBody.data;
-      console.log("refreshedAccessTokenBody", refreshedAccessTokenBody);
-      if (!refreshResponse.ok || !refreshedAccessToken) {
-        redirect("/login");
+      const refreshedAccessTokenResponse = await refreshPromise;
+      refreshPromise = null;
+
+      if (!refreshedAccessTokenResponse) {
         console.error("Failed to refresh token");
+
+        throw redirect("/login");
+        // throw new Error("Failed to refresh token");
+      }
+      const refreshedAccessTokenBody: RefreshTokenResponse =
+        await refreshedAccessTokenResponse.json();
+      const refreshedAccessToken = refreshedAccessTokenBody.data;
+      if (!refreshedAccessToken) {
+        console.error("Failed to refresh token");
+        throw redirect("/login");
         // throw new Error("Failed to refresh token");
       }
 
-      const setCookie = refreshResponse.headers.get("set-cookie");
+      const setCookie = refreshedAccessTokenResponse.headers.get("set-cookie");
       const headers = new Headers();
       if (setCookie) {
         headers.append("Set-Cookie", setCookie);

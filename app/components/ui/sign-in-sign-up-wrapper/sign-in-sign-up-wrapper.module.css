@@ -8,7 +8,7 @@
 }
 
 .zoomOutAnimation {
-  animation: zoomout 20s ease-in-out forwards;
+  animation: zoomout 10s ease-in-out forwards;
 }
 
 .imgContainer {
