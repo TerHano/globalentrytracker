@@ -1,7 +1,7 @@
 import type { Route } from "./+types/profile-settings-page";
 import { redirect } from "react-router";
-import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 import { SubscriptionSettings } from "~/components/settings/subscription-settings";
+import { isAuthenticated } from "~/utils/auth";
 
 export function meta() {
   return [
@@ -11,13 +11,10 @@ export function meta() {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const { supabase, headers } = createSupabaseServerClient(request);
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session) {
-    // If the user is already logged in, redirect to the home page
-    return redirect("/login", { headers });
+  const isUserAuthenticated = await isAuthenticated(request);
+  if (!isUserAuthenticated) {
+    // If the user is not authenticated, redirect to the login page
+    return redirect("/login");
   }
 }
 

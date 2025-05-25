@@ -15,14 +15,7 @@ import { trackedLocationsQuery } from "~/api/tracked-locations-api";
 import { Empty } from "../ui/empty";
 import noTrackersImg from "~/assets/icons/no-trackers-bell.png";
 import { LocationTrackerCard } from "../location-tracker-card";
-import {
-  Bell,
-  BellMinus,
-  CalendarX,
-  CircleHelp,
-  PencilLine,
-  Trash2,
-} from "lucide-react";
+import { Bell, BellMinus, CircleHelp, PencilLine, Trash2 } from "lucide-react";
 import { modals } from "@mantine/modals";
 import { useDeleteTracker } from "~/hooks/api/useDeleteTracker";
 import { ConfirmDeleteTrackerBody } from "./confirm-delete-tracker-body";

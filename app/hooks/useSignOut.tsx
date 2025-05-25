@@ -1,36 +1,20 @@
-import { type AuthError } from "@supabase/supabase-js";
-import { supabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClient";
 import type { MutationHookOptions } from "./api/mutationOptions";
-import { useMutation } from "@tanstack/react-query";
+import { $api } from "~/utils/fetchData";
 
 export const useSignOutUser = ({
   onSuccess,
   onError,
-}: MutationHookOptions<void, void, AuthError>) => {
-  return useMutation<void, AuthError, void>({
-    mutationFn: async () => {
-      return signOutUser();
-    },
+}: MutationHookOptions<unknown, unknown>) => {
+  return $api.useMutation("post", "/api/auth/v1/sign-out", {
     onSuccess: (data, body) => {
-      // Default behavior
-
-      // Call user-provided handler if it exists
       if (onSuccess) {
         onSuccess(data, body);
       }
     },
     onError: (error) => {
-      // Call user-provided handler if it exists
       if (onError) {
-        onError(error);
+        onError(error.errors);
       }
     },
   });
 };
-async function signOutUser() {
-  return supabaseBrowserClient.auth.signOut().then(({ error }) => {
-    if (error) {
-      throw error;
-    }
-  });
-}

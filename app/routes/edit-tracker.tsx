@@ -1,9 +1,8 @@
 import { Anchor, Text } from "@mantine/core";
-import { Link, redirect } from "react-router";
+import { Link } from "react-router";
 import { notificationCheckQuery } from "~/api/notification-check-api";
 import { CreateEditTrackerForm } from "~/components/create-tracker/create-edit-tracker-form";
 import { Page } from "~/components/ui/page";
-import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 import type { Route } from "../routes/+types/edit-tracker";
 import { locationStatesQuery } from "~/api/location-states-api";
 import { notificationTypesQuery } from "~/api/notification-types-api";
@@ -24,26 +23,17 @@ export function meta() {
 }
 
 export async function loader({ request, params }: Route.LoaderArgs) {
-  const { supabase, headers } = createSupabaseServerClient(request);
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session) {
-    // If the user is already logged in, redirect to the home page
-    return redirect("/login", { headers });
-  }
   const { trackerId } = params;
   if (!trackerId) {
     throw new Error("Tracker ID is required");
   }
-  const token = session.access_token;
   const trackerIdNumber = parseInt(trackerId);
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery(notificationCheckQuery(token));
-  await queryClient.prefetchQuery(locationsQuery(token));
-  await queryClient.prefetchQuery(notificationTypesQuery(token));
-  await queryClient.prefetchQuery(locationStatesQuery(token));
+  await queryClient.prefetchQuery(notificationCheckQuery(request));
+  await queryClient.prefetchQuery(locationsQuery(request));
+  await queryClient.prefetchQuery(notificationTypesQuery(request));
+  await queryClient.prefetchQuery(locationStatesQuery(request));
   await queryClient.prefetchQuery(
     trackedLocationQuery({ trackedLocationId: trackerIdNumber })
   );
@@ -51,9 +41,8 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   const trackedLocation = await fetchClient
     .GET(`/api/v1/tracked-locations/{id}`, {
       params: { path: { id: trackerIdNumber } },
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { cookie: request?.headers.get("cookie") || "" },
+      credentials: "include",
     })
     .then((response) => response.data?.data);
 

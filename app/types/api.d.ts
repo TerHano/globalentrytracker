@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+    "/api/v1/admin/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get all users
+         * @description Retrieves a list of all users in the system. Requires Admin authorization.
+         */
+        get: operations["GetAllUsers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/user/{userId}": {
         parameters: {
             query?: never;
@@ -24,7 +44,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/sign-up": {
+    "/api/auth/v1/authenticated": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Check if user is authenticated
+         * @description Checks if the user is authenticated and returns a boolean value.
+         */
+        get: operations["IsAuthenticated"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/v1/password-recovery": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send password reset email
+         * @description Sends a password reset email to the user with the provided email address.
+         */
+        post: operations["SendPasswordResetEmail"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/v1/sign-up": {
         parameters: {
             query?: never;
             header?: never;
@@ -38,6 +98,106 @@ export interface paths {
          * @description Creates a new user account with the provided registration details.
          */
         post: operations["SignUp"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/v1/sign-in": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Authenticate a user and obtain a token
+         * @description Authenticates the user with the provided credentials and returns an access token and refresh token.
+         */
+        post: operations["SignIn"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/v1/refresh-token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Refresh an access token using a refresh token
+         * @description Uses the provided refresh token to obtain a new access token and refresh token.
+         */
+        post: operations["RefreshToken"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/v1/verify-email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Verify email
+         * @description Verifies the provided email when signing up and allows the user to log in.
+         */
+        post: operations["VerifyEmail"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/v1/verify-email-reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Verify email reset token
+         * @description Verifies the provided email reset token and allows the user to reset their password.
+         */
+        post: operations["VerifyEmailReset"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/v1/reset-password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reset user password
+         * @description Resets the password for the authenticated user.
+         */
+        post: operations["ResetPassword"];
         delete?: never;
         options?: never;
         head?: never;
@@ -134,6 +294,50 @@ export interface paths {
          * @description Sends a test email notification to the currently authenticated user to verify email notification settings.
          */
         post: operations["SendTestEmailNotification"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/v1/sign-out": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ObjectApiResponse"];
+                    };
+                };
+                /** @description Bad Request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ObjectApiResponse"];
+                    };
+                };
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;
@@ -625,6 +829,14 @@ export interface components {
             /** Format: int32 */
             data: number;
         };
+        IsAuthenticatedDto: {
+            isAuthenticated?: boolean;
+        };
+        IsAuthenticatedDtoApiResponse: {
+            success: boolean;
+            errors: components["schemas"]["Error"][];
+            data: components["schemas"]["IsAuthenticatedDto"];
+        };
         ManageSubscriptionSessionRequest: {
             returnUrl: string;
         };
@@ -658,6 +870,9 @@ export interface components {
             errors: components["schemas"]["Error"][];
             data: unknown;
         };
+        PasswordResetEmailRequest: {
+            email: string;
+        };
         PermissionsDto: {
             canCreateTracker: boolean;
         };
@@ -688,11 +903,18 @@ export interface components {
          * @enum {integer}
          */
         PlanOptionFrequency: 1 | 2;
+        ResetPasswordRequest: {
+            newPassword: string;
+        };
         /**
          * Format: int32
          * @enum {integer}
          */
         Role: 0 | 1 | 2;
+        SignInRequest: {
+            email: string;
+            password: string;
+        };
         StringApiResponse: {
             success: boolean;
             errors: components["schemas"]["Error"][];
@@ -764,6 +986,11 @@ export interface components {
             errors: components["schemas"]["Error"][];
             data: components["schemas"]["UserDto"];
         };
+        UserDtoArrayApiResponse: {
+            success: boolean;
+            errors: components["schemas"]["Error"][];
+            data: components["schemas"]["UserDto"][];
+        };
         UserNotificationSettingsDto: {
             discordSettings?: components["schemas"]["DiscordNotificationSettingsDto"];
             emailSettings?: components["schemas"]["EmailNotificationSettingsDto"];
@@ -791,6 +1018,9 @@ export interface components {
             errors: components["schemas"]["Error"][];
             data: components["schemas"]["UserSubscriptionDto"];
         };
+        VerifyOtpRequest: {
+            tokenHash: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -800,6 +1030,44 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    GetAllUsers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserDtoArrayApiResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
     DeleteUserById: {
         parameters: {
             query?: never;
@@ -840,6 +1108,68 @@ export interface operations {
             };
         };
     };
+    IsAuthenticated: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IsAuthenticatedDtoApiResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    SendPasswordResetEmail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PasswordResetEmailRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
     SignUp: {
         parameters: {
             query?: never;
@@ -850,6 +1180,167 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["CreateUserRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    SignIn: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SignInRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    RefreshToken: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StringApiResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    VerifyEmail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyOtpRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    VerifyEmailReset: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyOtpRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    ResetPassword: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetPasswordRequest"];
             };
         };
         responses: {

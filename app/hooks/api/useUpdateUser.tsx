@@ -12,7 +12,6 @@ export const useUpdateUser = ({
   onError,
 }: MutationHookOptions<UpdateUserRequest, unknown>) => {
   const queryClient = useQueryClient();
-  // const supabaseBrowserClient = createSupabaseBrowserClient();
 
   return $api.useMutation("put", "/api/v1/me", {
     onSuccess: (data, request) => {

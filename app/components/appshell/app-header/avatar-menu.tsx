@@ -55,7 +55,7 @@ export const AvatarMenu = ({ meData, signOutMutation }: AvaterMenuProps) => {
         </Menu.Item>
         <Menu.Item
           color="red"
-          onClick={() => signOutMutation.mutate()}
+          onClick={() => signOutMutation.mutate({})}
           leftSection={
             signOutMutation.isPending ? (
               <Loader color="red" size={14} />

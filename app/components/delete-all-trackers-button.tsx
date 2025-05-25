@@ -6,6 +6,7 @@ import {
   Group,
   useModalsStack,
   Text,
+  SimpleGrid,
 } from "@mantine/core";
 import { Empty } from "./ui/empty";
 import deleteAllTrackersImg from "~/assets/icons/delete-all-trackers.png";
@@ -42,6 +43,7 @@ export const DeleteAllTrackers = ({ visible }: { visible: boolean }) => {
       <Modal.Stack>
         <Modal
           {...modalStack.register("delete-all-trackers-confirm")}
+          size="sm"
           withCloseButton={false}
         >
           <Stack align="center" justify="center" gap="lg">
@@ -51,7 +53,7 @@ export const DeleteAllTrackers = ({ visible }: { visible: boolean }) => {
             undone."
               icon={<Image src={deleteAllTrackersImg} w="5rem" />}
             />
-            <Group w="100%" justify="end" gap="xs">
+            <SimpleGrid w="100%" cols={2} spacing="xs">
               <Button onClick={() => modalStack.closeAll()} variant="outline">
                 Cancel
               </Button>
@@ -60,12 +62,13 @@ export const DeleteAllTrackers = ({ visible }: { visible: boolean }) => {
                 onClick={() => {
                   deleteAllTrackersMutation.mutate({});
                 }}
+                size="sm"
                 color="red"
                 variant="filled"
               >
-                Delete All Trackers
+                Delete All
               </Button>
-            </Group>
+            </SimpleGrid>
           </Stack>
         </Modal>
         <Modal

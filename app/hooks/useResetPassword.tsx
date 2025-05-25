@@ -1,7 +1,5 @@
-import { type AuthError, type User } from "@supabase/supabase-js";
-import { supabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClient";
 import type { MutationHookOptions } from "./api/mutationOptions";
-import { useMutation } from "@tanstack/react-query";
+import { $api } from "~/utils/fetchData";
 
 export interface ResetPasswordRequest {
   newPassword: string;
@@ -10,36 +8,21 @@ export interface ResetPasswordRequest {
 export const useResetPassword = ({
   onSuccess,
   onError,
-}: MutationHookOptions<ResetPasswordRequest, User, AuthError | null>) => {
-  return useMutation<User, AuthError, ResetPasswordRequest>({
-    mutationFn: async (request: ResetPasswordRequest) => {
-      return resetPassword(request);
+}: MutationHookOptions<ResetPasswordRequest, unknown>) => {
+  return $api.useMutation("post", "/api/auth/v1/reset-password", {
+    onSuccess: (data, request) => {
+      // Call user-provided handler if it exists
+      if (onSuccess) {
+        onSuccess(data.data, request?.body);
+      }
     },
-    onSuccess: (data, body) => {
+    onError: (response) => {
       // Default behavior
 
       // Call user-provided handler if it exists
-      if (onSuccess) {
-        onSuccess(data, body);
-      }
-    },
-    onError: (error) => {
-      // Call user-provided handler if it exists
       if (onError) {
-        onError(error);
+        onError(response.errors);
       }
     },
   });
 };
-async function resetPassword({ newPassword }: ResetPasswordRequest) {
-  return supabaseBrowserClient.auth
-    .updateUser({
-      password: newPassword,
-    })
-    .then((resp) => {
-      if (resp.error) {
-        throw resp.error;
-      }
-      return resp.data.user;
-    });
-}

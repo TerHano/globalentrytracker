@@ -1,8 +1,8 @@
 import type { Route } from "./+types/login";
 import { redirect } from "react-router";
-import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 import SignUpForm from "~/components/sign-up-form/sign-up-form";
 import { SignInSignUpWrapper } from "~/components/ui/SignInSignUpWrapper";
+import { isAuthenticated } from "~/utils/auth";
 
 export function meta() {
   return [
@@ -12,13 +12,10 @@ export function meta() {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const { supabase, headers } = createSupabaseServerClient(request);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (user) {
-    // If the user is already logged in, redirect to the home page
-    return redirect("/dashboard", { headers });
+  const isUserAuthenticated = await isAuthenticated(request);
+  if (isUserAuthenticated) {
+    // If the user is not authenticated, redirect to the login page
+    return redirect("/dashboard");
   }
   return { error: "Wrong user" }; // No action needed if the user is not logged in
 }

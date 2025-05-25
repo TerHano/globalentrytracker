@@ -1,10 +1,5 @@
-import {
-  type AuthError,
-  type AuthTokenResponsePassword,
-} from "@supabase/supabase-js";
-import { supabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClient";
 import type { MutationHookOptions } from "./api/mutationOptions";
-import { useMutation } from "@tanstack/react-query";
+import { $api } from "~/utils/fetchData";
 
 export interface SignInRequest {
   email: string;
@@ -14,38 +9,20 @@ export interface SignInRequest {
 export const useSignInUser = ({
   onSuccess,
   onError,
-}: MutationHookOptions<
-  SignInRequest,
-  AuthTokenResponsePassword,
-  AuthError
->) => {
-  return useMutation<AuthTokenResponsePassword, AuthError, SignInRequest>({
-    mutationFn: async (request: SignInRequest) => {
-      return signInUser(request);
-    },
-    onSuccess: async (data, body) => {
-      // Default behavior
-
+}: MutationHookOptions<SignInRequest, unknown>) => {
+  return $api.useMutation("post", "/api/auth/v1/sign-in", {
+    onSuccess: (data, request) => {
       // Call user-provided handler if it exists
       if (onSuccess) {
-        onSuccess(data, body);
+        onSuccess(data.data, request?.body);
       }
     },
-    onError: (error) => {
+    onError: (response) => {
+      // Default behavior
       // Call user-provided handler if it exists
       if (onError) {
-        onError(error);
+        onError(response.errors);
       }
     },
   });
 };
-async function signInUser({ email, password }: SignInRequest) {
-  return supabaseBrowserClient.auth
-    .signInWithPassword({ email, password })
-    .then((resp) => {
-      if (resp.error) {
-        throw resp.error;
-      }
-      return resp;
-    });
-}

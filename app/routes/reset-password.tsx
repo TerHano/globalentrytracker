@@ -1,9 +1,8 @@
-import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 import type { Route } from "./+types/reset-password";
 import { Stack } from "@mantine/core";
 import { ResetPasswordForm } from "~/components/reset-password/reset-password-form";
-import type { EmailOtpType } from "@supabase/supabase-js";
 import { PasswordResetLinkExpired } from "~/components/reset-password/password-reset-link-expired";
+import { fetchClient } from "~/utils/fetchData";
 
 export function meta() {
   return [
@@ -15,18 +14,30 @@ export function meta() {
 export async function loader({ request }: Route.LoaderArgs) {
   const requestUrl = new URL(request.url);
   const token_hash = requestUrl.searchParams.get("token_hash");
-  const type = requestUrl.searchParams.get("type") as EmailOtpType | null;
-  //const next = requestUrl.searchParams.get("next") || "/";
+  const type = requestUrl.searchParams.get("type");
+
   if (token_hash && type) {
-    const { supabase, headers } = createSupabaseServerClient(request);
-    const { error } = await supabase.auth.verifyOtp({
-      type,
-      token_hash,
+    const response = await fetchClient.POST("/api/auth/v1/verify-email-reset", {
+      credentials: "include",
+      body: {
+        tokenHash: token_hash,
+      },
     });
-    if (error) {
+    console.log("response", response);
+    if (response.response.status !== 200) {
       return { linkExpired: true };
+    } else {
+      const setCookie = response.response.headers.get("set-cookie");
+
+      const headers = new Headers();
+      if (setCookie) {
+        headers.append("Set-Cookie", setCookie);
+      }
+      return new Response(JSON.stringify({ linkExpired: false }), {
+        status: 200,
+        headers,
+      });
     }
-    return new Response(JSON.stringify({ linkExpired: false }), { headers });
   } else {
     return { linkExpired: true };
   }

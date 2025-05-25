@@ -37,48 +37,4 @@ export const useCreateUpdateEmailSettings = ({
       },
     }
   );
-  // return useMutation<number, ApiError[], CreateUpdateEmailSettingsRequest>({
-  //   mutationFn: async (request: CreateUpdateEmailSettingsRequest) => {
-  //     const token = await getSupabaseToken();
-  //     if (!token) {
-  //       throw new Error("No token found");
-  //     }
-  //     return emailNotificationSettingsApi(request, isUpdate);
-  //   },
-  //   onSuccess: (data, body) => {
-  //     // Default behavior
-
-  //     // Call user-provided handler if it exists
-  //     if (onSuccess) {
-  //       onSuccess(data, body);
-  //     }
-  //   },
-  //   onError: (error) => {
-  //     // Default behavior
-  //     console.error("Error deleting tracker:", error);
-
-  //     // Call user-provided handler if it exists
-  //     if (onError) {
-  //       onError(error);
-  //     }
-  //   },
-  // });
 };
-
-// async function emailNotificationSettingsApi(
-//   request: CreateUpdateEmailSettingsRequest,
-//   isUpdate: boolean
-// ) {
-//   const token = await getSupabaseToken();
-//   if (!token) {
-//     throw new Error("No token found");
-//   }
-//   return fetchData<number>(`/api/v1/notification-settings/email`, {
-//     method: isUpdate ? "PUT" : "POST",
-//     body: JSON.stringify(request),
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `Bearer ${token}`,
-//     },
-//   });
-// }

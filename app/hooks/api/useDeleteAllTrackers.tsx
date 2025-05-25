@@ -41,35 +41,4 @@ export function useDeleteAllTrackers({
       }
     },
   });
-
-  // return useMutation<void, ApiError[], void>({
-  //   mutationFn: async () => {
-  //     const token = await getSupabaseToken();
-  //     if (!token) {
-  //       throw new Error("No token found");
-  //     }
-  //     return deleteAllTrackedLocationsApi();
-  //   },
-  //   onSuccess: (data) => {
-  //     // Default behavior
-  //     // Call user-provided handler if it exists
-  //     if (onSuccess) {
-  //       onSuccess(data);
-  //       queryClient.invalidateQueries({ queryKey: [trackedLocationsQueryKey] });
-  //       queryClient.invalidateQueries({
-  //         queryKey: [trackedLocationQueryKey],
-  //       });
-  //       queryClient.invalidateQueries({ queryKey: [permissionQueryKey] });
-  //     }
-  //   },
-  //   onError: (error) => {
-  //     // Default behavior
-  //     console.error("Error deleting tracker:", error);
-
-  //     // Call user-provided handler if it exists
-  //     if (onError) {
-  //       onError(error);
-  //     }
-  //   },
-  // });
 }

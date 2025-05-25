@@ -63,7 +63,10 @@ const AppHeaderAuthenticated = () => {
       });
     },
     onError: (error) => {
-      console.error("Error signing out:", error.message);
+      const firstError = error[0];
+      if (firstError) {
+        console.error("Error signing out:", firstError.message);
+      }
     },
   });
 

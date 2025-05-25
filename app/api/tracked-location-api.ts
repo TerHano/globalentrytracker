@@ -1,29 +1,23 @@
 import { queryOptions } from "@tanstack/react-query";
 import { fetchClient, validateResponse } from "~/utils/fetchData";
-import { getSupabaseToken } from "~/utils/supabase/get-supabase-token-client";
+import type { components } from "~/types/api";
 
-export const trackedLocationQuery = ({
-  trackedLocationId,
-  token,
-}: {
+export type TrackedLocation =
+  components["schemas"]["TrackedLocationForUserDto"];
+
+export const trackedLocationQuery = (params: {
   trackedLocationId: number;
-  token?: string;
+  request?: Request;
 }) =>
   queryOptions({
-    queryKey: [trackedLocationQuery.name],
+    queryKey: [trackedLocationQuery.name, params.trackedLocationId],
     queryFn: async () => {
-      if (!token) {
-        const _token = await getSupabaseToken();
-        if (!_token) {
-          throw new Error("No token found");
-        }
-        token = _token;
-      }
       return fetchClient
-        .GET("/api/v1/tracked-locations/{id}", {
-          params: { path: { id: trackedLocationId } },
+        .GET(`/api/v1/tracked-locations/{id}`, {
+          params: { path: { id: params.trackedLocationId } },
+          credentials: "include",
           headers: {
-            Authorization: `Bearer ${token}`,
+            cookie: params.request?.headers.get("cookie"),
           },
         })
         .then((response) => validateResponse(response.data));

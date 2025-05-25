@@ -19,7 +19,9 @@ export const SignInSignUpWrapper = ({
     </Flex>
   );
 
-  const imageCol = <Image radius="md" visibleFrom="md" src={image} />;
+  const imageCol = (
+    <Image mah="85vh" fit="cover" radius="md" visibleFrom="md" src={image} />
+  );
 
   return (
     <Flex justify="center">

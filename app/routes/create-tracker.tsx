@@ -2,7 +2,6 @@ import { Anchor, Text } from "@mantine/core";
 import { Link, redirect } from "react-router";
 import { CreateEditTrackerForm } from "~/components/create-tracker/create-edit-tracker-form";
 import { Page } from "~/components/ui/page";
-import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
 import type { Route } from "./+types/create-tracker";
 import { notificationCheckQuery } from "~/api/notification-check-api";
 import { CreateTrackerNotificationWarning } from "~/components/create-tracker/create-tracker-notification-warning";
@@ -14,6 +13,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { locationsQuery } from "~/api/location-api";
+import { isAuthenticated } from "~/utils/auth";
 
 export function meta() {
   return [
@@ -23,20 +23,17 @@ export function meta() {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const { supabase, headers } = createSupabaseServerClient(request);
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session) {
-    // If the user is already logged in, redirect to the home page
-    return redirect("/login", { headers });
+  const isUserAuthenticated = await isAuthenticated(request);
+  if (!isUserAuthenticated) {
+    // If the user is not authenticated, redirect to the login page
+    return redirect("/login");
   }
-  const token = session.access_token;
+  // const token = session.access_token;
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(notificationCheckQuery(token));
-  await queryClient.prefetchQuery(locationsQuery(token));
-  await queryClient.prefetchQuery(notificationTypesQuery(token));
-  await queryClient.prefetchQuery(locationStatesQuery(token));
+  await queryClient.prefetchQuery(notificationCheckQuery(request));
+  await queryClient.prefetchQuery(locationsQuery(request));
+  await queryClient.prefetchQuery(notificationTypesQuery(request));
+  await queryClient.prefetchQuery(locationStatesQuery(request));
   return { dehydratedState: dehydrate(queryClient) };
 }
 

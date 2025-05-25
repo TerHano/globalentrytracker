@@ -3,7 +3,6 @@ import { PasswordInputWithStrength } from "../ui/password-input-with-strength";
 import { useCallback, useState } from "react";
 import { z } from "zod";
 import { useForm, zodResolver } from "@mantine/form";
-import { supabaseBrowserClient } from "~/utils/supabase/createSupbaseBrowerClient";
 import { useShowNotification } from "~/hooks/useShowNotification";
 import { Key } from "lucide-react";
 import { useNavigate } from "react-router";
@@ -16,13 +15,17 @@ export const ResetPasswordForm = () => {
   const { mutate: resetPassword, isPending: isResetPasswordLoading } =
     useResetPassword({
       onError: (error) => {
-        showNotification({
-          icon: <Key size={18} />,
-          title: "Error",
-          message:
-            error?.message ?? "An unexpected error occurred. Please try again.",
-          status: "error",
-        });
+        const firstError = error[0];
+        if (firstError) {
+          showNotification({
+            icon: <Key size={18} />,
+            title: "Error",
+            message:
+              firstError?.message ??
+              "An unexpected error occurred. Please try again.",
+            status: "error",
+          });
+        }
       },
       onSuccess: () => {
         showNotification({
@@ -58,7 +61,9 @@ export const ResetPasswordForm = () => {
   const onResetPassword = useCallback(
     (values: typeof form.values) => {
       resetPassword({
-        newPassword: values.password,
+        body: {
+          newPassword: values.password,
+        },
       });
     },
     [form, resetPassword]

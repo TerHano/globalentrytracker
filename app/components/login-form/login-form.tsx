@@ -31,13 +31,17 @@ export default function LoginForm() {
   const { showNotification } = useShowNotification();
   const { mutate: signInUser, isPending: isSignInUserLoading } = useSignInUser({
     onError: (error) => {
-      showNotification({
-        title: "Login Failed",
-        message:
-          error?.message ?? "An unexpected error occurred. Please try again.",
-        status: "error",
-        icon: <Key size={16} />,
-      });
+      const firstError = error?.[0];
+      if (firstError) {
+        showNotification({
+          title: "Login Failed",
+          message:
+            firstError?.message ??
+            "An unexpected error occurred. Please try again.",
+          status: "error",
+          icon: <Key size={16} />,
+        });
+      }
     },
     onSuccess: () => {
       navigate("/dashboard");
@@ -48,13 +52,17 @@ export default function LoginForm() {
     isPending: isSendResetPasswordEmailLoading,
   } = useSendResetPasswordEmail({
     onError: (error) => {
-      showNotification({
-        title: "Reset Password Failed",
-        message:
-          error?.message ?? "An unexpected error occurred. Please try again.",
-        status: "error",
-        icon: <Key size={16} />,
-      });
+      const firstError = error?.[0];
+      if (firstError) {
+        showNotification({
+          title: "Reset Password Failed",
+          message:
+            firstError.message ??
+            "An unexpected error occurred. Please try again.",
+          status: "error",
+          icon: <Key size={16} />,
+        });
+      }
     },
     onSuccess: (_, request) => {
       setSetResetPasswordEmail(request.email);
@@ -105,7 +113,9 @@ export default function LoginForm() {
         return;
       }
       sendResetPasswordEmail({
-        email: emailField.getValue(),
+        body: {
+          email: emailField.getValue(),
+        },
       });
       console.log("Resetting password for email:", emailField.getValue());
     });
@@ -115,7 +125,7 @@ export default function LoginForm() {
   const handleSubmit = useCallback(
     async (values: typeof form.values) => {
       const { email, password } = values;
-      signInUser({ email, password });
+      signInUser({ body: { email, password } });
     },
     [form, signInUser]
   );

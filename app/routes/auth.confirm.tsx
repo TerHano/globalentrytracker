@@ -1,23 +1,31 @@
-import type { EmailOtpType } from "@supabase/supabase-js";
 import { redirect, type LoaderFunctionArgs } from "react-router";
-import { createSupabaseServerClient } from "~/utils/supabase/createSupabaseServerClient";
+import { fetchClient } from "~/utils/fetchData";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const requestUrl = new URL(request.url);
   const token_hash = requestUrl.searchParams.get("token_hash");
-  const type = requestUrl.searchParams.get("type") as EmailOtpType | null;
+  const type = requestUrl.searchParams.get("type");
   const next = requestUrl.searchParams.get("next") || "/";
-  const headers = new Headers();
+
   if (token_hash && type) {
-    const { supabase, headers } = createSupabaseServerClient(request);
-    const { error } = await supabase.auth.verifyOtp({
-      type,
-      token_hash,
+    const response = await fetchClient.POST("/api/auth/v1/verify-email", {
+      credentials: "include",
+      body: {
+        tokenHash: token_hash,
+      },
     });
-    if (!error) {
-      return redirect(next, { headers });
+    if (response.response.status == 200) {
+      const setCookie = response.response.headers.get("set-cookie");
+
+      const headers = new Headers();
+      if (setCookie) {
+        headers.append("Set-Cookie", setCookie);
+      }
+      redirect(next, {
+        headers,
+      });
     }
   }
   // return the user to an error page with instructions
-  return redirect("/auth/auth-code-error", { headers });
+  return redirect("/auth/auth-code-error");
 }

@@ -98,7 +98,7 @@ export const MobileAvatarMenu = ({
               }
               variant="subtle"
               color="red"
-              onClick={() => signOutMutation.mutate()}
+              onClick={() => signOutMutation.mutate({})}
             >
               Sign Out
             </Button>

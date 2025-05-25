@@ -39,7 +39,6 @@ import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import React from "react";
 import { UpgradeModalProvider } from "./provider/upgrade-modal-provider";
-import { AuthProvider } from "./provider/auth-provider";
 import { ArrowLeft } from "lucide-react";
 
 export const links: Route.LinksFunction = () => [
@@ -91,14 +90,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <MantineProvider theme={theme} defaultColorScheme="dark">
-          <AuthProvider>
-            <ModalsProvider>
-              <Notifications autoClose={3000} />
-              <QueryClientProvider client={queryClient}>
-                <UpgradeModalProvider>{children}</UpgradeModalProvider>
-              </QueryClientProvider>
-            </ModalsProvider>
-          </AuthProvider>
+          <ModalsProvider>
+            <Notifications autoClose={3000} />
+            <QueryClientProvider client={queryClient}>
+              <UpgradeModalProvider>{children}</UpgradeModalProvider>
+            </QueryClientProvider>
+          </ModalsProvider>
         </MantineProvider>
         <ScrollRestoration />
         <Scripts />
@@ -115,7 +112,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;
-  const showFriendlyError = true;
+  const showFriendlyError = false;
 
   if (showFriendlyError) {
     if (isRouteErrorResponse(error)) {
