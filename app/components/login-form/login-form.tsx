@@ -21,6 +21,7 @@ import { useShowNotification } from "~/hooks/useShowNotification";
 import { ArrowLeft, Key, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import emailLinkImg from "~/assets/icons/email-link.png";
+import errorImg from "~/assets/icons/500.png";
 import resetPasswordImg from "~/assets/icons/reset-password.png";
 import { useSendResetPasswordEmail } from "~/hooks/useSendResetPasswordEmail";
 import { useSignInUser } from "~/hooks/useSignIn";
@@ -51,18 +52,20 @@ export default function LoginForm() {
     mutate: sendResetPasswordEmail,
     isPending: isSendResetPasswordEmailLoading,
   } = useSendResetPasswordEmail({
-    onError: (error) => {
-      const firstError = error?.[0];
-      if (firstError) {
-        showNotification({
-          title: "Reset Password Failed",
-          message:
-            firstError.message ??
-            "An unexpected error occurred. Please try again.",
-          status: "error",
-          icon: <Key size={16} />,
-        });
-      }
+    onError: () => {
+      modalStack.open("error-sending-reset-link-modal");
+
+      // const firstError = error?.[0];
+      // if (firstError) {
+      //   showNotification({
+      //     title: "Reset Password Failed",
+      //     message:
+      //       firstError.message ??
+      //       "An unexpected error occurred. Please try again.",
+      //     status: "error",
+      //     icon: <Key size={16} />,
+      //   });
+      // }
     },
     onSuccess: (_, request) => {
       setSetResetPasswordEmail(request.email);
@@ -87,6 +90,7 @@ export default function LoginForm() {
 
   const modalStack = useModalsStack([
     "forgot-password-modal",
+    "error-sending-reset-link-modal",
     "reset-link-sent-modal",
   ]);
 
@@ -252,6 +256,30 @@ export default function LoginForm() {
               </Text>
               . Please check your inbox and click the link to reset your
               password.
+            </Text>
+            <Button
+              variant="subtle"
+              color="gray"
+              onClick={() => modalStack.closeAll()}
+            >
+              Close
+            </Button>
+          </Stack>
+        </Modal>
+        <Modal
+          withCloseButton={false}
+          {...modalStack.register("error-sending-reset-link-modal")}
+        >
+          <Stack gap="xs">
+            <Stack justify="center" align="center" gap={0}>
+              <Image h="5rem" w="5rem" src={errorImg} />
+              <Text fw={800} size="lg">
+                Error Sending Password Reset Link
+              </Text>
+            </Stack>
+            <Text ta="center" size="sm" c="dimmed">
+              We encountered an error while sending the password reset link.
+              Please try again later.
             </Text>
             <Button
               variant="subtle"

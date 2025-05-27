@@ -33,7 +33,7 @@ export const ActiveTrackers = () => {
   const { data, isLoading } = useQuery(trackedLocationsQuery());
   const { data: nextNotification } = useQuery({
     ...nextNotificationQuery(),
-    refetchInterval: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 10,
     throwOnError: false,
   });
 

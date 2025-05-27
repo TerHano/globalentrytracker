@@ -1,5 +1,4 @@
 import type { Route } from "./+types/dashboard";
-import { redirect } from "react-router";
 import { notificationCheckQuery } from "~/api/notification-check-api";
 import { trackedLocationsQuery } from "~/api/tracked-locations-api";
 import { meQuery } from "~/api/me-api";
@@ -13,7 +12,6 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { permissionQuery } from "~/api/permissions-api";
-import { isAuthenticated } from "~/utils/auth";
 
 export function meta() {
   return [
@@ -22,12 +20,7 @@ export function meta() {
   ];
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const isUserAuthenticated = await isAuthenticated(request);
-  if (!isUserAuthenticated) {
-    // If the user is not authenticated, redirect to the login page
-    return redirect("/login");
-  }
+export async function clientLoader({ request }: Route.LoaderArgs) {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(notificationCheckQuery(request));
   await queryClient.prefetchQuery(trackedLocationsQuery(request));

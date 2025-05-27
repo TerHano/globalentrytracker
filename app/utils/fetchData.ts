@@ -1,8 +1,8 @@
 import type { ApiResponse } from "~/models/ApiResponse";
 import createFetchClient, { type Middleware } from "openapi-fetch";
 import createClient from "openapi-react-query";
-import { redirect } from "react-router";
 import type { paths } from "~/types/api";
+import { RefreshTokenError } from "~/root";
 
 const BASE_URL = import.meta.env.VITE_API_SERVER_BASE_URL;
 
@@ -24,7 +24,7 @@ function validateResponse<T>(
   }
   return apiResponse.data;
 }
-let refreshPromise: Promise<Response | null> | null = null;
+let refreshPromise: Promise<string | null> | null = null;
 
 const authMiddleware: Middleware = {
   onResponse: async ({ request, response }) => {
@@ -44,36 +44,40 @@ const authMiddleware: Middleware = {
               credentials: "include",
             }
           );
-          return refreshResponse;
+          if (!refreshResponse.ok) {
+            return null;
+          }
+
+          try {
+            const refreshedAccessTokenBody: RefreshTokenResponse =
+              await refreshResponse.json();
+            return refreshedAccessTokenBody.data;
+          } catch (error) {
+            console.error("Failed to parse refresh token response:", error);
+            return null;
+          }
         })();
       }
-      const refreshedAccessTokenResponse = await refreshPromise;
+      const refreshedAccessToken = await refreshPromise;
       refreshPromise = null;
 
-      if (!refreshedAccessTokenResponse) {
-        console.error("Failed to refresh token");
-
-        throw redirect("/login");
-        // throw new Error("Failed to refresh token");
-      }
-      const refreshedAccessTokenBody: RefreshTokenResponse =
-        await refreshedAccessTokenResponse.json();
-      const refreshedAccessToken = refreshedAccessTokenBody.data;
       if (!refreshedAccessToken) {
         console.error("Failed to refresh token");
-        throw redirect("/login");
+
+        throw new Error(RefreshTokenError);
         // throw new Error("Failed to refresh token");
       }
 
-      const setCookie = refreshedAccessTokenResponse.headers.get("set-cookie");
-      const headers = new Headers();
-      if (setCookie) {
-        headers.append("Set-Cookie", setCookie);
-      }
-      return new Response(JSON.stringify({ success: true }), {
-        status: 200,
-        headers,
+      const retryHeaders = new Headers(request.headers);
+      retryHeaders.set("Authorization", `Bearer ${refreshedAccessToken}`);
+
+      const retriedResponse = await fetch(request.url, {
+        method: request.method,
+        headers: retryHeaders,
+        credentials: "include",
       });
+
+      return retriedResponse;
     }
     return response;
   },

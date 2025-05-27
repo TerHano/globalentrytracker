@@ -1,8 +1,9 @@
 import LoginForm from "~/components/login-form/login-form";
 import type { Route } from "./+types/login";
 import { redirect } from "react-router";
-import { SignInSignUpWrapper } from "~/components/ui/sign-in-sign-up-wrapper/SignInSignUpWrapper";
+import { SignInSignUpWrapper } from "~/components/ui/sign-in-sign-up-wrapper/sign-in-sign-up-wrapper";
 import { isAuthenticated } from "~/utils/auth";
+import { RefreshTokenError } from "~/root";
 
 export function meta() {
   return [
@@ -11,14 +12,24 @@ export function meta() {
   ];
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const isUserAuthenticated = await isAuthenticated(request);
-  if (isUserAuthenticated) {
-    // If the user is not authenticated, redirect to the login page
-    return redirect("/dashboard");
+export async function clientLoader({ request }: Route.LoaderArgs) {
+  try {
+    const isUserAuthenticated = await isAuthenticated(request);
+    if (isUserAuthenticated) {
+      return redirect("/dashboard");
+    }
+  } catch {
+    return null;
+    // // If auth check fails (e.g., no refresh token), just continue to login
+    // if (error instanceof Error && error.message === RefreshTokenError) {
+    //   // User needs to log in, don't redirect
+    //   return null;
+    // }
+    // // Re-throw other errors
+    // throw error;
   }
 
-  return { error: "Wrong user" }; // No action needed if the user is not logged in
+  return null; // No action needed if the user is not logged in
 }
 
 export default function Login() {

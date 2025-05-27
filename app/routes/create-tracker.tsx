@@ -1,5 +1,5 @@
 import { Anchor, Text } from "@mantine/core";
-import { Link, redirect } from "react-router";
+import { Link } from "react-router";
 import { CreateEditTrackerForm } from "~/components/create-tracker/create-edit-tracker-form";
 import { Page } from "~/components/ui/page";
 import type { Route } from "./+types/create-tracker";
@@ -13,7 +13,6 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { locationsQuery } from "~/api/location-api";
-import { isAuthenticated } from "~/utils/auth";
 
 export function meta() {
   return [
@@ -22,13 +21,7 @@ export function meta() {
   ];
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const isUserAuthenticated = await isAuthenticated(request);
-  if (!isUserAuthenticated) {
-    // If the user is not authenticated, redirect to the login page
-    return redirect("/login");
-  }
-  // const token = session.access_token;
+export async function clientLoader({ request }: Route.LoaderArgs) {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(notificationCheckQuery(request));
   await queryClient.prefetchQuery(locationsQuery(request));

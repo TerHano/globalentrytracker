@@ -35,8 +35,9 @@ export const AppHeader = () => {
 };
 
 const AppHeaderAuthenticated = () => {
-  const { showNotification } = useShowNotification();
   const navigate = useNavigate();
+
+  const { showNotification } = useShowNotification();
   const {
     data: meData,
     isPending: isMeLoading,
@@ -53,7 +54,7 @@ const AppHeaderAuthenticated = () => {
 
   const signOutMutation = useSignOutUser({
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.clear();
       navigate("/login");
       showNotification({
         icon: <DoorOpen size={16} />,

@@ -8,17 +8,24 @@ import {
 } from "@tanstack/react-query";
 import { GlobalEntryTrackerShell } from "~/components/appshell/global-entry-tracker-shell";
 import { isAuthenticated } from "~/utils/auth";
+import { RefreshTokenError } from "~/root";
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const queryClient = new QueryClient();
-  const isUserAuthenticated = await isAuthenticated(request);
-  if (!isUserAuthenticated) {
-    // If the user is not authenticated, redirect to the login page
-    return redirect("/login");
+export async function clientLoader({ request }: Route.LoaderArgs) {
+  try {
+    const isUserAuthenticated = await isAuthenticated(request);
+    if (!isUserAuthenticated) {
+      throw redirect("/login");
+    }
+  } catch (error) {
+    if (error instanceof Error && error.message === RefreshTokenError) {
+      // Redirect immediately without showing dashboard
+      throw redirect("/login");
+    }
+    // Re-throw other errors
+    throw error;
   }
-
+  const queryClient = new QueryClient();
   await queryClient.prefetchQuery(meQuery(request));
-
   return { dehydratedState: dehydrate(queryClient) };
 }
 

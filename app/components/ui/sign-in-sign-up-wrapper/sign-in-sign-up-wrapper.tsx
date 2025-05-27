@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, Paper, Image } from "@mantine/core";
+import { Box, Flex, Grid, Paper } from "@mantine/core";
 import { SiteLogo } from "../site-logo";
 import styles from "./sign-in-sign-up-wrapper.module.css";
 

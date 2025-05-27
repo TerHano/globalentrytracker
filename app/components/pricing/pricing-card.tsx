@@ -10,6 +10,7 @@ import {
 import { CircleCheck, ExternalLink, Star } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router";
 import { PlanFrequency } from "~/enum/PlanFrequency";
 import { useUpgradeSubscription } from "~/hooks/api/useUpgradeSubscription";
 
@@ -49,6 +50,9 @@ export const PricingCard = ({
   const { t } = useTranslation();
 
   const { mutate: mutateCheckout } = useUpgradeSubscription({
+    onSuccess: (data) => {
+      window.location.href = data;
+    },
     onError: (error) => {
       console.error("Error during checkout:", error);
       setIsNavigating(false);

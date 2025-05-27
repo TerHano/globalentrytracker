@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { fetchClient, validateResponse } from "~/utils/fetchData";
+import { fetchClient } from "~/utils/fetchData";
 
 export const nextNotificationQuery = (request?: Request) =>
   queryOptions({
@@ -12,6 +12,6 @@ export const nextNotificationQuery = (request?: Request) =>
             cookie: request?.headers.get("cookie"),
           },
         })
-        .then((response) => validateResponse(response.data));
+        .then((response) => response.data?.data);
     },
   });

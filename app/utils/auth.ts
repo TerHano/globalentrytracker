@@ -1,7 +1,7 @@
 import { fetchClient } from "./fetchData";
 
 export async function isAuthenticated(request?: Request) {
-  const response = await fetchClient.GET("/api/auth/v1/authenticated", {
+  const response = await fetchClient.GET("/api/v1/me", {
     credentials: "include",
     headers: {
       cookie: request?.headers.get("cookie"),
@@ -16,5 +16,5 @@ export async function isAuthenticated(request?: Request) {
   if (response.data.success === false) {
     return false;
   }
-  return response.data.data.isAuthenticated;
+  return response.data.data;
 }
