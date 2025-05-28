@@ -1,9 +1,9 @@
 import type { MutationHookOptions } from "./api/mutationOptions";
 import { $api } from "~/utils/fetchData";
+import type { paths } from "~/types/api";
 
-export interface SendResetPasswordEmailRequest {
-  email: string;
-}
+export type SendResetPasswordEmailRequest =
+  paths["/api/auth/v1/password-recovery"]["post"]["requestBody"]["content"]["application/json"];
 
 export const useSendResetPasswordEmail = ({
   onSuccess,

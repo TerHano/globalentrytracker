@@ -5,14 +5,12 @@ export const meQuery = (request?: Request) =>
   queryOptions({
     queryKey: [meQuery.name],
     queryFn: async () => {
-      return fetchClient
-        .GET("/api/v1/me", {
-          credentials: "include",
-
-          headers: {
-            cookie: request?.headers.get("cookie"),
-          },
-        })
-        .then((response) => validateResponse(response.data));
+      const response = await fetchClient.GET("/api/v1/me", {
+        credentials: "include",
+        headers: {
+          cookie: request?.headers.get("cookie"),
+        },
+      });
+      return validateResponse(response);
     },
   });

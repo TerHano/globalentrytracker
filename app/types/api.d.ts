@@ -44,6 +44,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/pricing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Update pricing to the system
+         * @description Updates pricing information to the system. Requires Admin authorization.
+         */
+        put: operations["UpdatePricing"];
+        /**
+         * Add pricing to the system
+         * @description Adds pricing information to the system. Requires Admin authorization.
+         */
+        post: operations["AddPricing"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/auth/v1/authenticated": {
         parameters: {
             query?: never;
@@ -737,6 +761,12 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AddPricingPlanRequest: {
+            name: string;
+            description: string;
+            priceId: string;
+            features: string[];
+        };
         AppointmentLocationDto: {
             /** Format: int32 */
             id: number;
@@ -746,6 +776,7 @@ export interface components {
             city: string;
             state: string;
             postalCode: string;
+            timezone: string;
         };
         AppointmentLocationDtoApiResponse: {
             success: boolean;
@@ -872,6 +903,7 @@ export interface components {
         };
         PasswordResetEmailRequest: {
             email: string;
+            redirectUrl: string;
         };
         PermissionsDto: {
             canCreateTracker: boolean;
@@ -959,6 +991,14 @@ export interface components {
             /** Format: int32 */
             id: number;
             enabled: boolean;
+        };
+        UpdatePricingPlanRequest: {
+            /** Format: int32 */
+            id: number;
+            name: string;
+            description: string;
+            priceId: string;
+            features: string[];
         };
         UpdateTrackerForUserRequest: {
             /** Format: int32 */
@@ -1086,6 +1126,90 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    UpdatePricing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePricingPlanRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    AddPricing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddPricingPlanRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Int32ApiResponse"];
                 };
             };
             /** @description Unauthorized */

@@ -21,7 +21,7 @@ export function meta() {
   ];
 }
 
-export async function clientLoader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(notificationCheckQuery(request));
   await queryClient.prefetchQuery(locationsQuery(request));

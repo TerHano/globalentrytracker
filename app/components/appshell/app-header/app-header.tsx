@@ -1,6 +1,6 @@
 import { Button, Group, Skeleton } from "@mantine/core";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { DoorOpen } from "lucide-react";
+import { DoorOpen, Terminal } from "lucide-react";
 import { NavLink, useNavigate } from "react-router";
 import { meQuery } from "~/api/me-api";
 import { RoleEnum } from "~/enum/RoleEnum";
@@ -13,6 +13,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { AvatarMenu } from "./avatar-menu";
 import { SiteLogo } from "~/components/ui/site-logo";
 import { useSignOutUser } from "~/hooks/useSignOut";
+import { useIsAdmin } from "~/hooks/api/admin/useIsAdmin";
 
 export const AppHeader = () => {
   const { isUserAuthenticated, isLoading } = useUserAuthenticated();
@@ -46,6 +47,7 @@ const AppHeaderAuthenticated = () => {
     ...meQuery(),
     throwOnError: false,
   });
+  const { isAdmin } = useIsAdmin();
   const queryClient = useQueryClient();
   const matches = useMediaQuery("(min-width: 720px)");
   const { showUpgradeModal } = useShowUpgradeModalContext();
@@ -81,6 +83,17 @@ const AppHeaderAuthenticated = () => {
 
   return (
     <Group>
+      {isAdmin ? (
+        <Button
+          variant="light"
+          component={NavLink}
+          to="/admin/dashboard"
+          size="compact-sm"
+          leftSection={<Terminal size={14} />}
+        >
+          Admin Console
+        </Button>
+      ) : null}
       {!isProUser ? (
         <Button onClick={showUpgradeModal} size="compact-sm">
           Upgrade To Pro

@@ -1,6 +1,6 @@
 import { Paper, Stack, Button, Text, Image } from "@mantine/core";
-import { ArrowLeft, Link2Off } from "lucide-react";
-import { Link, NavLink } from "react-router";
+import { ArrowLeft } from "lucide-react";
+import { NavLink } from "react-router";
 import expiredPasswordResetLinkImg from "~/assets/icons/expired-password-link.png";
 
 export const PasswordResetLinkExpired = () => {

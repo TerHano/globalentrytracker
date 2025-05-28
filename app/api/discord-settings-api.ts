@@ -9,13 +9,15 @@ export const discordNotificationSettingsQuery = (request?: Request) =>
   queryOptions({
     queryKey: [discordNotificationSettingsQuery.name],
     queryFn: async () => {
-      return fetchClient
-        .GET("/api/v1/notification-settings/discord", {
+      const response = await fetchClient.GET(
+        "/api/v1/notification-settings/discord",
+        {
           credentials: "include",
           headers: {
             cookie: request?.headers.get("cookie"),
           },
-        })
-        .then((response) => validateResponse(response.data));
+        }
+      );
+      return validateResponse(response);
     },
   });

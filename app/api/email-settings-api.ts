@@ -9,13 +9,15 @@ export const emailNotificationSettingsQuery = (request?: Request) =>
   queryOptions({
     queryKey: [emailNotificationSettingsQuery.name],
     queryFn: async () => {
-      return fetchClient
-        .GET("/api/v1/notification-settings/email", {
+      const response = await fetchClient.GET(
+        "/api/v1/notification-settings/email",
+        {
           credentials: "include",
           headers: {
             cookie: request?.headers.get("cookie"),
           },
-        })
-        .then((response) => validateResponse(response.data));
+        }
+      );
+      return validateResponse(response);
     },
   });

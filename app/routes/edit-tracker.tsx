@@ -22,7 +22,7 @@ export function meta() {
   ];
 }
 
-export async function clientLoader({ request, params }: Route.LoaderArgs) {
+export async function loader({ request, params }: Route.LoaderArgs) {
   const { trackerId } = params;
   if (!trackerId) {
     throw new Error("Tracker ID is required");

@@ -13,7 +13,6 @@ import {
   Image,
 } from "@mantine/core";
 import classes from "./login-form.module.css";
-import { useNavigate } from "react-router";
 import { z } from "zod";
 import { useField, useForm, zodResolver } from "@mantine/form";
 import { useCallback, useState } from "react";
@@ -28,7 +27,6 @@ import { useSignInUser } from "~/hooks/useSignIn";
 
 export default function LoginForm() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { showNotification } = useShowNotification();
   const { mutate: signInUser, isPending: isSignInUserLoading } = useSignInUser({
     onError: (error) => {
@@ -45,7 +43,8 @@ export default function LoginForm() {
       }
     },
     onSuccess: () => {
-      navigate("/dashboard");
+      // Use full page navigation to ensure cookies are included
+      window.location.href = "/dashboard";
     },
   });
   const {
@@ -119,6 +118,7 @@ export default function LoginForm() {
       sendResetPasswordEmail({
         body: {
           email: emailField.getValue(),
+          redirectUrl: `${window.location.origin}/auth/reset-password`,
         },
       });
       console.log("Resetting password for email:", emailField.getValue());

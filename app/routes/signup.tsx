@@ -2,7 +2,6 @@ import type { Route } from "./+types/login";
 import { redirect } from "react-router";
 import SignUpForm from "~/components/sign-up-form/sign-up-form";
 import { SignInSignUpWrapper } from "~/components/ui/sign-in-sign-up-wrapper/sign-in-sign-up-wrapper";
-import { RefreshTokenError } from "~/root";
 import { isAuthenticated } from "~/utils/auth";
 
 export function meta() {
@@ -14,8 +13,8 @@ export function meta() {
 
 export async function clientLoader({ request }: Route.LoaderArgs) {
   try {
-    const isUserAuthenticated = await isAuthenticated(request);
-    if (isUserAuthenticated) {
+    const authResult = await isAuthenticated(request);
+    if (authResult.user) {
       return redirect("/dashboard");
     }
   } catch {

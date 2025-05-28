@@ -5,13 +5,15 @@ export const notificationCheckQuery = (request?: Request) =>
   queryOptions({
     queryKey: [notificationCheckQuery.name],
     queryFn: async () => {
-      return fetchClient
-        .GET("/api/v1/notification-settings/check", {
+      const response = await fetchClient.GET(
+        "/api/v1/notification-settings/check",
+        {
           credentials: "include",
           headers: {
             cookie: request?.headers.get("cookie"),
           },
-        })
-        .then((response) => validateResponse(response.data));
+        }
+      );
+      return validateResponse(response);
     },
   });

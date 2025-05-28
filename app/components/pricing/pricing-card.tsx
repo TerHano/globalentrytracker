@@ -10,7 +10,6 @@ import {
 import { CircleCheck, ExternalLink, Star } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
 import { PlanFrequency } from "~/enum/PlanFrequency";
 import { useUpgradeSubscription } from "~/hooks/api/useUpgradeSubscription";
 

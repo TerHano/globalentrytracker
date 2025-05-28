@@ -12,14 +12,13 @@ export const trackedLocationQuery = (params: {
   queryOptions({
     queryKey: [trackedLocationQuery.name, params.trackedLocationId],
     queryFn: async () => {
-      return fetchClient
-        .GET(`/api/v1/tracked-locations/{id}`, {
-          params: { path: { id: params.trackedLocationId } },
-          credentials: "include",
-          headers: {
-            cookie: params.request?.headers.get("cookie"),
-          },
-        })
-        .then((response) => validateResponse(response.data));
+      const response = await fetchClient.GET(`/api/v1/tracked-locations/{id}`, {
+        params: { path: { id: params.trackedLocationId } },
+        credentials: "include",
+        headers: {
+          cookie: params.request?.headers.get("cookie"),
+        },
+      });
+      return validateResponse(response);
     },
   });

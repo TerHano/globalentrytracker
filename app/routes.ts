@@ -26,4 +26,9 @@ export default [
       ]),
     ]),
   ]),
+  ...prefix("admin/", [
+    layout("routes/layout/admin-layout.tsx", [
+      route("dashboard", "routes/admin/dashboard.tsx"),
+    ]),
+  ]),
 ] satisfies RouteConfig;

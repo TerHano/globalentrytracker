@@ -5,13 +5,12 @@ export const planQuery = (request?: Request) =>
   queryOptions({
     queryKey: [planQuery.name],
     queryFn: async () => {
-      return fetchClient
-        .GET("/api/v1/plans", {
-          credentials: "include",
-          headers: {
-            cookie: request?.headers.get("cookie"),
-          },
-        })
-        .then((response) => validateResponse(response.data));
+      const response = await fetchClient.GET("/api/v1/plans", {
+        credentials: "include",
+        headers: {
+          cookie: request?.headers.get("cookie"),
+        },
+      });
+      return validateResponse(response);
     },
   });

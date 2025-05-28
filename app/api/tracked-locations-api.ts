@@ -9,13 +9,12 @@ export const trackedLocationsQuery = (request?: Request) =>
   queryOptions({
     queryKey: [trackedLocationsQuery.name],
     queryFn: async () => {
-      return fetchClient
-        .GET("/api/v1/tracked-locations", {
-          credentials: "include",
-          headers: {
-            cookie: request?.headers.get("cookie"),
-          },
-        })
-        .then((response) => validateResponse(response.data));
+      const response = await fetchClient.GET("/api/v1/tracked-locations", {
+        credentials: "include",
+        headers: {
+          cookie: request?.headers.get("cookie"),
+        },
+      });
+      return validateResponse(response);
     },
   });

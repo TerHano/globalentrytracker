@@ -8,13 +8,12 @@ export const locationsQuery = (request?: Request) =>
   queryOptions({
     queryKey: [locationsQuery.name],
     queryFn: async () => {
-      return fetchClient
-        .GET("/api/v1/location", {
-          credentials: "include",
-          headers: {
-            cookie: request?.headers.get("cookie"),
-          },
-        })
-        .then((response) => validateResponse(response.data));
+      const response = await fetchClient.GET("/api/v1/location", {
+        credentials: "include",
+        headers: {
+          cookie: request?.headers.get("cookie"),
+        },
+      });
+      return validateResponse(response);
     },
   });
