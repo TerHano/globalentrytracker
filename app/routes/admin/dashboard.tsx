@@ -2,17 +2,13 @@ import type { Route } from "./+types/dashboard";
 import { notificationCheckQuery } from "~/api/notification-check-api";
 import { trackedLocationsQuery } from "~/api/tracked-locations-api";
 import { meQuery } from "~/api/me-api";
-import { NotificationSetupAlert } from "~/components/dashboard/notification-setup-alert";
-import { ActiveTrackers } from "~/components/dashboard/active-trackers";
-import { Stack } from "@mantine/core";
-import { Greeting } from "~/components/dashboard/greeting";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
 import { permissionQuery } from "~/api/permissions-api";
-import { UsersTable } from "~/components/admin/users/users-table";
+import { AdminConsolePage } from "~/pages/admin/admin-console-page";
 
 export function meta() {
   return [
@@ -35,9 +31,7 @@ export default function AdminDashboard({ loaderData }: Route.ComponentProps) {
   const { dehydratedState } = loaderData;
   return (
     <HydrationBoundary state={dehydratedState}>
-      <Stack className="fade-in-up-animation">
-        <UsersTable />
-      </Stack>
+      <AdminConsolePage />
     </HydrationBoundary>
   );
 }

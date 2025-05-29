@@ -13,7 +13,6 @@ import { useMediaQuery } from "@mantine/hooks";
 import { AvatarMenu } from "./avatar-menu";
 import { SiteLogo } from "~/components/ui/site-logo";
 import { useSignOutUser } from "~/hooks/useSignOut";
-import { useIsAdmin } from "~/hooks/api/admin/useIsAdmin";
 
 export const AppHeader = () => {
   const { isUserAuthenticated, isLoading } = useUserAuthenticated();
@@ -47,12 +46,11 @@ const AppHeaderAuthenticated = () => {
     ...meQuery(),
     throwOnError: false,
   });
-  const { isAdmin } = useIsAdmin();
   const queryClient = useQueryClient();
   const matches = useMediaQuery("(min-width: 720px)");
   const { showUpgradeModal } = useShowUpgradeModalContext();
 
-  const isProUser = meData ? meData.role != RoleEnum.Free : false;
+  const isProUser = meData ? meData.role.code != RoleEnum.Free : false;
 
   const signOutMutation = useSignOutUser({
     onSuccess: () => {
@@ -66,10 +64,13 @@ const AppHeaderAuthenticated = () => {
       });
     },
     onError: (error) => {
-      const firstError = error[0];
-      if (firstError) {
-        console.error("Error signing out:", firstError.message);
-      }
+      const firstError = error[0]?.message ?? "An unexpected error occurred.";
+      showNotification({
+        icon: <DoorOpen size={16} />,
+        title: "Sign out failed",
+        message: firstError,
+        status: "error",
+      });
     },
   });
 
@@ -83,13 +84,14 @@ const AppHeaderAuthenticated = () => {
 
   return (
     <Group>
-      {isAdmin ? (
+      {meData.role.code === RoleEnum.Admin ? (
         <Button
           variant="light"
           component={NavLink}
           to="/admin/dashboard"
           size="compact-sm"
           leftSection={<Terminal size={14} />}
+          color="yellow"
         >
           Admin Console
         </Button>

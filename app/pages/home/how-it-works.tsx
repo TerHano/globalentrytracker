@@ -1,9 +1,10 @@
 import { SimpleGrid, Stack, ThemeIcon, Text } from "@mantine/core";
-import { Section } from "~/components/ui/section";
+import { Section } from "~/components/ui/layout/section";
 
 export const HowItWorks = () => {
   return (
     <Section
+      layout="centered"
       sectionId="howItWorks"
       title="How It Works"
       description="Three simple steps to secure your Global Entry appointment

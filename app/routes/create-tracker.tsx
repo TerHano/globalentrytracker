@@ -1,7 +1,7 @@
 import { Anchor, Text } from "@mantine/core";
 import { Link } from "react-router";
 import { CreateEditTrackerForm } from "~/components/create-tracker/create-edit-tracker-form";
-import { Page } from "~/components/ui/page";
+import { Page } from "~/components/ui/layout/page";
 import type { Route } from "./+types/create-tracker";
 import { notificationCheckQuery } from "~/api/notification-check-api";
 import { CreateTrackerNotificationWarning } from "~/components/create-tracker/create-tracker-notification-warning";

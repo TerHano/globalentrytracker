@@ -14,7 +14,7 @@ interface AvaterMenuProps {
 export const AvatarMenu = ({ meData, signOutMutation }: AvaterMenuProps) => {
   const { showUpgradeModal } = useShowUpgradeModalContext();
   const navigate = useNavigate();
-  const isProUser = meData ? meData.role != RoleEnum.Free : false;
+  const isProUser = meData ? meData.role.code != RoleEnum.Free : false;
 
   return (
     <Menu transitionProps={{ transition: "rotate-right", duration: 150 }}>

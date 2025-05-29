@@ -9,7 +9,6 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { Page } from "../ui/page";
 import { meQuery } from "~/api/me-api";
 import { useQuery } from "@tanstack/react-query";
 import { useForm, zodResolver } from "@mantine/form";
@@ -18,6 +17,7 @@ import { useUpdateUser } from "~/hooks/api/useUpdateUser";
 import { useCallback, useEffect } from "react";
 import { useShowNotification } from "~/hooks/useShowNotification";
 import { UserRoundCheck } from "lucide-react";
+import { Page } from "../ui/layout/page";
 
 interface ProfileSettingsFormSchema {
   firstName: string;

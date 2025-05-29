@@ -2,7 +2,6 @@ import { Anchor, Text } from "@mantine/core";
 import { Link } from "react-router";
 import { notificationCheckQuery } from "~/api/notification-check-api";
 import { CreateEditTrackerForm } from "~/components/create-tracker/create-edit-tracker-form";
-import { Page } from "~/components/ui/page";
 import type { Route } from "../routes/+types/edit-tracker";
 import { locationStatesQuery } from "~/api/location-states-api";
 import { notificationTypesQuery } from "~/api/notification-types-api";
@@ -14,6 +13,7 @@ import {
 import { locationsQuery } from "~/api/location-api";
 import { trackedLocationQuery } from "~/api/tracked-location-api";
 import { fetchClient } from "~/utils/fetchData";
+import { Page } from "~/components/ui/layout/page";
 
 export function meta() {
   return [

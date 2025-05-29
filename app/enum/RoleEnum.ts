@@ -1,4 +1,5 @@
 export enum RoleEnum {
-  Free = 0,
-  Pro = 1,
+  Free = "free",
+  Pro = "subscriber",
+  Admin = "admin",
 }

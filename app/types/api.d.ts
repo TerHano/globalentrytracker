@@ -24,6 +24,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get all roles
+         * @description Retrieves a list of all roles in the system. Requires Admin authorization.
+         */
+        get: operations["GetAllRoles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/user/{userId}": {
         parameters: {
             query?: never;
@@ -938,11 +958,17 @@ export interface components {
         ResetPasswordRequest: {
             newPassword: string;
         };
-        /**
-         * Format: int32
-         * @enum {integer}
-         */
-        Role: 0 | 1 | 2;
+        RoleDto: {
+            /** Format: int32 */
+            id: number;
+            name: string;
+            code: string;
+        };
+        RoleDtoArrayApiResponse: {
+            success: boolean;
+            errors: components["schemas"]["Error"][];
+            data: components["schemas"]["RoleDto"][];
+        };
         SignInRequest: {
             email: string;
             password: string;
@@ -1019,17 +1045,30 @@ export interface components {
             firstName: string;
             lastName: string;
             email: string;
-            role: components["schemas"]["Role"];
+            role: components["schemas"]["RoleDto"];
         };
         UserDtoApiResponse: {
             success: boolean;
             errors: components["schemas"]["Error"][];
             data: components["schemas"]["UserDto"];
         };
-        UserDtoArrayApiResponse: {
+        UserDtoForAdmin: {
+            /** Format: int32 */
+            id: number;
+            externalId: string | null;
+            email: string;
+            firstName: string;
+            lastName: string;
+            /** Format: date-time */
+            createdAt: string;
+            role?: components["schemas"]["RoleDto"];
+            /** Format: date-time */
+            nextNotificationAt: string;
+        };
+        UserDtoForAdminArrayApiResponse: {
             success: boolean;
             errors: components["schemas"]["Error"][];
-            data: components["schemas"]["UserDto"][];
+            data: components["schemas"]["UserDtoForAdmin"][];
         };
         UserNotificationSettingsDto: {
             discordSettings?: components["schemas"]["DiscordNotificationSettingsDto"];
@@ -1085,7 +1124,45 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UserDtoArrayApiResponse"];
+                    "application/json": components["schemas"]["UserDtoForAdminArrayApiResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    GetAllRoles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoleDtoArrayApiResponse"];
                 };
             };
             /** @description Unauthorized */

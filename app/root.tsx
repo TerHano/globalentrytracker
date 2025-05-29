@@ -6,7 +6,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useNavigate,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -14,6 +13,8 @@ import type { Route } from "./+types/root";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
+import "mantine-datatable/styles.layer.css";
+
 import "./app.css";
 
 import dayjs from "dayjs";
@@ -42,8 +43,6 @@ import React from "react";
 import { UpgradeModalProvider } from "./provider/upgrade-modal-provider";
 import { ArrowLeft } from "lucide-react";
 
-export const RefreshTokenError = "REFRESH_TOKEN_FAILED";
-
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -62,15 +61,11 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-//const queryClient = new QueryClient();
-
 const theme = createTheme({
   fontFamily: "Montserrat, sans-serif",
 });
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate();
-
   const [queryClient] = React.useState(
     () =>
       new QueryClient({
@@ -79,36 +74,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             // With SSR, we usually want to set some default staleTime
             // above 0 to avoid refetching immediately on the client
             staleTime: 60 * 1000,
-            throwOnError: (error) => {
-              // Handle auth errors immediately, don't throw to error boundary
-              if (
-                error instanceof Error &&
-                error.message === RefreshTokenError
-              ) {
-                // Redirect immediately without showing any UI
-                // if (typeof window !== "undefined") {
-                //   window.location.href = "/login";
-                // }
-                if (typeof window !== "undefined") {
-                  setTimeout(() => {
-                    navigate("/login", { replace: true });
-                  }, 0);
-                }
-                return false; // Don't throw to error boundary
-              }
-              return true; // Throw other errors normally
-            },
-            retry: (failureCount, error) => {
-              // Don't retry auth failures
-              if (
-                error instanceof Error &&
-                error.message === RefreshTokenError
-              ) {
-                return false;
-              }
-              // Default retry logic for other errors
-              return failureCount < 3;
-            },
+            retry: 3, // Default retry logic for errors
           },
         },
       })
@@ -125,13 +91,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <MantineProvider theme={theme} defaultColorScheme="dark">
-          <ModalsProvider>
-            <Notifications autoClose={3000} />
-            <QueryClientProvider client={queryClient}>
+          <QueryClientProvider client={queryClient}>
+            <ModalsProvider>
+              <Notifications autoClose={3000} />
+
               <UpgradeModalProvider>{children}</UpgradeModalProvider>
-            </QueryClientProvider>
-          </ModalsProvider>
+            </ModalsProvider>
+          </QueryClientProvider>
         </MantineProvider>
+
         <ScrollRestoration />
         <Scripts />
       </body>

@@ -26,23 +26,23 @@ import { useSendResetPasswordEmail } from "~/hooks/useSendResetPasswordEmail";
 import { useSignInUser } from "~/hooks/useSignIn";
 
 export default function LoginForm() {
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const { t } = useTranslation();
   const { showNotification } = useShowNotification();
   const { mutate: signInUser, isPending: isSignInUserLoading } = useSignInUser({
     onError: (error) => {
-      const firstError = error?.[0];
-      if (firstError) {
-        showNotification({
-          title: "Login Failed",
-          message:
-            firstError?.message ??
-            "An unexpected error occurred. Please try again.",
-          status: "error",
-          icon: <Key size={16} />,
-        });
-      }
+      const errorMessage =
+        error?.[0]?.message ??
+        "An unexpected error occurred. Please try again.";
+      showNotification({
+        title: "Login Failed",
+        message: errorMessage,
+        status: "error",
+        icon: <Key size={16} />,
+      });
     },
     onSuccess: () => {
+      setIsRedirecting(true);
       // Use full page navigation to ensure cookies are included
       window.location.href = "/dashboard";
     },
@@ -53,18 +53,6 @@ export default function LoginForm() {
   } = useSendResetPasswordEmail({
     onError: () => {
       modalStack.open("error-sending-reset-link-modal");
-
-      // const firstError = error?.[0];
-      // if (firstError) {
-      //   showNotification({
-      //     title: "Reset Password Failed",
-      //     message:
-      //       firstError.message ??
-      //       "An unexpected error occurred. Please try again.",
-      //     status: "error",
-      //     icon: <Key size={16} />,
-      //   });
-      // }
     },
     onSuccess: (_, request) => {
       setSetResetPasswordEmail(request.email);
@@ -173,7 +161,7 @@ export default function LoginForm() {
           </Button>
         </Group>
         <Button
-          loading={isSignInUserLoading}
+          loading={isSignInUserLoading || isRedirecting}
           type="submit"
           fullWidth
           mt="xl"

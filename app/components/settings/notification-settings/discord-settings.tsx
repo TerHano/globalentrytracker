@@ -15,7 +15,7 @@ import { Link } from "react-router";
 import { z } from "zod";
 import type { DiscordNotificationSettings } from "~/api/discord-settings-api";
 import { DiscordIcon } from "~/components/ui/icons/DiscordIcon";
-import { Page } from "~/components/ui/page";
+import { Page } from "~/components/ui/layout/page";
 import {
   useCreateUpdateDiscordSettings,
   type CreateUpdateDiscordSettingsRequest,

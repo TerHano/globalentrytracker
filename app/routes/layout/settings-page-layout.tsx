@@ -2,7 +2,7 @@ import { SegmentedControl, Group, Text, Button, Stack } from "@mantine/core";
 import { useCallback, useEffect, useMemo } from "react";
 import { ArrowLeft, Bell, CreditCard, User } from "lucide-react";
 import { NavLink, Outlet, useNavigate } from "react-router";
-import { Page } from "~/components/ui/page";
+import { Page } from "~/components/ui/layout/page";
 import type { Route } from "./+types/settings-page-layout";
 import { useField } from "@mantine/form";
 

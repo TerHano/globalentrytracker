@@ -25,7 +25,6 @@ import emailIcon from "~/assets/icons/email.png";
 export default function SignUpForm() {
   const { t } = useTranslation();
   const { showNotification } = useShowNotification();
-  const [isLoading, setIsLoading] = useState(false);
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [verificationEmail, setVerificationEmail] = useState<string | null>(
@@ -70,20 +69,20 @@ export default function SignUpForm() {
     },
   });
 
-  const { mutate: signUpUserMutate } = useSignUpUser({
+  const { mutate: signUpUserMutate, isPending: isLoading } = useSignUpUser({
     onSuccess: (_, request) => {
-      setIsLoading(false);
       setVerificationEmail(request.email);
       form.reset();
       setIsModalOpen(true);
     },
     onError: (error) => {
-      const firstError = error[0];
-      setIsLoading(false);
+      const errorMessage =
+        error?.[0]?.message ??
+        "An unexpected error occurred. Please try again.";
       setVerificationEmail(null);
       showNotification({
         title: t("Sign Up Failed"),
-        message: firstError?.message ?? "An error occurred",
+        message: errorMessage,
         status: "error",
         icon: <Key size={16} />,
       });
@@ -92,7 +91,6 @@ export default function SignUpForm() {
 
   const handleSubmit = useCallback(
     async (values: typeof form.values) => {
-      setIsLoading(true);
       console.log("Submitting form", values);
       const requestBody: SignUpUserRequest = {
         email: values.email,

@@ -15,17 +15,15 @@ export const ResetPasswordForm = () => {
   const { mutate: resetPassword, isPending: isResetPasswordLoading } =
     useResetPassword({
       onError: (error) => {
-        const firstError = error[0];
-        if (firstError) {
-          showNotification({
-            icon: <Key size={18} />,
-            title: "Error",
-            message:
-              firstError?.message ??
-              "An unexpected error occurred. Please try again.",
-            status: "error",
-          });
-        }
+        const errorMessage =
+          error?.[0]?.message ??
+          "An unexpected error occurred. Please try again.";
+        showNotification({
+          icon: <Key size={18} />,
+          title: "Error",
+          message: errorMessage,
+          status: "error",
+        });
       },
       onSuccess: () => {
         showNotification({

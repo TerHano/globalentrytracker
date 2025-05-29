@@ -10,12 +10,28 @@ type RefreshTokenResponse = {
 type AuthResult = {
   success: boolean;
   headers?: Headers;
-  updatedCookieHeader?: string;
+  // updatedCookieHeader?: string;
   accessToken?: string;
 };
 
+function hasRefreshTokenCookie(cookieHeader: string): boolean {
+  if (!cookieHeader) return false;
+
+  // Parse cookies and look for refresh token
+  // Assuming your refresh token cookie is named 'refresh_token' or similar
+  // Adjust the cookie name to match your backend implementation
+  const cookies = cookieHeader.split(";").map((cookie) => cookie.trim());
+  return cookies.some((cookie) => cookie.startsWith("refresh_token="));
+}
+
 async function attemptTokenRefresh(cookieHeader: string): Promise<AuthResult> {
   try {
+    // Check if refresh token cookie exists before attempting refresh
+    if (!hasRefreshTokenCookie(cookieHeader)) {
+      console.log("No refresh token cookie found, skipping refresh attempt");
+      return { success: false };
+    }
+
     console.log("Token expired, attempting refresh...");
 
     const refreshResponse = await fetch(
@@ -52,13 +68,13 @@ async function attemptTokenRefresh(cookieHeader: string): Promise<AuthResult> {
     });
 
     // Create updated cookie header for subsequent requests
-    const updatedCookieHeader =
-      setCookieHeaders.length > 0 ? setCookieHeaders.join("; ") : cookieHeader;
+    // const updatedCookieHeader =
+    //   setCookieHeaders.length > 0 ? setCookieHeaders.join("; ") : cookieHeader;
 
     return {
       success: true,
       headers: responseHeaders,
-      updatedCookieHeader,
+      //  updatedCookieHeader,
       accessToken: refreshData.data,
     };
   } catch (error) {
@@ -103,7 +119,7 @@ export async function isAuthenticated(
       const retryResponse = await fetch(`${BASE_URL}/api/v1/me`, {
         credentials: "include",
         headers: {
-          cookie: refreshResult.updatedCookieHeader ?? "",
+          //  cookie: refreshResult.updatedCookieHeader ?? "",
           Authorization: `Bearer ${refreshResult.accessToken}`,
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -161,7 +177,7 @@ export async function isAdmin(
       const retryResponse = await fetch(`${BASE_URL}/api/v1/admin/users`, {
         credentials: "include",
         headers: {
-          cookie: refreshResult.updatedCookieHeader ?? "",
+          //  cookie: refreshResult.updatedCookieHeader ?? "",
           Authorization: `Bearer ${refreshResult.accessToken}`,
           "Content-Type": "application/json",
           Accept: "application/json",

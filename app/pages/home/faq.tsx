@@ -1,11 +1,12 @@
 import { Accordion, Text } from "@mantine/core";
-import { Section } from "~/components/ui/section";
+import { Section } from "~/components/ui/layout/section";
 import { useFAQ } from "~/hooks/useFAQ";
 
 export const FAQ = () => {
   const { data: faq } = useFAQ();
   return (
     <Section
+      layout="centered"
       sectionId="faq"
       title="Frequently Asked Questions"
       description="Answers to common questions about our service."

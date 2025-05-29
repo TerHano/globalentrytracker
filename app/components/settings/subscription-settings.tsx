@@ -10,7 +10,7 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import { Page } from "../ui/page";
+import { Page } from "~/components/ui/layout/page";
 import { useQuery } from "@tanstack/react-query";
 import { subscriptionInformationQuery } from "~/api/subscription-information-api";
 import { useTranslation } from "react-i18next";

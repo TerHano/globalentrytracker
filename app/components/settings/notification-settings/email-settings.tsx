@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import type { EmailNotificationSettings } from "~/api/email-settings-api";
 import { LabelValue } from "~/components/ui/label-value";
-import { Page } from "~/components/ui/page";
+import { Page } from "~/components/ui/layout/page";
 import {
   useCreateUpdateEmailSettings,
   type CreateUpdateEmailSettingsRequest,
