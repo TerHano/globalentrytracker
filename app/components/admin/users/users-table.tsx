@@ -6,6 +6,7 @@ import { DataTable } from "mantine-datatable";
 import { modals } from "@mantine/modals";
 import { UserModalBody } from "./user-modal-body";
 import { UserRoleBadge } from "./user-role-badge";
+import { UserModalButton } from "./user-modal-button";
 
 export const UsersTable = () => {
   const allUsers = useQuery(allUsersQuery());
@@ -32,7 +33,7 @@ export const UsersTable = () => {
     <DataTable
       records={allUsers.data ?? []}
       columns={[
-        { title: "ID", width: 100, accessor: "id", sortable: true },
+        { title: "ID", width: 100, accessor: "id" },
 
         { title: "First Name", width: 150, accessor: "firstName" },
         { title: "Last Name", width: 150, accessor: "lastName" },
@@ -40,25 +41,32 @@ export const UsersTable = () => {
         {
           accessor: "user.role.code",
           title: "Role",
-          width: 100,
+          width: 150,
           render: (user) => <UserRoleBadge roleCode={user.role?.code} />,
         },
+        {
+          accessor: "__none",
+          textAlign: "center",
+          title: "Actions",
+          width: 80,
+          render: (user) => <UserModalButton user={user} />,
+        },
       ]}
-      withTableBorder
-      highlightOnHover
-      striped
-      stripedColor="red"
       borderRadius="xs"
-      onRowClick={(row) => {
-        const user = row.record;
-        modals.open({
-          centered: true,
-          size: "md",
-          withCloseButton: false,
-          children: <UserModalBody user={user} />,
-        });
-        // Handle row click, e.g., navigate to user details page
-      }}
+      withTableBorder
+      //rowBackgroundColor={(record) => "red"}
+      pinLastColumn
+      striped
+      // onRowClick={(row) => {
+      //   const user = row.record;
+      //   modals.open({
+      //     centered: true,
+      //     size: "xl",
+      //     withCloseButton: false,
+      //     children: <UserModalBody user={user} />,
+      //   });
+      //   // Handle row click, e.g., navigate to user details page
+      // }}
     />
   );
 };

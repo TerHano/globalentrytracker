@@ -52,8 +52,8 @@ export const SubscriptionSettings = () => {
     if (subscriptionInformation?.planInterval === "month") {
       return t("Month");
     }
-    if (subscriptionInformation?.planInterval === "year") {
-      return t("Year");
+    if (subscriptionInformation?.planInterval === "week") {
+      return t("Week");
     }
     return t("Unknown");
   }, [subscriptionInformation, t]);

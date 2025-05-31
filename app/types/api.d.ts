@@ -88,6 +88,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/pricing/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Deletes pricing from the system
+         * @description Deletes pricing information from the system by its ID. Requires Admin authorization.
+         */
+        delete: operations["DeletePricing"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/grant-subscription": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Grant a subscription to a user
+         * @description Grants a subscription to a user by their userId and planId. Requires Admin authorization.
+         */
+        post: operations["GrantSubscription"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/auth/v1/authenticated": {
         parameters: {
             query?: never;
@@ -781,12 +821,6 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        AddPricingPlanRequest: {
-            name: string;
-            description: string;
-            priceId: string;
-            features: string[];
-        };
         AppointmentLocationDto: {
             /** Format: int32 */
             id: number;
@@ -824,6 +858,12 @@ export interface components {
         };
         CreateEmailNotificationSettingsRequest: {
             enabled: boolean;
+        };
+        CreatePricingPlanRequest: {
+            name: string;
+            description: string;
+            priceId: string;
+            features: string;
         };
         CreateTrackerForUserRequest: {
             /** Format: int32 */
@@ -873,6 +913,11 @@ export interface components {
             /** Format: int32 */
             code: number;
             message: string;
+        };
+        GrantSubscriptionRequest: {
+            /** Format: int32 */
+            userId: number;
+            priceId: string;
         };
         Int32ApiResponse: {
             success: boolean;
@@ -941,6 +986,7 @@ export interface components {
             priceId: string;
             /** Format: int64 */
             price: number;
+            priceFormatted: string;
             currency: string;
             features: string[];
             frequency: components["schemas"]["PlanOptionFrequency"];
@@ -1024,7 +1070,7 @@ export interface components {
             name: string;
             description: string;
             priceId: string;
-            features: string[];
+            features: string;
         };
         UpdateTrackerForUserRequest: {
             /** Format: int32 */
@@ -1062,6 +1108,8 @@ export interface components {
             /** Format: date-time */
             createdAt: string;
             role?: components["schemas"]["RoleDto"];
+            customerId?: string | null;
+            subscriptionId?: string | null;
             /** Format: date-time */
             nextNotificationAt: string;
         };
@@ -1276,7 +1324,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AddPricingPlanRequest"];
+                "application/json": components["schemas"]["CreatePricingPlanRequest"];
             };
         };
         responses: {
@@ -1287,6 +1335,88 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Int32ApiResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    DeletePricing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    GrantSubscription: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GrantSubscriptionRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
                 };
             };
             /** @description Unauthorized */

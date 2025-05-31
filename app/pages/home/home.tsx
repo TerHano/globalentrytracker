@@ -23,7 +23,7 @@ export const HomePage = () => {
   return (
     <Container size="xl">
       <Stack mt="lg" gap="xl">
-        <Grid justify="center" id="hero">
+        <Grid justify="center" id="hero" overflow="hidden">
           <Grid.Col span={{ xs: 12, sm: 8 }}>
             <Stack className="fade-in-up-animation" gap="xs">
               <Text span fw={800} lh="1em" fz="2rem">

@@ -13,7 +13,7 @@ import type { Route } from "./+types/root";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
-import "mantine-datatable/styles.layer.css";
+import "mantine-datatable/styles.css";
 
 import "./app.css";
 

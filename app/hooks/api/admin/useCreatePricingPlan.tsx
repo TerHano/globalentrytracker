@@ -1,27 +1,20 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "~/hooks/api/mutationOptions";
-import { trackedLocationQuery } from "~/api/tracked-location-api";
-import { permissionQuery } from "~/api/permissions-api";
-import { trackedLocationsQuery } from "~/api/tracked-locations-api";
-import { nextNotificationQuery } from "~/api/next-notification-api";
 import type { paths } from "~/types/api";
+import { planQuery } from "~/api/plans-api";
 
 export type CreatePricingPlanRequest =
   paths["/api/v1/admin/pricing"]["post"]["requestBody"]["content"]["application/json"];
 
-export const useCreateUpdateTracker = ({
+export const useCreatePricingPlan = ({
   onSuccess,
   onError,
 }: MutationHookOptions<CreatePricingPlanRequest, number>) => {
   const queryClient = useQueryClient();
 
-  const queriesToInvalidate = [
-    trackedLocationQuery.name,
-    trackedLocationsQuery.name,
-    nextNotificationQuery.name,
-    permissionQuery.name,
-  ];
+  const queriesToInvalidate = [planQuery.name];
+
   return $api.useMutation("post", "/api/v1/admin/pricing", {
     onSuccess: (data, request) => {
       queriesToInvalidate.forEach((query) => {

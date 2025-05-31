@@ -18,7 +18,7 @@ const colorForRole = (roleCode: string | null | undefined) => {
       return "red";
     case "free":
       return "blue";
-    case "paid":
+    case "subscriber":
       return "yellow";
     default:
       return "dark";

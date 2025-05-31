@@ -2,19 +2,19 @@ import { useQueryClient } from "@tanstack/react-query";
 import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "~/hooks/api/mutationOptions";
 import type { paths } from "~/types/api";
-import { planQuery } from "~/api/plans-api";
+import { allUsersQuery } from "~/api/admin/all-users-api";
 
-export type UpdatePricingPlanRequest =
-  paths["/api/v1/admin/pricing"]["post"]["requestBody"]["content"]["application/json"];
+export type GrantSubscriptionRequest =
+  paths["/api/v1/admin/grant-subscription"]["post"]["requestBody"]["content"]["application/json"];
 
-export const useUpdatePricingPlan = ({
+export const useGrantSubscription = ({
   onSuccess,
   onError,
-}: MutationHookOptions<UpdatePricingPlanRequest, unknown>) => {
+}: MutationHookOptions<GrantSubscriptionRequest, unknown>) => {
   const queryClient = useQueryClient();
 
-  const queriesToInvalidate = [planQuery.name];
-  return $api.useMutation("put", "/api/v1/admin/pricing", {
+  const queriesToInvalidate = [allUsersQuery.name];
+  return $api.useMutation("post", "/api/v1/admin/grant-subscription", {
     onSuccess: (data, request) => {
       queriesToInvalidate.forEach((query) => {
         queryClient.invalidateQueries({

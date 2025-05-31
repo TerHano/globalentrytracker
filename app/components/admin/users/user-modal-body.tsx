@@ -4,6 +4,7 @@ import {
   Divider,
   Group,
   Select,
+  SimpleGrid,
   Stack,
   Text,
 } from "@mantine/core";
@@ -32,7 +33,7 @@ export const UserModalBody = ({ user }: { user: User }) => {
           {user.email}
         </Text>
       </Stack>
-      <Group justify="space-between" align="center">
+      <SimpleGrid cols={{ sm: 1, md: 2 }} spacing="xs">
         <LabelValue label="External ID">
           <Text truncate maw={250}>
             {user.externalId ?? "N/A"}
@@ -41,8 +42,18 @@ export const UserModalBody = ({ user }: { user: User }) => {
         <LabelValue label="Created At">
           {new Date(user.createdAt).toLocaleDateString()}
         </LabelValue>
-      </Group>
-      <Group justify="space-between" align="center">
+        <LabelValue label="Customer ID">
+          <Text truncate maw={250}>
+            {user.customerId ?? "N/A"}
+          </Text>
+        </LabelValue>
+        <LabelValue label="Subscription ID">
+          <Text truncate maw={250}>
+            {user.subscriptionId ?? "N/A"}
+          </Text>
+        </LabelValue>
+      </SimpleGrid>
+      {/* <Group justify="space-between" align="center">
         <Select
           maw={100}
           variant="filled"
@@ -63,7 +74,7 @@ export const UserModalBody = ({ user }: { user: User }) => {
           defaultValue={user.role?.code}
           allowDeselect={false}
         />
-      </Group>
+      </Group> */}
       <Divider />
       <Group>
         <Button variant="light" color="red">
