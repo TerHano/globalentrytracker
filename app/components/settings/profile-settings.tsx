@@ -25,7 +25,7 @@ interface ProfileSettingsFormSchema {
 }
 
 export const ProfileSettings = () => {
-  const { data: me, isFetching: isMeLoading } = useQuery(meQuery());
+  const { data: me, isLoading: isMeLoading } = useQuery(meQuery());
 
   const { showNotification } = useShowNotification();
 

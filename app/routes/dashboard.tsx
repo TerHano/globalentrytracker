@@ -12,6 +12,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { permissionQuery } from "~/api/permissions-api";
+import { nextNotificationQuery } from "~/api/next-notification-api";
 
 export function meta() {
   return [
@@ -22,10 +23,13 @@ export function meta() {
 
 export async function loader({ request }: Route.LoaderArgs) {
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(notificationCheckQuery(request));
-  await queryClient.prefetchQuery(trackedLocationsQuery(request));
-  await queryClient.prefetchQuery(meQuery(request));
-  await queryClient.prefetchQuery(permissionQuery(request));
+  await Promise.all([
+    queryClient.prefetchQuery(notificationCheckQuery(request)),
+    queryClient.prefetchQuery(nextNotificationQuery(request)),
+    queryClient.prefetchQuery(trackedLocationsQuery(request)),
+    queryClient.prefetchQuery(meQuery(request)),
+    queryClient.prefetchQuery(permissionQuery(request)),
+  ]);
 
   return { dehydratedState: dehydrate(queryClient) };
 }
