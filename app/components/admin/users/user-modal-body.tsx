@@ -1,25 +1,13 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Group,
-  Select,
-  SimpleGrid,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { Button, Divider, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { User } from "lucide-react";
 import { LabelValue } from "~/components/ui/label-value";
 import type { paths } from "~/types/api";
 import { UserRoleBadge } from "./user-role-badge";
-import { useQuery } from "@tanstack/react-query";
-import { allRolesQuery } from "~/api/admin/roles-api";
 
 type User =
   paths["/api/v1/admin/users"]["get"]["responses"]["200"]["content"]["application/json"]["data"][number];
 
 export const UserModalBody = ({ user }: { user: User }) => {
-  const allRoles = useQuery(allRolesQuery());
   return (
     <Stack>
       <Stack gap="xs" align="center" justify="center">

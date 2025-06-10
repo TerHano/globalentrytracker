@@ -1,4 +1,4 @@
-import { Stack, Divider, Button } from "@mantine/core";
+import { Stack, Divider } from "@mantine/core";
 import { AddEditPricingPlanButton } from "~/components/admin/pricing/add-edit-pricing-plan-button";
 import { PricingList } from "~/components/admin/pricing/pricing-list";
 import { UsersTable } from "~/components/admin/users/users-table";

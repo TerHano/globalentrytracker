@@ -1,23 +1,20 @@
 import { Skeleton, Stack } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { allUsersQuery } from "~/api/admin/all-users-api";
-import { useDeleteUser } from "~/hooks/api/admin/useDeleteUser";
 import { DataTable } from "mantine-datatable";
-import { modals } from "@mantine/modals";
-import { UserModalBody } from "./user-modal-body";
 import { UserRoleBadge } from "./user-role-badge";
 import { UserModalButton } from "./user-modal-button";
 
 export const UsersTable = () => {
   const allUsers = useQuery(allUsersQuery());
-  const deleteUserMutation = useDeleteUser({
-    onSuccess: (data, userId) => {
-      console.log("User deleted successfully:", data, userId);
-    },
-    onError: (errors) => {
-      console.error("Error deleting user:", errors);
-    },
-  });
+  // const deleteUserMutation = useDeleteUser({
+  //   onSuccess: (data, userId) => {
+  //     console.log("User deleted successfully:", data, userId);
+  //   },
+  //   onError: (errors) => {
+  //     console.error("Error deleting user:", errors);
+  //   },
+  // });
 
   if (allUsers.isLoading) {
     return (

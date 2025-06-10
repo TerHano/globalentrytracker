@@ -11,7 +11,6 @@ import {
   ActionIcon,
 } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import { allRolesQuery } from "~/api/admin/roles-api";
 import { LabelValue } from "~/components/ui/label-value";
 import { UserRoleBadge } from "./user-role-badge";
 import { useState } from "react";
@@ -27,7 +26,6 @@ type User =
 
 export const UserModalButton = ({ user }: { user: User }) => {
   const { showNotification, showErrorCodeNotification } = useShowNotification();
-  const allRoles = useQuery(allRolesQuery());
   const allPlans = useQuery(planQuery());
   const [selectedPlan, setSelectedPlan] = useState<string>("");
 
