@@ -21,7 +21,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       if (setCookie) {
         headers.append("Set-Cookie", setCookie);
       }
-      redirect(next, {
+      return redirect(next, {
         headers,
       });
     }
