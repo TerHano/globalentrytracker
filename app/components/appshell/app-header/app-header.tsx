@@ -119,7 +119,7 @@ const AppHeaderAuthenticated = () => {
         onClick: () => signOutMutation.mutate({}),
       },
     ],
-    [isProUser, navigate, showUpgradeModal, signOutMutation]
+    [isProUser, meData?.role.code, navigate, showUpgradeModal, signOutMutation]
   );
 
   if (isMeErrored) {
