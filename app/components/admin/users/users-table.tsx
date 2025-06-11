@@ -28,6 +28,7 @@ export const UsersTable = () => {
 
   return (
     <DataTable
+      minHeight={150}
       records={allUsers.data ?? []}
       columns={[
         { title: "ID", width: 100, accessor: "id" },

@@ -55,15 +55,15 @@ export default function SettingsPageLayout({
 
   const pageTabs: PageTab[] = useMemo(
     () => [
-      { name: "Profile", icon: <User size={14} />, path: "profile" },
+      { name: "Profile", icon: <User size={18} />, path: "profile" },
       {
         name: "Subscription",
-        icon: <CreditCard size={14} />,
+        icon: <CreditCard size={18} />,
         path: "subscription",
       },
       {
         name: "Notifications",
-        icon: <Bell size={14} />,
+        icon: <Bell size={18} />,
         path: "notifications",
       },
     ],
