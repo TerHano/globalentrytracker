@@ -1,7 +1,14 @@
-import { SegmentedControl, Group, Text, Button, Stack } from "@mantine/core";
+import {
+  SegmentedControl,
+  Group,
+  Text,
+  Button,
+  Stack,
+  Skeleton,
+} from "@mantine/core";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Bell, CreditCard, User } from "lucide-react";
-import { NavLink, Outlet, useNavigate } from "react-router";
+import { NavLink, Outlet, useNavigate, useNavigation } from "react-router";
 import { Page } from "~/components/ui/layout/page";
 import type { Route } from "./+types/settings-page-layout";
 import { useField } from "@mantine/form";
@@ -31,6 +38,11 @@ export default function SettingsPageLayout({
   const { tab } = loaderData;
   const [activeTab, setActiveTab] = useState<SettingsTab>(tab);
   const navigate = useNavigate();
+  const navigation = useNavigation();
+
+  const isNavigating =
+    navigation.state === "loading" &&
+    navigation.location?.pathname?.startsWith("/settings");
 
   const handleTabChange = useCallback(
     (value: SettingsTab | null) => {
@@ -122,7 +134,11 @@ export default function SettingsPageLayout({
         description="You can change your settings here"
       >
         {settingsTabs}
-        <Outlet />
+        {isNavigating ? (
+          <Skeleton visible height={100} radius="sm" />
+        ) : (
+          <Outlet />
+        )}
       </Page>
     </Stack>
   );
