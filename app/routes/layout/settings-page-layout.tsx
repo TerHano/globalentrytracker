@@ -1,5 +1,5 @@
 import { SegmentedControl, Group, Text, Button, Stack } from "@mantine/core";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Bell, CreditCard, User } from "lucide-react";
 import { NavLink, Outlet, useNavigate } from "react-router";
 import { Page } from "~/components/ui/layout/page";
@@ -29,22 +29,30 @@ export default function SettingsPageLayout({
   loaderData,
 }: Route.ComponentProps) {
   const { tab } = loaderData;
+  const [activeTab, setActiveTab] = useState<SettingsTab>(tab);
   const navigate = useNavigate();
 
   const handleTabChange = useCallback(
     (value: string | null) => {
       switch (value) {
-        case "Profile":
-          navigate("/settings/profile");
-          break;
         case "Notifications":
-          navigate("/settings/notifications");
+          setActiveTab("Notifications");
+
+          navigate("/settings/notifications", {
+            preventScrollReset: true,
+          });
           break;
         case "Subscription":
-          navigate("/settings/subscription");
+          setActiveTab("Subscription");
+          navigate("/settings/subscription", {
+            preventScrollReset: true,
+          });
           break;
         default:
-          navigate("/settings/profile");
+          setActiveTab("Profile");
+          navigate("/settings/profile", {
+            preventScrollReset: true,
+          });
           break;
       }
     },
@@ -78,12 +86,12 @@ export default function SettingsPageLayout({
   );
 
   const segmentedControlField = useField({
-    initialValue: tab,
+    initialValue: activeTab,
   });
 
   useEffect(() => {
-    segmentedControlField.setValue(tab);
-  }, [tab, segmentedControlField]);
+    segmentedControlField.setValue(activeTab);
+  }, [activeTab, segmentedControlField]);
 
   const settingsTabs = useMemo(
     () => (
