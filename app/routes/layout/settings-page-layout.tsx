@@ -1,14 +1,7 @@
-import {
-  SegmentedControl,
-  Group,
-  Text,
-  Button,
-  Stack,
-  UnstyledButton,
-} from "@mantine/core";
-import { useEffect, useMemo } from "react";
+import { SegmentedControl, Group, Text, Button, Stack } from "@mantine/core";
+import { useCallback, useEffect, useMemo } from "react";
 import { ArrowLeft, Bell, CreditCard, User } from "lucide-react";
-import { NavLink, Outlet } from "react-router";
+import { NavLink, Outlet, useNavigate } from "react-router";
 import { Page } from "~/components/ui/layout/page";
 import type { Route } from "./+types/settings-page-layout";
 import { useField } from "@mantine/form";
@@ -36,6 +29,27 @@ export default function SettingsPageLayout({
   loaderData,
 }: Route.ComponentProps) {
   const { tab } = loaderData;
+  const navigate = useNavigate();
+
+  const handleTabChange = useCallback(
+    (value: string | null) => {
+      switch (value) {
+        case "Profile":
+          navigate("/settings/profile");
+          break;
+        case "Notifications":
+          navigate("/settings/notifications");
+          break;
+        case "Subscription":
+          navigate("/settings/subscription");
+          break;
+        default:
+          navigate("/settings/profile");
+          break;
+      }
+    },
+    [navigate]
+  );
 
   const pageTabs: PageTab[] = useMemo(
     () => [
@@ -58,7 +72,7 @@ export default function SettingsPageLayout({
     () =>
       pageTabs.map((tab) => ({
         value: tab.name,
-        label: <TabLabel icon={tab.icon} label={tab.name} path={tab.path} />,
+        label: <TabLabel icon={tab.icon} label={tab.name} />,
       })),
     [pageTabs]
   );
@@ -76,9 +90,10 @@ export default function SettingsPageLayout({
       <SegmentedControl
         {...segmentedControlField.getInputProps()}
         data={tabs}
+        onChange={handleTabChange}
       />
     ),
-    [tabs, segmentedControlField]
+    [segmentedControlField, tabs, handleTabChange]
   );
 
   return (
@@ -111,29 +126,21 @@ export default function SettingsPageLayout({
 const TabLabel = ({
   icon,
   label,
-  path,
 }: {
   icon: React.ReactNode;
   label: string;
-  path: string;
 }) => {
   return (
-    <UnstyledButton
-      component={NavLink}
-      prefetch="render"
-      to={`/settings/${path}`}
+    <Group
+      fz={{ base: "xs", xs: "sm" }}
+      gap={5}
+      align="center"
+      justify="center"
     >
-      <Group
-        fz={{ base: "xs", xs: "sm" }}
-        gap={5}
-        align="center"
-        justify="center"
-      >
-        {icon}
-        <Text visibleFrom="xs" fw="bold" fz={{ base: "xs", xs: "sm" }}>
-          {label}
-        </Text>
-      </Group>
-    </UnstyledButton>
+      {icon}
+      <Text visibleFrom="xs" fw="bold" fz={{ base: "xs", xs: "sm" }}>
+        {label}
+      </Text>
+    </Group>
   );
 };
