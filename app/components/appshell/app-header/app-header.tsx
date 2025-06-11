@@ -1,6 +1,6 @@
 import { Button, Group, Skeleton } from "@mantine/core";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { DoorOpen, Terminal } from "lucide-react";
+import { Cog, DoorOpen, LayoutDashboard, Star, Terminal } from "lucide-react";
 import { NavLink, useNavigate } from "react-router";
 import { meQuery } from "~/api/me-api";
 import { RoleEnum } from "~/enum/RoleEnum";
@@ -13,6 +13,15 @@ import { useMediaQuery } from "@mantine/hooks";
 import { AvatarMenu } from "./avatar-menu";
 import { SiteLogo } from "~/components/ui/site-logo";
 import { useSignOutUser } from "~/hooks/useSignOut";
+import { useMemo } from "react";
+
+export interface MenuOption {
+  color?: "red" | "yellow";
+  isShown?: boolean;
+  label: string;
+  icon: React.ReactNode;
+  onClick?: () => void;
+}
 
 export const AppHeader = () => {
   const { isUserAuthenticated, isLoading } = useUserAuthenticated();
@@ -74,6 +83,45 @@ const AppHeaderAuthenticated = () => {
     },
   });
 
+  const menuOptions = useMemo<MenuOption[]>(
+    () => [
+      {
+        label: "Admin Console",
+        color: "yellow",
+        icon: <Terminal size={14} />,
+        onClick: () => navigate("/admin/dashboard"),
+        isShown: meData?.role.code === RoleEnum.Admin,
+      },
+      {
+        label: "Dashboard",
+        icon: <LayoutDashboard size={14} />,
+        onClick: () => navigate("/dashboard"),
+      },
+      {
+        label: "Upgrade",
+        icon: <Star size={14} />,
+        onClick: showUpgradeModal,
+        isShown: !isProUser,
+      },
+      {
+        label: "Settings",
+        icon: <Cog size={14} />,
+        onClick: () => navigate("/settings/profile"),
+      },
+      {
+        color: "red",
+        label: "Sign Out",
+        icon: signOutMutation.isPending ? (
+          <Skeleton width={14} height={14} />
+        ) : (
+          <DoorOpen size={14} />
+        ),
+        onClick: () => signOutMutation.mutate({}),
+      },
+    ],
+    [isProUser, navigate, showUpgradeModal, signOutMutation]
+  );
+
   if (isMeErrored) {
     return null;
   }
@@ -87,6 +135,7 @@ const AppHeaderAuthenticated = () => {
       {meData.role.code === RoleEnum.Admin ? (
         <Button
           variant="light"
+          visibleFrom="xs"
           component={NavLink}
           to="/admin/dashboard"
           size="compact-sm"
@@ -103,9 +152,9 @@ const AppHeaderAuthenticated = () => {
       ) : null}
 
       {matches ? (
-        <AvatarMenu signOutMutation={signOutMutation} meData={meData} />
+        <AvatarMenu menuOptions={menuOptions} meData={meData} />
       ) : (
-        <MobileAvatarMenu signOutMutation={signOutMutation} meData={meData} />
+        <MobileAvatarMenu menuOptions={menuOptions} meData={meData} />
       )}
     </Group>
   );
