@@ -1,9 +1,10 @@
 import { queryOptions } from "@tanstack/react-query";
 import { fetchClient, validateResponse } from "~/utils/fetchData";
+import { QUERY_KEYS } from "./query-keys";
 
 export const allNotificationSettingsQuery = (request?: Request) =>
   queryOptions({
-    queryKey: [allNotificationSettingsQuery.name],
+    queryKey: QUERY_KEYS.ALL_NOTIFICATION_SETTINGS,
     queryFn: async () => {
       const response = await fetchClient.GET("/api/v1/notification-settings", {
         credentials: "include",

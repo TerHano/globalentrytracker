@@ -39,7 +39,22 @@ export const ActiveTrackers = () => {
 
   const nextNotificationDate = useMemo(() => {
     if (nextNotification) {
-      return dayjs(nextNotification).format("MM/DD/YYYY, hh:mm A");
+      // Use consistent date formatting to prevent hydration mismatches
+      try {
+        const date = new Date(nextNotification);
+        // Use consistent locale and timezone handling
+        return date.toLocaleString('en-US', {
+          month: '2-digit',
+          day: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+      } catch (error) {
+        console.warn('Failed to format notification date:', error);
+        return dayjs(nextNotification).format("MM/DD/YYYY, hh:mm A");
+      }
     }
     return "--";
   }, [nextNotification]);

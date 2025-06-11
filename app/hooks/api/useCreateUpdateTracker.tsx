@@ -1,10 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "./mutationOptions";
-import { trackedLocationQuery } from "~/api/tracked-location-api";
-import { permissionQuery } from "~/api/permissions-api";
-import { trackedLocationsQuery } from "~/api/tracked-locations-api";
-import { nextNotificationQuery } from "~/api/next-notification-api";
+import { QUERY_KEYS } from "~/api/query-keys";
 import type { paths } from "~/types/api";
 
 export type CreateUpdateTrackerRequest =
@@ -32,10 +29,10 @@ export const useCreateUpdateTracker = ({
   const queryClient = useQueryClient();
 
   const queriesToInvalidate = [
-    trackedLocationQuery.name,
-    trackedLocationsQuery.name,
-    nextNotificationQuery.name,
-    permissionQuery.name,
+    QUERY_KEYS.TRACKED_LOCATION,
+    QUERY_KEYS.TRACKED_LOCATIONS,
+    QUERY_KEYS.NEXT_NOTIFICATION,
+    QUERY_KEYS.PERMISSIONS,
   ];
   if (!isUpdate) {
     return $api.useMutation("post", "/api/v1/track-location", {
@@ -43,9 +40,9 @@ export const useCreateUpdateTracker = ({
         // Default behavior
         // Call user-provided handler if it exists
         // Invalidate queries
-        queriesToInvalidate.forEach((query) => {
+        queriesToInvalidate.forEach((queryKey) => {
           queryClient.invalidateQueries({
-            queryKey: [query],
+            queryKey,
           });
         });
         if (onSuccess) {
@@ -65,9 +62,9 @@ export const useCreateUpdateTracker = ({
       onSuccess: (data, request) => {
         // Default behavior
         // Call user-provided handler if it exists
-        queriesToInvalidate.forEach((query) => {
+        queriesToInvalidate.forEach((queryKey) => {
           queryClient.invalidateQueries({
-            queryKey: [query],
+            queryKey,
           });
         });
         if (onSuccess) {

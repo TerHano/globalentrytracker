@@ -1,9 +1,10 @@
 import { queryOptions } from "@tanstack/react-query";
 import { fetchClient, validateResponse } from "~/utils/fetchData";
+import { QUERY_KEYS } from "./query-keys";
 
 export const subscriptionInformationQuery = (request?: Request) =>
   queryOptions({
-    queryKey: [subscriptionInformationQuery.name],
+    queryKey: QUERY_KEYS.SUBSCRIPTION,
     queryFn: async () => {
       const response = await fetchClient.GET("/api/v1/subscription", {
         credentials: "include",

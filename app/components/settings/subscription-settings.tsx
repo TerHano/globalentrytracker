@@ -28,7 +28,7 @@ export const SubscriptionSettings = () => {
   const {
     data: subscriptionInformation,
     isLoading: isSubscriptionInfoLoading,
-  } = useQuery({ ...subscriptionInformationQuery(), staleTime: 1000000 });
+  } = useQuery(subscriptionInformationQuery());
   const { mutate: mutateManageSubscription } = useManageSubscription({
     onError: () => {
       setIsNavigating(false);

@@ -7,6 +7,6 @@ export function meta() {
   ];
 }
 
-export default function ProfileSettingsPage() {
+export default function SubscriptionSettingsPage() {
   return <SubscriptionSettings />;
 }

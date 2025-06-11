@@ -44,7 +44,10 @@ export default function LoginForm() {
     onSuccess: () => {
       setIsRedirecting(true);
       // Use full page navigation to ensure cookies are included
-      window.location.href = "/dashboard";
+      // Add a small delay to prevent hydration issues
+      setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 100);
     },
   });
   const {

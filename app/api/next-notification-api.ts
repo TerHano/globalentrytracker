@@ -1,9 +1,10 @@
 import { queryOptions } from "@tanstack/react-query";
 import { fetchClient, validateResponse } from "~/utils/fetchData";
+import { QUERY_KEYS } from "./query-keys";
 
 export const nextNotificationQuery = (request?: Request) =>
   queryOptions({
-    queryKey: [nextNotificationQuery.name],
+    queryKey: QUERY_KEYS.NEXT_NOTIFICATION,
     queryFn: async () => {
       const response = await fetchClient.GET("/api/v1/next-notification", {
         credentials: "include",

@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "./mutationOptions";
-import { meQuery } from "~/api/me-api";
+import { QUERY_KEYS } from "~/api/query-keys";
 import type { paths } from "~/types/api";
 
 type UpdateUserRequest =
@@ -15,7 +15,7 @@ export const useUpdateUser = ({
 
   return $api.useMutation("put", "/api/v1/me", {
     onSuccess: (data, request) => {
-      queryClient.invalidateQueries({ queryKey: [meQuery.name] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ME });
       // Call user-provided handler if it exists
       if (onSuccess) {
         onSuccess(data?.data, request?.body);

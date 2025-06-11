@@ -1,6 +1,9 @@
 const BASE_URL =
   import.meta.env.VITE_API_SERVER_BASE_URL || "http://localhost:3000";
 
+const REFRESH_TOKEN_NAME =
+  import.meta.env.VITE_REFRESH_TOKEN_NAME || "refresh_token";
+
 type RefreshTokenResponse = {
   success: boolean;
   data: string;
@@ -18,10 +21,10 @@ function hasRefreshTokenCookie(cookieHeader: string): boolean {
   if (!cookieHeader) return false;
 
   // Parse cookies and look for refresh token
-  // Assuming your refresh token cookie is named 'refresh_token' or similar
+  // Assuming your refresh token cookie is named REFRESH_TOKEN_NAME or similar
   // Adjust the cookie name to match your backend implementation
   const cookies = cookieHeader.split(";").map((cookie) => cookie.trim());
-  return cookies.some((cookie) => cookie.startsWith("refresh_token="));
+  return cookies.some((cookie) => cookie.startsWith(`${REFRESH_TOKEN_NAME}=`));
 }
 
 async function attemptTokenRefresh(cookieHeader: string): Promise<AuthResult> {

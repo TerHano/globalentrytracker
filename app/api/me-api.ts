@@ -1,9 +1,10 @@
 import { queryOptions } from "@tanstack/react-query";
 import { fetchClient, validateResponse } from "~/utils/fetchData";
+import { QUERY_KEYS } from "./query-keys";
 
 export const meQuery = (request?: Request) =>
   queryOptions({
-    queryKey: [meQuery.name],
+    queryKey: QUERY_KEYS.ME,
     queryFn: async () => {
       const response = await fetchClient.GET("/api/v1/me", {
         credentials: "include",
@@ -13,4 +14,8 @@ export const meQuery = (request?: Request) =>
       });
       return validateResponse(response);
     },
+    // Add configuration to prevent hydration mismatches
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+    retry: false, // Don't retry auth queries to prevent multiple failed attempts
   });

@@ -1,9 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "./mutationOptions";
-import { trackedLocationsQuery } from "~/api/tracked-locations-api";
-import { trackedLocationQuery } from "~/api/tracked-location-api";
-import { permissionQuery } from "~/api/permissions-api";
+import { QUERY_KEYS } from "~/api/query-keys";
 
 export interface DeleteTrackerResponse {
   success: boolean;
@@ -24,15 +22,15 @@ export function useDeleteTracker({
         // Default behavior
         // Call user-provided handler if it exists
         queryClient.invalidateQueries({
-          queryKey: [trackedLocationsQuery.name],
+          queryKey: QUERY_KEYS.TRACKED_LOCATIONS,
         });
         queryClient.invalidateQueries({
           queryKey: [
-            trackedLocationQuery.name,
+            ...QUERY_KEYS.TRACKED_LOCATION,
             request.params.path.locationTrackerId,
           ],
         });
-        queryClient.invalidateQueries({ queryKey: [permissionQuery.name] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PERMISSIONS });
         if (onSuccess) {
           onSuccess(data.data, request.params.path.locationTrackerId);
         }

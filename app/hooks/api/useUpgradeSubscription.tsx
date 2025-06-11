@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "./mutationOptions";
 import { noop } from "@mantine/core";
-import { subscriptionInformationQuery } from "~/api/subscription-information-api";
+import { QUERY_KEYS } from "~/api/query-keys";
 import type { paths } from "~/types/api";
 
 type UpgradeSubscriptionRequest =
@@ -17,7 +17,7 @@ export const useUpgradeSubscription = ({
   return $api.useMutation("post", "/api/v1/subscribe", {
     onSuccess: (data, request) => {
       queryClient.invalidateQueries({
-        queryKey: [subscriptionInformationQuery.name],
+        queryKey: QUERY_KEYS.SUBSCRIPTION,
       });
       onSuccess(data.data, request?.body);
     },
