@@ -6,13 +6,13 @@ import { Page } from "~/components/ui/layout/page";
 import type { Route } from "./+types/settings-page-layout";
 import { useField } from "@mantine/form";
 
+type SettingsTab = "Profile" | "Notifications" | "Subscription";
+
 interface PageTab {
-  name: string;
+  name: SettingsTab;
   icon: React.ReactNode;
   path: string;
 }
-
-type SettingsTab = "Profile" | "Notifications" | "Subscription";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const path = request.url;
@@ -33,28 +33,22 @@ export default function SettingsPageLayout({
   const navigate = useNavigate();
 
   const handleTabChange = useCallback(
-    (value: string | null) => {
+    (value: SettingsTab | null) => {
+      let path;
       switch (value) {
         case "Notifications":
-          setActiveTab("Notifications");
-
-          navigate("/settings/notifications", {
-            preventScrollReset: true,
-          });
+          path = "/settings/notifications";
           break;
         case "Subscription":
-          setActiveTab("Subscription");
-          navigate("/settings/subscription", {
-            preventScrollReset: true,
-          });
+          path = "/settings/subscription";
           break;
         default:
-          setActiveTab("Profile");
-          navigate("/settings/profile", {
-            preventScrollReset: true,
-          });
+          path = "/settings/profile";
           break;
       }
+      navigate(path, {
+        preventScrollReset: true,
+      });
     },
     [navigate]
   );
@@ -98,7 +92,10 @@ export default function SettingsPageLayout({
       <SegmentedControl
         {...segmentedControlField.getInputProps()}
         data={tabs}
-        onChange={handleTabChange}
+        onChange={(val: string) => {
+          setActiveTab(val as SettingsTab);
+          handleTabChange(val as SettingsTab);
+        }}
       />
     ),
     [segmentedControlField, tabs, handleTabChange]
