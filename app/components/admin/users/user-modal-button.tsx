@@ -83,16 +83,22 @@ export const UserModalButton = ({ user }: { user: User }) => {
                 {user.email}
               </Text>
             </Stack>
-            <SimpleGrid cols={{ sm: 1, md: 2 }} spacing="xs">
-              <LabelValue label="External ID">
-                <Text truncate maw={250}>
-                  {user.externalId ?? "N/A"}
-                </Text>
-              </LabelValue>{" "}
-              <LabelValue label="Created At">
-                {new Date(user.createdAt).toLocaleDateString()}
-              </LabelValue>
-            </SimpleGrid>
+            <Divider />
+            <Stack>
+              <SimpleGrid cols={{ sm: 1, md: 2 }} spacing="xs">
+                <LabelValue label="External ID">
+                  <Text truncate maw={250}>
+                    {user.externalId ?? "N/A"}
+                  </Text>
+                </LabelValue>{" "}
+                <LabelValue label="Created At">
+                  {new Date(user.createdAt).toLocaleDateString()}
+                </LabelValue>
+              </SimpleGrid>
+              <Button variant="light" color="red">
+                Delete User
+              </Button>
+            </Stack>
             <Divider />
             <Stack>
               <SimpleGrid cols={{ sm: 1, md: 2 }} spacing="xs">
@@ -139,11 +145,6 @@ export const UserModalButton = ({ user }: { user: User }) => {
         />
       </Group> */}
             <Divider />
-            <Group>
-              <Button variant="light" color="red">
-                Delete User
-              </Button>
-            </Group>
           </Stack>
         </Modal>
         <Modal
@@ -158,8 +159,8 @@ export const UserModalButton = ({ user }: { user: User }) => {
             <Radio.Group
               value={selectedPlan}
               onChange={setSelectedPlan}
-              label="Pick one package to install"
-              description="Choose a package that you will need in your application"
+              label="Which plan would you like to grant?"
+              description="Select a plan to grant this user a subscription."
             >
               <Stack pt="md" gap="xs">
                 {allPlans.data?.map((plan) => (

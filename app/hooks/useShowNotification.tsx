@@ -1,5 +1,5 @@
 import { notifications } from "@mantine/notifications";
-import { Plane } from "lucide-react";
+import { Key, Plane } from "lucide-react";
 import { useCallback, useMemo } from "react";
 import { ErrorCode } from "~/enum/ErrorCodes";
 import { useTranslation } from "react-i18next";
@@ -30,20 +30,23 @@ export const useShowNotification = () => {
   );
 
   const errorNotificationMap = useMemo<
-    Record<ErrorCode, UseShowNotificationProps>
+    Record<ErrorCode, Omit<UseShowNotificationProps, "status">>
   >(() => {
     return {
       [ErrorCode.GenericError]: {
-        status: "error",
         title: t("Error"),
         message: t("An error occurred. Please try again."),
         icon: <Plane size={16} />,
       },
       [ErrorCode.TrackerExistsForLocationAndType]: {
-        status: "error",
         title: t("Tracker Exists"),
         message: t("A tracker already exists for this location and type."),
         icon: <Plane size={16} />,
+      },
+      [ErrorCode.LoginInformationIncorrect]: {
+        title: t("Login Information Incorrect"),
+        message: t("The login information provided is incorrect."),
+        icon: <Key size={16} />,
       },
     };
     // Add more error codes as needed
@@ -66,7 +69,7 @@ export const useShowNotification = () => {
             withBorder: true,
             title: notificationProps.title,
             message: notificationProps.message,
-            color: getColorForStatus(notificationProps.status),
+            color: getColorForStatus("error"),
             icon: notificationProps.icon,
             withCloseButton: false,
           });

@@ -1,10 +1,23 @@
-import { SegmentedControl, Group, Text, Button, Stack } from "@mantine/core";
-import { useCallback, useEffect, useMemo } from "react";
+import {
+  SegmentedControl,
+  Group,
+  Text,
+  Button,
+  Stack,
+  UnstyledButton,
+} from "@mantine/core";
+import { useEffect, useMemo } from "react";
 import { ArrowLeft, Bell, CreditCard, User } from "lucide-react";
-import { NavLink, Outlet, useNavigate } from "react-router";
+import { NavLink, Outlet } from "react-router";
 import { Page } from "~/components/ui/layout/page";
 import type { Route } from "./+types/settings-page-layout";
 import { useField } from "@mantine/form";
+
+interface PageTab {
+  name: string;
+  icon: React.ReactNode;
+  path: string;
+}
 
 type SettingsTab = "Profile" | "Notifications" | "Subscription";
 
@@ -23,46 +36,36 @@ export default function SettingsPageLayout({
   loaderData,
 }: Route.ComponentProps) {
   const { tab } = loaderData;
-  // const isFirstRender = useIsFirstRender();
-  const navigate = useNavigate();
 
-  const tabs = useMemo(
+  const pageTabs: PageTab[] = useMemo(
     () => [
+      { name: "Profile", icon: <User size={14} />, path: "profile" },
       {
-        value: "Profile",
-        label: <TabLabel icon={<User size={14} />} label="Profile" />,
+        name: "Subscription",
+        icon: <CreditCard size={14} />,
+        path: "subscription",
       },
       {
-        value: "Subscription",
-        label: (
-          <TabLabel icon={<CreditCard size={14} />} label="Subscription" />
-        ),
-      },
-      {
-        value: "Notifications",
-        label: <TabLabel icon={<Bell size={14} />} label="Notifications" />,
+        name: "Notifications",
+        icon: <Bell size={14} />,
+        path: "notifications",
       },
     ],
     []
   );
 
+  const tabs = useMemo(
+    () =>
+      pageTabs.map((tab) => ({
+        value: tab.name,
+        label: <TabLabel icon={tab.icon} label={tab.name} path={tab.path} />,
+      })),
+    [pageTabs]
+  );
+
   const segmentedControlField = useField({
     initialValue: tab,
   });
-
-  const handleTabChange = useCallback(
-    (val: string) => {
-      if (val === "Profile") {
-        navigate("/settings/profile");
-      } else if (val === "Notifications") {
-        navigate("/settings/notifications");
-      }
-      if (val === "Subscription") {
-        navigate("/settings/subscription");
-      }
-    },
-    [navigate]
-  );
 
   useEffect(() => {
     segmentedControlField.setValue(tab);
@@ -72,11 +75,10 @@ export default function SettingsPageLayout({
     () => (
       <SegmentedControl
         {...segmentedControlField.getInputProps()}
-        onChange={(val) => handleTabChange(val)}
         data={tabs}
       />
     ),
-    [handleTabChange, segmentedControlField, tabs]
+    [tabs, segmentedControlField]
   );
 
   return (
@@ -109,21 +111,29 @@ export default function SettingsPageLayout({
 const TabLabel = ({
   icon,
   label,
+  path,
 }: {
   icon: React.ReactNode;
   label: string;
+  path: string;
 }) => {
   return (
-    <Group
-      fz={{ base: "xs", xs: "sm" }}
-      gap={5}
-      align="center"
-      justify="center"
+    <UnstyledButton
+      component={NavLink}
+      prefetch="render"
+      to={`/settings/${path}`}
     >
-      {icon}
-      <Text fw="bold" fz={{ base: "xs", xs: "sm" }}>
-        {label}
-      </Text>
-    </Group>
+      <Group
+        fz={{ base: "xs", xs: "sm" }}
+        gap={5}
+        align="center"
+        justify="center"
+      >
+        {icon}
+        <Text visibleFrom="xs" fw="bold" fz={{ base: "xs", xs: "sm" }}>
+          {label}
+        </Text>
+      </Group>
+    </UnstyledButton>
   );
 };

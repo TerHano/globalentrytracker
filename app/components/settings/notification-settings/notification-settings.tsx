@@ -5,6 +5,7 @@ import { allNotificationSettingsQuery } from "~/api/all-notification-settings-ap
 import { useQuery } from "@tanstack/react-query";
 import { Mail } from "lucide-react";
 import { EmailSettingsCard } from "./email-settings";
+import { Page } from "~/components/ui/layout/page";
 
 export const NotificationSettings = () => {
   const { data: settings, isLoading: isSettingsLoading } = useQuery(
@@ -19,7 +20,11 @@ export const NotificationSettings = () => {
     );
   }
   return (
-    <div className="fade-in-up-animation">
+    <Page.Subsection
+      className="fade-in-up-animation"
+      header="Notification Settings"
+      description="Manage your notification preferences."
+    >
       <Tabs radius="md" defaultValue="email">
         <TabsList>
           <TabsTab value="email" leftSection={<Mail size={14} />}>
@@ -42,6 +47,6 @@ export const NotificationSettings = () => {
     
             <TabsPanel value="settings">Settings tab content</TabsPanel> */}
       </Tabs>
-    </div>
+    </Page.Subsection>
   );
 };
