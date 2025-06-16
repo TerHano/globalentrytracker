@@ -248,6 +248,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/auth/v1/resend-email-verification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Resend email verification
+         * @description Resends the email verification link to the user with the provided email address.
+         */
+        post: operations["ResendEmailVerification"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/auth/v1/verify-email-reset": {
         parameters: {
             query?: never;
@@ -910,8 +930,8 @@ export interface components {
             data: components["schemas"]["EmailNotificationSettingsDto"];
         };
         Error: {
-            /** Format: int32 */
-            code: number;
+            /** @enum {string} */
+            code: "GenericError" | "TrackerForLocationAndTypeExists" | "IncorrectLoginInformation" | "ResendVerifyEmail" | "EmailNotConfirmed";
             message: string;
         };
         GrantSubscriptionRequest: {
@@ -944,17 +964,16 @@ export interface components {
             errors: components["schemas"]["Error"][];
             data: components["schemas"]["NotificationCheckDto"];
         };
-        /**
-         * Format: int32
-         * @enum {integer}
-         */
-        NotificationType: 0 | 1;
         NotificationTypeDto: {
             /** Format: int32 */
             id: number;
             name: string;
             description: string;
-            type: components["schemas"]["NotificationType"];
+            /**
+             * Format: int32
+             * @enum {integer}
+             */
+            type: 0 | 1;
         };
         NotificationTypeDtoArrayApiResponse: {
             success: boolean;
@@ -989,18 +1008,20 @@ export interface components {
             priceFormatted: string;
             currency: string;
             features: string[];
-            frequency: components["schemas"]["PlanOptionFrequency"];
+            /**
+             * Format: int32
+             * @enum {integer}
+             */
+            frequency: 1 | 2;
         };
         PlanOptionDtoArrayApiResponse: {
             success: boolean;
             errors: components["schemas"]["Error"][];
             data: components["schemas"]["PlanOptionDto"][];
         };
-        /**
-         * Format: int32
-         * @enum {integer}
-         */
-        PlanOptionFrequency: 1 | 2;
+        ResendEmailVerificationRequest: {
+            email?: string | null;
+        };
         ResetPasswordRequest: {
             newPassword: string;
         };
@@ -1606,6 +1627,39 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["VerifyOtpRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    ResendEmailVerification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResendEmailVerificationRequest"];
             };
         };
         responses: {

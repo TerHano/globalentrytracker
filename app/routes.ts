@@ -11,7 +11,7 @@ export default [
   route("/login", "routes/login.tsx"),
   route("/signup", "routes/signup.tsx"),
   route("/auth/reset-password", "routes/reset-password.tsx"),
-  route("/auth/confirm-email", "routes/auth.confirm.tsx"),
+  route("/auth/confirm-email", "routes/auth/auth.confirm.tsx"),
   layout("routes/layout/protected-layout.tsx", [
     route("dashboard", "routes/dashboard.tsx"),
     route("create-tracker", "routes/create-tracker.tsx"),

@@ -5,7 +5,6 @@ import {
   Button,
   Anchor,
   Text,
-  Input,
   Group,
   Modal,
   Stack,
@@ -17,29 +16,31 @@ import { z } from "zod";
 import { useField, useForm, zodResolver } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { useShowNotification } from "~/hooks/useShowNotification";
-import { ArrowLeft, Key, Mail } from "lucide-react";
+import { ArrowLeft, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import emailLinkImg from "~/assets/icons/email-link.png";
 import errorImg from "~/assets/icons/500.png";
 import resetPasswordImg from "~/assets/icons/reset-password.png";
 import { useSendResetPasswordEmail } from "~/hooks/useSendResetPasswordEmail";
 import { useSignInUser } from "~/hooks/useSignIn";
+import { EmailNotConfirmedModal } from "./email-not-confirmed-modal";
 
 export default function LoginForm() {
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [isEmailNotConfirmedModalOpen, setIsEmailNotConfirmedModalOpen] =
+    useState(false);
   const { t } = useTranslation();
-  const { showNotification } = useShowNotification();
+  const { showErrorCodeNotification } = useShowNotification();
   const { mutate: signInUser, isPending: isSignInUserLoading } = useSignInUser({
-    onError: (error) => {
-      const errorMessage =
-        error?.[0]?.message ??
-        "An unexpected error occurred. Please try again.";
-      showNotification({
-        title: "Login Failed",
-        message: errorMessage,
-        status: "error",
-        icon: <Key size={16} />,
-      });
+    onError: (errors) => {
+      const hasNotConfirmedEmailError = errors.some(
+        (error) => error.code === "EmailNotConfirmed"
+      );
+      if (hasNotConfirmedEmailError) {
+        setIsEmailNotConfirmedModalOpen(true);
+        return;
+      }
+      showErrorCodeNotification(errors);
     },
     onSuccess: () => {
       setIsRedirecting(true);
@@ -126,13 +127,11 @@ export default function LoginForm() {
   );
 
   return (
-    <div className="fade-in-up-animation">
+    <Stack className="fade-in-up-animation">
       <Title order={2} ta="center" mt="md">
         {t("Welcome back to EntryAlert")}
       </Title>
-
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Input.Label></Input.Label>
         <TextInput
           label="Email"
           placeholder="hello@gmail.com"
@@ -282,6 +281,13 @@ export default function LoginForm() {
           </Stack>
         </Modal>
       </Modal.Stack>
-    </div>
+      <EmailNotConfirmedModal
+        email={form.values.email}
+        opened={isEmailNotConfirmedModalOpen}
+        onClose={() => {
+          setIsEmailNotConfirmedModalOpen(false);
+        }}
+      />
+    </Stack>
   );
 }
