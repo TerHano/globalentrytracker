@@ -3,8 +3,6 @@ import { DiscordIcon } from "~/components/ui/icons/DiscordIcon";
 import { DiscordSettingsCard } from "./discord-settings";
 import { allNotificationSettingsQuery } from "~/api/all-notification-settings-api";
 import { useQuery } from "@tanstack/react-query";
-import { Mail } from "lucide-react";
-import { EmailSettingsCard } from "./email-settings";
 import { Page } from "~/components/ui/layout/page";
 
 export const NotificationSettings = () => {
@@ -25,19 +23,19 @@ export const NotificationSettings = () => {
       header="Notification Settings"
       description="Manage your notification preferences."
     >
-      <Tabs radius="md" defaultValue="email">
+      <Tabs radius="md" defaultValue="discord">
         <TabsList>
-          <TabsTab value="email" leftSection={<Mail size={14} />}>
+          {/* <TabsTab value="email" leftSection={<Mail size={14} />}>
             Email
-          </TabsTab>
+          </TabsTab> */}
           <TabsTab value="discord" leftSection={<DiscordIcon size={14} />}>
             Discord
           </TabsTab>
         </TabsList>
 
-        <TabsPanel mt="sm" value="email">
+        {/* <TabsPanel mt="sm" value="email">
           <EmailSettingsCard settings={settings.emailSettings} />
-        </TabsPanel>
+        </TabsPanel> */}
 
         <TabsPanel mt="sm" value="discord">
           <DiscordSettingsCard settings={settings.discordSettings} />
