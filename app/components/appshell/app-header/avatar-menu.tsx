@@ -13,7 +13,7 @@ export const AvatarMenu = ({ meData, menuOptions }: AvaterMenuProps) => {
       <Menu.Target>
         <UnstyledButton>
           <Avatar color="cyan" size="md" radius="xl">
-            {meData?.firstName.charAt(0)}
+            {meData?.firstName.charAt(0).toUpperCase()}
           </Avatar>
         </UnstyledButton>
       </Menu.Target>

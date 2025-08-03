@@ -4,13 +4,13 @@ import type { MutationHookOptions } from "./mutationOptions";
 import type { paths } from "~/types/api";
 
 export type SignUpUserRequest =
-  paths["/api/auth/v1/sign-up"]["post"]["requestBody"]["content"]["application/json"];
+  paths["/api/auth/v1/register"]["post"]["requestBody"]["content"]["application/json"];
 
 export const useSignUpUser = ({
   onSuccess,
   onError,
 }: MutationHookOptions<SignUpUserRequest, unknown>) => {
-  return $api.useMutation("post", "/api/auth/v1/sign-up", {
+  return $api.useMutation("post", "/api/auth/v1/register", {
     onSuccess: (data, request) => {
       // Call user-provided handler if it exists
       if (onSuccess) {

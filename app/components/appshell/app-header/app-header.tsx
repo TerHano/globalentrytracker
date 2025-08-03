@@ -12,7 +12,7 @@ import { MobileAvatarMenu } from "./mobile-avatar-menu";
 import { useMediaQuery } from "@mantine/hooks";
 import { AvatarMenu } from "./avatar-menu";
 import { SiteLogo } from "~/components/ui/site-logo";
-import { useSignOutUser } from "~/hooks/useSignOut";
+import { useSignOutUser } from "~/hooks/api/useSignOut";
 import { useMemo } from "react";
 
 export interface MenuOption {
@@ -116,7 +116,7 @@ const AppHeaderAuthenticated = () => {
         ) : (
           <DoorOpen size={14} />
         ),
-        onClick: () => signOutMutation.mutate({}),
+        onClick: () => signOutMutation.mutate({ body: {} }),
       },
     ],
     [isProUser, meData?.role.code, navigate, showUpgradeModal, signOutMutation]

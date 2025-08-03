@@ -21,8 +21,11 @@ import {
 } from "~/hooks/api/useSignUpUser";
 import { PasswordInputWithStrength } from "../ui/password-input-with-strength";
 import emailIcon from "~/assets/icons/email.png";
+import { useNavigate } from "react-router";
 
 export default function SignUpForm() {
+  const navigate = useNavigate();
+
   const { t } = useTranslation();
   const { showNotification } = useShowNotification();
   const [passwordValue, setPasswordValue] = useState<string>("");
@@ -70,10 +73,8 @@ export default function SignUpForm() {
   });
 
   const { mutate: signUpUserMutate, isPending: isLoading } = useSignUpUser({
-    onSuccess: (_, request) => {
-      setVerificationEmail(request.email);
-      form.reset();
-      setIsModalOpen(true);
+    onSuccess: () => {
+      navigate("/dashboard");
     },
     onError: (error) => {
       const errorMessage =

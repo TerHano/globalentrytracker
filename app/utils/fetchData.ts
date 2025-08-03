@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { ApiResponse } from "~/models/ApiResponse";
 import createFetchClient, { type Middleware } from "openapi-fetch";
 import createClient from "openapi-react-query";
@@ -93,7 +94,7 @@ const fetchClient = createFetchClient<paths>({
   credentials: "include",
 });
 
-fetchClient.use(errorMiddleware);
+//fetchClient.use(errorMiddleware);
 const $api = createClient(fetchClient);
 
 export { fetchClient, $api, validateResponse };

@@ -44,7 +44,7 @@ export const MobileAvatarMenu = ({
         <Stack>
           <Group align="center" justify="start" gap="xs">
             <Avatar color="cyan" size="md" radius="xl">
-              {meData?.firstName.charAt(0)}
+              {meData?.firstName.charAt(0).toUpperCase()}
             </Avatar>
             <Stack gap={0}>
               <Text fw="bold" fz="md">

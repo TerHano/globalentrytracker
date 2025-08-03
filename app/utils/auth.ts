@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const BASE_URL =
   import.meta.env.VITE_API_SERVER_BASE_URL || "http://localhost:3000";
 
@@ -90,7 +91,6 @@ export async function isAuthenticated(
   request: Request
 ): Promise<{ user: unknown; headers?: Headers }> {
   const cookieHeader = request.headers.get("cookie") || "";
-
   try {
     // First, try to get user data with existing cookies
     const response = await fetch(`${BASE_URL}/api/v1/me`, {
@@ -103,6 +103,7 @@ export async function isAuthenticated(
     });
 
     // If successful, return user data
+    console.log("Checking authentication...", response);
     if (response.ok) {
       const data = await response.json();
       if (data.success && data.data) {
@@ -111,31 +112,31 @@ export async function isAuthenticated(
     }
 
     // If 401, try to refresh token
-    if (response.status === 401) {
-      const refreshResult = await attemptTokenRefresh(cookieHeader);
+    // if (response.status === 401) {
+    //   const refreshResult = await attemptTokenRefresh(cookieHeader);
 
-      if (!refreshResult.success) {
-        return { user: false };
-      }
+    //   if (!refreshResult.success) {
+    //     return { user: false };
+    //   }
 
-      // Token refreshed successfully, try to get user data again
-      const retryResponse = await fetch(`${BASE_URL}/api/v1/me`, {
-        credentials: "include",
-        headers: {
-          //  cookie: refreshResult.updatedCookieHeader ?? "",
-          Authorization: `Bearer ${refreshResult.accessToken}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
+    //   // Token refreshed successfully, try to get user data again
+    //   const retryResponse = await fetch(`${BASE_URL}/api/v1/me`, {
+    //     credentials: "include",
+    //     headers: {
+    //       //  cookie: refreshResult.updatedCookieHeader ?? "",
+    //       Authorization: `Bearer ${refreshResult.accessToken}`,
+    //       "Content-Type": "application/json",
+    //       Accept: "application/json",
+    //     },
+    //   });
 
-      if (retryResponse.ok) {
-        const retryData = await retryResponse.json();
-        if (retryData.success && retryData.data) {
-          return { user: retryData.data, headers: refreshResult.headers };
-        }
-      }
-    }
+    //   if (retryResponse.ok) {
+    //     const retryData = await retryResponse.json();
+    //     if (retryData.success && retryData.data) {
+    //       return { user: retryData.data, headers: refreshResult.headers };
+    //     }
+    //   }
+    // }
 
     return { user: false };
   } catch (error) {
@@ -169,31 +170,31 @@ export async function isAdmin(
     }
 
     // If 401, try to refresh token first
-    if (response.status === 401) {
-      const refreshResult = await attemptTokenRefresh(cookieHeader);
+    // if (response.status === 401) {
+    //   const refreshResult = await attemptTokenRefresh(cookieHeader);
 
-      if (!refreshResult.success) {
-        return { isAdmin: false };
-      }
+    //   if (!refreshResult.success) {
+    //     return { isAdmin: false };
+    //   }
 
-      // Token refreshed successfully, try admin endpoint again
-      const retryResponse = await fetch(`${BASE_URL}/api/v1/admin/users`, {
-        credentials: "include",
-        headers: {
-          //  cookie: refreshResult.updatedCookieHeader ?? "",
-          Authorization: `Bearer ${refreshResult.accessToken}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
+    //   // Token refreshed successfully, try admin endpoint again
+    //   const retryResponse = await fetch(`${BASE_URL}/api/v1/admin/users`, {
+    //     credentials: "include",
+    //     headers: {
+    //       //  cookie: refreshResult.updatedCookieHeader ?? "",
+    //       Authorization: `Bearer ${refreshResult.accessToken}`,
+    //       "Content-Type": "application/json",
+    //       Accept: "application/json",
+    //     },
+    //   });
 
-      if (retryResponse.ok) {
-        const retryData = await retryResponse.json();
-        if (retryData.success) {
-          return { isAdmin: true, headers: refreshResult.headers };
-        }
-      }
-    }
+    //   if (retryResponse.ok) {
+    //     const retryData = await retryResponse.json();
+    //     if (retryData.success) {
+    //       return { isAdmin: true, headers: refreshResult.headers };
+    //     }
+    //   }
+    // }
 
     return { isAdmin: false };
   } catch (error) {

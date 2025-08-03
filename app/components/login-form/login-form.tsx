@@ -22,7 +22,7 @@ import emailLinkImg from "~/assets/icons/email-link.png";
 import errorImg from "~/assets/icons/500.png";
 import resetPasswordImg from "~/assets/icons/reset-password.png";
 import { useSendResetPasswordEmail } from "~/hooks/useSendResetPasswordEmail";
-import { useSignInUser } from "~/hooks/useSignIn";
+import { useSignInUser } from "~/hooks/api/useSignIn";
 import { EmailNotConfirmedModal } from "./email-not-confirmed-modal";
 
 export default function LoginForm() {
@@ -33,6 +33,7 @@ export default function LoginForm() {
   const { showErrorCodeNotification } = useShowNotification();
   const { mutate: signInUser, isPending: isSignInUserLoading } = useSignInUser({
     onError: (errors) => {
+      console.log("errored");
       const hasNotConfirmedEmailError = errors.some(
         (error) => error.code === "EmailNotConfirmed"
       );

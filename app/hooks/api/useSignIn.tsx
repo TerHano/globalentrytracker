@@ -1,16 +1,16 @@
-import type { MutationHookOptions } from "./api/mutationOptions";
+import type { MutationHookOptions } from "./mutationOptions";
 import { $api } from "~/utils/fetchData";
 
 export interface SignInRequest {
-  email: string;
-  password: string;
+  email: string | null;
+  password: string | null;
 }
 
 export const useSignInUser = ({
   onSuccess,
   onError,
 }: MutationHookOptions<SignInRequest, unknown>) => {
-  return $api.useMutation("post", "/api/auth/v1/sign-in", {
+  return $api.useMutation("post", "/api/auth/v1/login", {
     onSuccess: (data, request) => {
       // Call user-provided handler if it exists
       if (onSuccess) {
