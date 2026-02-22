@@ -3,7 +3,6 @@ import {
   Button,
   Group,
   Radio,
-  Select,
   SimpleGrid,
   Skeleton,
   Stack,
@@ -15,7 +14,7 @@ import dayjs from "dayjs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { notificationTypesQuery } from "~/api/notification-types-api";
 import { DatePickerInput } from "@mantine/dates";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { z } from "zod";
 import notificationRadioCardStles from "./notification-type-radio-card.module.css";
 import { Bell, BellOff, BellRing, TicketsPlane, Watch } from "lucide-react";
@@ -26,16 +25,15 @@ import {
 } from "~/hooks/api/useCreateUpdateTracker";
 import { useShowNotification } from "~/hooks/useShowNotification";
 import { NotificationTypeEnum } from "~/enum/NotificationType";
-import { locationStatesQuery } from "~/api/location-states-api";
 import type { components } from "~/types/api";
 import { locationsQuery } from "~/api/location-api";
+import { LocationGroupCombobox } from "./location-group-combobox";
 
 interface CreateEditTrackerFormProps {
   trackedLocation?: components["schemas"]["TrackedLocationForUserDto"];
 }
 
 interface FormValues {
-  state?: string;
   enabled: boolean;
   locationId: string;
   notificationTypeId: string;
@@ -53,14 +51,8 @@ export const CreateEditTrackerForm = ({
     useQuery(locationsQuery());
   const { data: notificationTypes, isLoading: isNotificationTypesLoading } =
     useQuery(notificationTypesQuery());
-  const { data: states, isLoading: isStatesLoading } = useQuery(
-    locationStatesQuery()
-  );
-  const isLoading =
-    isLocationsLoading || isNotificationTypesLoading || isStatesLoading;
+  const isLoading = isLocationsLoading || isNotificationTypesLoading;
 
-  const [filteredAppointmentLocations, setFilteredAppointmentLocations] =
-    useState(appointmentLocations);
   const queryClient = useQueryClient();
   const createUpdateTrackerMutation = useCreateUpdateTracker({
     isUpdate,
@@ -78,13 +70,15 @@ export const CreateEditTrackerForm = ({
         status: "success",
         icon: <TicketsPlane size={16} />,
       });
-      const newValues = {
-        enabled: body.enabled,
-        locationId: body.locationId.toString(),
-        notificationTypeId: body.notificationTypeId.toString(),
-        cutOffDate: body.cutOffDate,
-      };
-      form.setInitialValues(newValues);
+      if (body) {
+        const newValues = {
+          enabled: body.enabled,
+          locationId: body.locationId.toString(),
+          notificationTypeId: body.notificationTypeId.toString(),
+          cutOffDate: body.cutOffDate,
+        };
+        form.setInitialValues(newValues);
+      }
       //form.setValues(newValues);
       queryClient.invalidateQueries({
         queryKey: ["tracked-locations"],
@@ -103,8 +97,6 @@ export const CreateEditTrackerForm = ({
     notificationTypes?.at(0)?.id?.toString() ?? "";
 
   const schema = z.object({
-    //make state optional
-    state: z.string().optional(),
     enabled: z.boolean(),
     locationId: z
       .string({ message: "Location is required" })
@@ -124,33 +116,7 @@ export const CreateEditTrackerForm = ({
       cutOffDate: dayjs().add(2, "week").format("YYYY-MM-DD"),
     },
     validate: zodResolver(schema),
-    onValuesChange: (newValues, oldValues) => {
-      if (newValues.state !== oldValues.state) {
-        if (!newValues.state) {
-          setFilteredAppointmentLocations(appointmentLocations);
-          return;
-        }
-        const filteredLocations = appointmentLocations?.filter(
-          (location) => location.state === newValues.state
-        );
-        setFilteredAppointmentLocations(filteredLocations);
-        if (
-          !filteredLocations
-            ?.map((location) => location.id.toString())
-            .includes(newValues.locationId)
-        ) {
-          form.setFieldValue("locationId", "");
-        }
-      }
-    },
   });
-
-  const appointmentLocationOptions =
-    filteredAppointmentLocations?.map((location) => ({
-      value: location.id.toString(),
-      label: `${location.city} (${location.name})`,
-      description: location.name,
-    })) ?? [];
 
   const handleSubmit = async (values: typeof form.values) => {
     console.log("Submitting form", values);
@@ -177,7 +143,6 @@ export const CreateEditTrackerForm = ({
         locationId: trackedLocation.location.id.toString(),
         notificationTypeId: trackedLocation.notificationType.id.toString(),
         cutOffDate: dayjs(trackedLocation.cutOffDate).format("YYYY-MM-DD"),
-        state: trackedLocation.location.state,
       });
     }
   }, [defaultNotificationType, form, trackedLocation]);
@@ -215,38 +180,26 @@ export const CreateEditTrackerForm = ({
           />
         ) : null}
 
-        <Group grow align="flex-start">
-          <Select
-            clearable={false}
-            maw={100}
-            withCheckIcon
-            checkIconPosition="left"
-            comboboxProps={{
-              transitionProps: { transition: "pop", duration: 200 },
+        <Stack gap="xs">
+          <Text fw={500} size="sm">
+            Airport Location <span style={{ color: "red" }}>*</span>
+          </Text>
+          <LocationGroupCombobox
+            locations={appointmentLocations}
+            value={form.values.locationId || ""}
+            onChange={(value) => {
+              const finalValue = value ?? "";
+              form.setFieldValue("locationId", finalValue);
             }}
-            data={states}
-            label="State"
-            //   description="location state"
-            {...form.getInputProps("state")}
-            key={form.key("state")}
+            placeholder="Search by city, state, or airport name"
           />
-          <Select
-            comboboxProps={{
-              transitionProps: { transition: "pop", duration: 200 },
-            }}
-            //searchable
-            withAsterisk
-            maw={400}
-            withCheckIcon
-            checkIconPosition="left"
-            data={appointmentLocationOptions}
-            label="Location"
-            placeholder="Pick location"
-            key={form.key("locationId")}
-            {...form.getInputProps("locationId")}
-            //  description="Select the location you want to track."
-          />
-        </Group>
+          {form.errors.locationId && (
+            <Text size="xs" c="red">
+              {form.errors.locationId}
+            </Text>
+          )}
+        </Stack>
+
         <Radio.Group
           name="notificationType"
           label="What type of notification do you want to receive?"
@@ -256,7 +209,7 @@ export const CreateEditTrackerForm = ({
           key={form.key("notificationTypeId")}
         >
           <SimpleGrid my="xs" cols={{ base: 1, sm: 2, md: 3 }}>
-            {notificationTypes?.map((type) => (
+            {(notificationTypes ?? []).map((type) => (
               <Radio.Card
                 className={notificationRadioCardStles.root}
                 key={type.type}
