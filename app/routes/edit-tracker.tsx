@@ -31,11 +31,13 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(notificationCheckQuery(request));
-  await queryClient.prefetchQuery(locationsQuery(request));
-  await queryClient.prefetchQuery(notificationTypesQuery(request));
+  const locations = await queryClient.fetchQuery(locationsQuery(request));
+  const notificationTypes = await queryClient.fetchQuery(
+    notificationTypesQuery(request),
+  );
   await queryClient.prefetchQuery(locationStatesQuery(request));
   await queryClient.prefetchQuery(
-    trackedLocationQuery({ trackedLocationId: trackerIdNumber })
+    trackedLocationQuery({ trackedLocationId: trackerIdNumber }),
   );
 
   const trackedLocation = await fetchClient
@@ -46,10 +48,16 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     })
     .then((response) => response.data?.data);
 
-  return { trackedLocation, dehydratedState: dehydrate(queryClient) };
+  return {
+    trackedLocation,
+    locations,
+    notificationTypes,
+    dehydratedState: dehydrate(queryClient),
+  };
 }
 export default function EditTracker({ loaderData }: Route.ComponentProps) {
-  const { dehydratedState, trackedLocation } = loaderData;
+  const { dehydratedState, trackedLocation, locations, notificationTypes } =
+    loaderData;
   return (
     <HydrationBoundary state={dehydratedState}>
       <Page
@@ -72,12 +80,9 @@ export default function EditTracker({ loaderData }: Route.ComponentProps) {
         description="This form allows you to create a new tracker for a specific Global Entry appointment location."
       >
         <CreateEditTrackerForm
-          // data={{
-          //   appointmentLocations,
-          //   states,
-          //   notificationTypes,
-          // }}
           trackedLocation={trackedLocation}
+          locations={locations}
+          notificationTypes={notificationTypes}
         />
       </Page>
     </HydrationBoundary>

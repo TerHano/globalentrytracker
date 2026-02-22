@@ -4,7 +4,7 @@ import {
   Skeleton,
   Text,
   Image,
-  Group,
+  SimpleGrid,
 } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { planQuery } from "~/api/plans-api";
@@ -31,7 +31,7 @@ export const PricingGrid = ({
     throwOnError: false,
   });
   const [selectedFrequency, setSelectedFrequency] = useState(
-    PlanFrequency.Monthly.toString()
+    PlanFrequency.Monthly.toString(),
   );
 
   if (isPlansErrored) {
@@ -68,7 +68,7 @@ export const PricingGrid = ({
           ]}
         />
       </Stack>
-      <Group gap="lg">
+      <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="lg">
         {isPlansLoading ? (
           <>
             <SkeletonPriceCard />
@@ -95,7 +95,7 @@ export const PricingGrid = ({
               />
             ))
         )}
-      </Group>
+      </SimpleGrid>
     </Stack>
   );
 };

@@ -24,14 +24,20 @@ export function meta() {
 export async function loader({ request }: Route.LoaderArgs) {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(notificationCheckQuery(request));
-  await queryClient.prefetchQuery(locationsQuery(request));
-  await queryClient.prefetchQuery(notificationTypesQuery(request));
+  const locations = await queryClient.fetchQuery(locationsQuery(request));
+  const notificationTypes = await queryClient.fetchQuery(
+    notificationTypesQuery(request),
+  );
   await queryClient.prefetchQuery(locationStatesQuery(request));
-  return { dehydratedState: dehydrate(queryClient) };
+  return {
+    locations,
+    notificationTypes,
+    dehydratedState: dehydrate(queryClient),
+  };
 }
 
 export default function CreateTracker({ loaderData }: Route.ComponentProps) {
-  const { dehydratedState } = loaderData;
+  const { dehydratedState, locations, notificationTypes } = loaderData;
   return (
     <HydrationBoundary state={dehydratedState}>
       <Page
@@ -54,7 +60,10 @@ export default function CreateTracker({ loaderData }: Route.ComponentProps) {
         description="This form allows you to create a new tracker for a specific Global Entry appointment location."
       >
         <CreateTrackerNotificationWarning />
-        <CreateEditTrackerForm />
+        <CreateEditTrackerForm
+          locations={locations}
+          notificationTypes={notificationTypes}
+        />
       </Page>
     </HydrationBoundary>
   );

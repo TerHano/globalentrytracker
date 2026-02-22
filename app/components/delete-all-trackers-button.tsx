@@ -16,12 +16,20 @@ import { Confetti, type ConfettiHandle } from "./ui/confetti";
 import { useRef } from "react";
 import { CalendarX } from "lucide-react";
 
-export const DeleteAllTrackers = ({ visible }: { visible: boolean }) => {
+export const DeleteAllTrackers = ({
+  visible,
+  trackerCount,
+}: {
+  visible: boolean;
+  trackerCount: number;
+}) => {
   const confettiRef = useRef<ConfettiHandle>(null);
   const modalStack = useModalsStack([
     "delete-all-trackers-confirm",
     "trackers-deleted",
   ]);
+  const isSingleTracker = trackerCount === 1;
+  const trackerLabel = isSingleTracker ? "tracker" : "trackers";
 
   const shootConfetti = () => {
     if (confettiRef.current) {
@@ -31,7 +39,6 @@ export const DeleteAllTrackers = ({ visible }: { visible: boolean }) => {
 
   const deleteAllTrackersMutation = useDeleteAllTrackers({
     onSuccess: () => {
-      console.log("All trackers deleted successfully");
       modalStack.open("trackers-deleted");
     },
     onError: (error) => {
@@ -44,17 +51,23 @@ export const DeleteAllTrackers = ({ visible }: { visible: boolean }) => {
         <Modal
           {...modalStack.register("delete-all-trackers-confirm")}
           size="sm"
+          centered
+          closeOnClickOutside={!deleteAllTrackersMutation.isPending}
+          closeOnEscape={!deleteAllTrackersMutation.isPending}
           withCloseButton={false}
         >
           <Stack align="center" justify="center" gap="lg">
             <Empty
-              title="Delete All Trackers?"
-              description="Are you sure you want to delete all trackers? This action cannot be
-            undone."
+              title={`Delete ${trackerCount} ${trackerLabel}?`}
+              description={`This will permanently remove ${trackerCount} ${trackerLabel} from your account and stop all related notifications. This action cannot be undone.`}
               icon={<Image src={deleteAllTrackersImg} w="5rem" />}
             />
             <SimpleGrid w="100%" cols={2} spacing="xs">
-              <Button onClick={() => modalStack.closeAll()} variant="outline">
+              <Button
+                onClick={() => modalStack.closeAll()}
+                variant="default"
+                disabled={deleteAllTrackersMutation.isPending}
+              >
                 Cancel
               </Button>
               <Button
@@ -66,7 +79,7 @@ export const DeleteAllTrackers = ({ visible }: { visible: boolean }) => {
                 color="red"
                 variant="filled"
               >
-                Delete All
+                {`Delete ${trackerCount} ${trackerLabel}`}
               </Button>
             </SimpleGrid>
           </Stack>
@@ -74,6 +87,7 @@ export const DeleteAllTrackers = ({ visible }: { visible: boolean }) => {
         <Modal
           {...modalStack.register("trackers-deleted")}
           onClose={() => modalStack.closeAll()}
+          centered
           onEnterTransitionEnd={() => {
             shootConfetti();
           }}
@@ -82,10 +96,8 @@ export const DeleteAllTrackers = ({ visible }: { visible: boolean }) => {
           <Stack align="center" justify="center" gap="lg">
             <Confetti ref={confettiRef} />
             <Empty
-              title="Congratulations!"
-              description="Glad you got your appointment! All your trackers have been
-            successfully deleted and you should no longer receive
-            notifications."
+              title={`${trackerCount} ${trackerLabel} deleted`}
+              description="You won't receive alerts from previous trackers anymore. If you still need notifications, you can create a new tracker anytime."
               icon={<Image src={celebrationImg} w="5rem" />}
             />
             <Stack w="100%" justify="center" gap="sm">
@@ -95,7 +107,7 @@ export const DeleteAllTrackers = ({ visible }: { visible: boolean }) => {
                 onClick={() => shootConfetti()}
                 variant="subtle"
               >
-                Celebrate Again
+                Celebrate again
               </Button>
             </Stack>
           </Stack>
@@ -113,7 +125,7 @@ export const DeleteAllTrackers = ({ visible }: { visible: boolean }) => {
             size="compact-xs"
             rightSection={<CalendarX size={12} />}
           >
-            Delete All Your Trackers
+            Delete all trackers
           </Button>
           {/* <DeleteAllTrackersButton
             buttonProps={{

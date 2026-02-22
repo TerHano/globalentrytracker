@@ -25,7 +25,7 @@ export const HomePage = () => {
       <Stack mt="lg" gap="xl">
         <Grid justify="center" id="hero" overflow="hidden">
           <Grid.Col span={{ xs: 12, sm: 8 }}>
-            <Stack className="fade-in-up-animation" gap="xs">
+            <Stack className="fade-in-up-animation" gap="sm">
               <Text span fw={800} lh="1em" fz="2rem">
                 Get Your Global Entry Interview Sooner
               </Text>
@@ -34,17 +34,19 @@ export const HomePage = () => {
                 become available at your preferred locations.
               </Text>
               {isUserAuthenticated ? (
-                <NavLink to="/dashboard">
-                  {({ isPending }) => (
-                    <Button
-                      loading={isPending}
-                      size="sm"
-                      leftSection={<LayoutDashboard size={16} />}
-                    >
-                      Go To Dashboard
-                    </Button>
-                  )}
-                </NavLink>
+                <Group mt="md" gap="xs">
+                  <NavLink to="/dashboard">
+                    {({ isPending }) => (
+                      <Button
+                        loading={isPending}
+                        size="sm"
+                        leftSection={<LayoutDashboard size={16} />}
+                      >
+                        Go To Dashboard
+                      </Button>
+                    )}
+                  </NavLink>
+                </Group>
               ) : (
                 <Group mt="md" gap="xs">
                   <NavLink to="/signup">
@@ -67,8 +69,8 @@ export const HomePage = () => {
               )}
               <Group align="center" mt="xs" gap="xs">
                 <FeatureTagLine label="Real-time Alerts" />
-                <FeatureTagLine label=" Multiple Locations" />
-                <FeatureTagLine label="  24/7 Monitoring" />
+                <FeatureTagLine label="Multiple Locations" />
+                <FeatureTagLine label="24/7 Monitoring" />
               </Group>
             </Stack>
           </Grid.Col>

@@ -111,7 +111,10 @@ export const ActiveTrackers = () => {
           {trackedLocationsList}
         </Stack>
       </Paper>
-      <DeleteAllTrackers visible={(data && data.length > 0) ?? false} />
+      <DeleteAllTrackers
+        visible={(data && data.length > 0) ?? false}
+        trackerCount={data?.length ?? 0}
+      />
     </section>
   );
 };
