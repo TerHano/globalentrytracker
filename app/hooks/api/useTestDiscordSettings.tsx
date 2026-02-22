@@ -30,6 +30,6 @@ export const useTestDiscordSettings = ({
           onError(response.errors);
         }
       },
-    }
+    },
   );
 };

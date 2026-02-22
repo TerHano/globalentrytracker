@@ -23,7 +23,7 @@ export function invalidateTrackedLocationQueries(queryClient: QueryClient) {
  */
 export function invalidateTrackedLocationById(
   queryClient: QueryClient,
-  locationTrackerId: number
+  locationTrackerId: number,
 ) {
   return queryClient.invalidateQueries({
     queryKey: [...QUERY_KEYS.TRACKED_LOCATION, locationTrackerId],

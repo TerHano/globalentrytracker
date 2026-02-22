@@ -54,14 +54,14 @@ const errorMiddleware: Middleware = {
               "Content-Type": "application/json",
               Accept: "application/json",
             },
-          }
+          },
         );
 
         if (refreshResponse.ok) {
           const refreshData = await refreshResponse.json();
           if (refreshData.success && refreshData.data) {
             console.log(
-              "Token refreshed successfully, retrying original request..."
+              "Token refreshed successfully, retrying original request...",
             );
 
             // Retry the original request with the new token

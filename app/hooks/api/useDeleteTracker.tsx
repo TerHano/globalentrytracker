@@ -6,7 +6,10 @@ import {
   invalidateTrackedLocationQueries,
   invalidateUserQueries,
 } from "~/utils/query-invalidation-utils";
-import { mutationRetryConfig, requestRetryConfig } from "~/utils/request-config";
+import {
+  mutationRetryConfig,
+  requestRetryConfig,
+} from "~/utils/request-config";
 import type { APIError } from "~/utils/error-utils";
 
 export interface DeleteTrackerResponse {
@@ -44,6 +47,6 @@ export function useDeleteTracker({
           onError(r.errors);
         }
       },
-    }
+    },
   );
 }

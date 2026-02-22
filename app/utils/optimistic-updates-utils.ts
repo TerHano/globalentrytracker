@@ -16,7 +16,7 @@ export function useOptimisticTrackerToggle(trackerId: number) {
     applyOptimisticUpdate: (newEnabledStatus: boolean) => {
       // Store the previous data for rollback
       const previousData = queryClient.getQueryData(
-        QUERY_KEYS.TRACKED_LOCATIONS
+        QUERY_KEYS.TRACKED_LOCATIONS,
       );
 
       // Update the tracked locations list

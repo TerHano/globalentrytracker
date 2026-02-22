@@ -77,7 +77,7 @@ export function isAPIError(error: unknown): error is APIErrorResponse {
  */
 export function handleAPIError(
   error: unknown,
-  defaultMessage: string = "An error occurred"
+  defaultMessage: string = "An error occurred",
 ): string {
   if (isAPIError(error)) {
     return extractErrorMessage(error);

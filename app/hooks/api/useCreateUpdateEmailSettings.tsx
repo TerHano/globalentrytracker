@@ -8,7 +8,11 @@ export interface CreateUpdateEmailSettingsRequest {
   enabled: boolean;
 }
 interface useCreateUpdateEmailSettingsProps
-  extends MutationHookOptions<CreateUpdateEmailSettingsRequest, number, APIError[]> {
+  extends MutationHookOptions<
+    CreateUpdateEmailSettingsRequest,
+    number,
+    APIError[]
+  > {
   isUpdate?: boolean;
 }
 
@@ -32,6 +36,6 @@ export const useCreateUpdateEmailSettings = ({
           onError(r.errors);
         }
       },
-    }
+    },
   );
 };

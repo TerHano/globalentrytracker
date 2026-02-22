@@ -27,7 +27,8 @@ export const requestRetryConfig = {
       typeof (error as { response: unknown }).response === "object" &&
       (error as { response: { status: unknown } }).response !== null
     ) {
-      const status = (error as { response: { status: number } }).response.status;
+      const status = (error as { response: { status: number } }).response
+        .status;
       // Don't retry on client errors (4xx) except 408, 429
       if (status >= 400 && status < 500) {
         if (status === 408 || status === 429) {

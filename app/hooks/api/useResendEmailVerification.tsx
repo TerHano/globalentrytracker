@@ -10,7 +10,11 @@ type ResendEmailVerificationRequest =
 export const useResendEmailVerification = ({
   onSuccess = noop,
   onError = noop,
-}: MutationHookOptions<ResendEmailVerificationRequest, unknown, APIError[]>) => {
+}: MutationHookOptions<
+  ResendEmailVerificationRequest,
+  unknown,
+  APIError[]
+>) => {
   return $api.useMutation("post", "/api/auth/v1/resend-email-verification", {
     ...mutationRetryConfig,
     onSuccess: (data, request) => {

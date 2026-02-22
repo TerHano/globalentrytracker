@@ -9,7 +9,11 @@ export type CreateUpdateDiscordSettingsRequest =
   | paths["/api/v1/notification-settings/discord"]["put"]["requestBody"]["content"]["application/json"];
 
 interface useCreateUpdateDiscordSettingsProps
-  extends MutationHookOptions<CreateUpdateDiscordSettingsRequest, number, APIError[]> {
+  extends MutationHookOptions<
+    CreateUpdateDiscordSettingsRequest,
+    number,
+    APIError[]
+  > {
   isUpdate?: boolean;
 }
 
