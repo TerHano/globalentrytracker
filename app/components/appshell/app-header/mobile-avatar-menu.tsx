@@ -79,7 +79,7 @@ export const MobileAvatarMenu = ({
       </Drawer>
 
       <Avatar onClick={open} color="cyan" size="md" radius="xl">
-        {meData?.firstName.charAt(0)}
+        {meData?.firstName.charAt(0).toUpperCase()}
       </Avatar>
     </>
   );
