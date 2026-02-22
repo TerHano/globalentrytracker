@@ -3,21 +3,19 @@ import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "./mutationOptions";
 import { QUERY_KEYS } from "~/api/query-keys";
 import type { paths } from "~/types/api";
+import {
+  invalidateTrackedLocationQueries,
+  invalidateUserQueries,
+} from "~/utils/query-invalidation-utils";
+import { mutationRetryConfig } from "~/utils/request-config";
+import type { APIError } from "~/utils/error-utils";
 
 export type CreateUpdateTrackerRequest =
   | paths["/api/v1/track-location"]["post"]["requestBody"]["content"]["application/json"]
   | paths["/api/v1/track-location"]["put"]["requestBody"]["content"]["application/json"];
 
-// export interface CreateUpdateTrackerRequest {
-//   id?: number;
-//   locationId: number;
-//   enabled: boolean;
-//   notificationTypeId: number;
-//   cutOffDate: string;
-// }
-
 interface useCreateUpdateTrackerProps
-  extends MutationHookOptions<CreateUpdateTrackerRequest, number> {
+  extends MutationHookOptions<CreateUpdateTrackerRequest, number, APIError[]> {
   isUpdate?: boolean;
 }
 
@@ -28,55 +26,46 @@ export const useCreateUpdateTracker = ({
 }: useCreateUpdateTrackerProps) => {
   const queryClient = useQueryClient();
 
-  const queriesToInvalidate = [
-    QUERY_KEYS.TRACKED_LOCATION,
-    QUERY_KEYS.TRACKED_LOCATIONS,
-    QUERY_KEYS.NEXT_NOTIFICATION,
-    QUERY_KEYS.PERMISSIONS,
-  ];
   if (!isUpdate) {
     return $api.useMutation("post", "/api/v1/track-location", {
-      onSuccess: (data, request) => {
-        // Default behavior
-        // Call user-provided handler if it exists
-        // Invalidate queries
-        queriesToInvalidate.forEach((queryKey) => {
-          queryClient.invalidateQueries({
-            queryKey,
-          });
-        });
+      ...mutationRetryConfig,
+      onSuccess: async (data, request) => {
+        // Invalidate relevant queries
+        await Promise.all([
+          invalidateTrackedLocationQueries(queryClient),
+          invalidateUserQueries(queryClient),
+        ]);
+
         if (onSuccess) {
           onSuccess(data.data, request?.body);
         }
       },
       onError: (r) => {
-        // Default behavior
-        // Call user-provided handler if it exists
         if (onError) {
           onError(r.errors);
         }
       },
     });
-  } else
-    return $api.useMutation("put", "/api/v1/track-location", {
-      onSuccess: (data, request) => {
-        // Default behavior
-        // Call user-provided handler if it exists
-        queriesToInvalidate.forEach((queryKey) => {
-          queryClient.invalidateQueries({
-            queryKey,
-          });
-        });
-        if (onSuccess) {
-          onSuccess(data.data, request?.body);
-        }
-      },
-      onError: (r) => {
-        // Default behavior
-        // Call user-provided handler if it exists
-        if (onError) {
-          onError(r.errors);
-        }
-      },
-    });
+  }
+
+  // Update mutation
+  return $api.useMutation("put", "/api/v1/track-location", {
+    ...mutationRetryConfig,
+    onSuccess: async (data, request) => {
+      // Invalidate relevant queries
+      await Promise.all([
+        invalidateTrackedLocationQueries(queryClient),
+        invalidateUserQueries(queryClient),
+      ]);
+
+      if (onSuccess) {
+        onSuccess(data.data, request?.body);
+      }
+    },
+    onError: (r) => {
+      if (onError) {
+        onError(r.errors);
+      }
+    },
+  });
 };

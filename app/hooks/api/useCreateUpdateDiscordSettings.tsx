@@ -1,13 +1,15 @@
 import type { paths } from "~/types/api";
 import type { MutationHookOptions } from "./mutationOptions";
 import { $api } from "~/utils/fetchData";
+import { mutationRetryConfig } from "~/utils/request-config";
+import type { APIError } from "~/utils/error-utils";
 
 export type CreateUpdateDiscordSettingsRequest =
   | paths["/api/v1/notification-settings/discord"]["post"]["requestBody"]["content"]["application/json"]
   | paths["/api/v1/notification-settings/discord"]["put"]["requestBody"]["content"]["application/json"];
 
 interface useCreateUpdateDiscordSettingsProps
-  extends MutationHookOptions<CreateUpdateDiscordSettingsRequest, number> {
+  extends MutationHookOptions<CreateUpdateDiscordSettingsRequest, number, APIError[]> {
   isUpdate?: boolean;
 }
 
@@ -18,18 +20,13 @@ export const useCreateUpdateDiscordSettings = ({
 }: useCreateUpdateDiscordSettingsProps) => {
   if (isUpdate) {
     return $api.useMutation("put", "/api/v1/notification-settings/discord", {
+      ...mutationRetryConfig,
       onSuccess: (data, request) => {
-        // Default behavior
-        // Call user-provided handler if it exists
         if (onSuccess) {
           onSuccess(data.data, request?.body);
         }
       },
       onError: (r) => {
-        // Default behavior
-        console.error("Error deleting tracker:", r.errors);
-
-        // Call user-provided handler if it exists
         if (onError) {
           onError(r.errors);
         }
@@ -37,18 +34,13 @@ export const useCreateUpdateDiscordSettings = ({
     });
   }
   return $api.useMutation("post", "/api/v1/notification-settings/discord", {
+    ...mutationRetryConfig,
     onSuccess: (data, request) => {
-      // Default behavior
-      // Call user-provided handler if it exists
       if (onSuccess) {
         onSuccess(data.data, request?.body);
       }
     },
     onError: (r) => {
-      // Default behavior
-      console.error("Error deleting tracker:", r.errors);
-
-      // Call user-provided handler if it exists
       if (onError) {
         onError(r.errors);
       }

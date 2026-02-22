@@ -34,7 +34,10 @@ function validateResponse<T>(response: {
   return response.data.data;
 }
 
-// Enhanced error handling middleware with token refresh on client side
+/**
+ * Enhanced error handling middleware with token refresh on client side
+ * Automatically attempts to refresh expired tokens (401 responses)
+ */
 const errorMiddleware: Middleware = {
   onResponse: async ({ response, request }) => {
     // If 401, attempt token refresh and retry
@@ -94,7 +97,8 @@ const fetchClient = createFetchClient<paths>({
   credentials: "include",
 });
 
-//fetchClient.use(errorMiddleware);
+// Enable error middleware for token refresh and enhanced error handling
+fetchClient.use(errorMiddleware);
 const $api = createClient(fetchClient);
 
 export { fetchClient, $api, validateResponse };

@@ -6,16 +6,18 @@ import { Stack } from "@mantine/core";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const requestUrl = new URL(request.url);
-  const token_hash = requestUrl.searchParams.get("token_hash");
+  const userId = requestUrl.searchParams.get("userId");
+  const code = requestUrl.searchParams.get("code");
   const email = requestUrl.searchParams.get("email");
-  const type = requestUrl.searchParams.get("type");
-  const next = requestUrl.searchParams.get("next") || "/";
+  const changedEmail = requestUrl.searchParams.get("changedEmail");
 
-  if (token_hash && type) {
+  if (userId && code) {
     const response = await fetchClient.POST("/api/auth/v1/verify-email", {
       credentials: "include",
       body: {
-        tokenHash: token_hash,
+        userId,
+        code,
+        changedEmail,
       },
     });
     if (response.response.status == 200) {
@@ -25,7 +27,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       if (setCookie) {
         headers.append("Set-Cookie", setCookie);
       }
-      return redirect(next, {
+      return redirect("/dashboard", {
         headers,
       });
     }

@@ -1,12 +1,14 @@
 import type { MutationHookOptions } from "./mutationOptions";
 import { $api } from "~/utils/fetchData";
+import { mutationRetryConfig } from "~/utils/request-config";
+import type { APIError } from "~/utils/error-utils";
 
 export interface CreateUpdateEmailSettingsRequest {
   id?: number;
   enabled: boolean;
 }
 interface useCreateUpdateEmailSettingsProps
-  extends MutationHookOptions<CreateUpdateEmailSettingsRequest, number> {
+  extends MutationHookOptions<CreateUpdateEmailSettingsRequest, number, APIError[]> {
   isUpdate?: boolean;
 }
 
@@ -19,18 +21,13 @@ export const useCreateUpdateEmailSettings = ({
     isUpdate ? "put" : "post",
     "/api/v1/notification-settings/email",
     {
+      ...mutationRetryConfig,
       onSuccess: (data, request) => {
-        // Default behavior
-        // Call user-provided handler if it exists
         if (onSuccess) {
           onSuccess(data.data, request?.body);
         }
       },
       onError: (r) => {
-        // Default behavior
-        console.error("Error deleting tracker:", r.errors);
-
-        // Call user-provided handler if it exists
         if (onError) {
           onError(r.errors);
         }

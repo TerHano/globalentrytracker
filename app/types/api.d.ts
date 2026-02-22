@@ -393,11 +393,7 @@ export interface paths {
                 path?: never;
                 cookie?: never;
             };
-            requestBody: {
-                content: {
-                    "application/json": unknown;
-                };
-            };
+            requestBody?: never;
             responses: {
                 /** @description OK */
                 200: {
@@ -465,6 +461,43 @@ export interface paths {
         get: operations["MapEntryAlertIdentityApi-/api/auth/v1/confirmEmail"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/v1/verify-email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ConfirmEmailRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;
@@ -1137,6 +1170,12 @@ export interface components {
             success: boolean;
             errors: components["schemas"]["Error"][];
             data: boolean;
+        };
+        ConfirmEmailRequest: {
+            userId?: string | null;
+            code?: string | null;
+            changedEmail?: string | null;
+            email?: string | null;
         };
         CreateCheckoutSessionRequest: {
             priceId: string;
@@ -1939,10 +1978,7 @@ export interface operations {
     };
     SignIn: {
         parameters: {
-            query?: {
-                useCookies?: boolean;
-                useSessionCookies?: boolean;
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;

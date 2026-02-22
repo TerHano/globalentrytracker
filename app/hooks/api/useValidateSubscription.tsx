@@ -4,14 +4,17 @@ import type { MutationHookOptions } from "./mutationOptions";
 import { noop } from "@mantine/core";
 import { meQuery } from "~/api/me-api";
 import { $api } from "~/utils/fetchData";
+import { mutationRetryConfig } from "~/utils/request-config";
+import type { APIError } from "~/utils/error-utils";
 
 export const useValidateSubscription = ({
   onSuccess = noop,
   onError = noop,
-}: MutationHookOptions<undefined, boolean>) => {
+}: MutationHookOptions<undefined, boolean, APIError[]>) => {
   const queryClient = useQueryClient();
 
   return $api.useMutation("patch", "/api/v1/validate-subscription", {
+    ...mutationRetryConfig,
     onSuccess: (data, request) => {
       queryClient.invalidateQueries({
         queryKey: [meQuery.name],
@@ -23,7 +26,6 @@ export const useValidateSubscription = ({
     },
 
     onError: (error) => {
-      // Default behavior
       onError(error.errors);
     },
   });
