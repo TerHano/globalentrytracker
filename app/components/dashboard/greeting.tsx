@@ -18,13 +18,23 @@ export const Greeting = () => {
   return (
     <Flex justify="space-between" align="center" gap="lg">
       <Skeleton w="fit-content" visible={isMeLoading}>
-        <Text fz="h3" fw="bold">
+        <Text
+          fz="h3"
+          fw="bold"
+          role="heading"
+          aria-level={1}
+          aria-live="polite"
+        >
           {isMeLoading ? "Loading..." : `Hey, ${meData?.firstName} 👋`}
         </Text>
       </Skeleton>
       {hasTrackers &&
         (isAddingTrackerDisabled ? (
-          <Button onClick={showUpgradeModal} size="sm">
+          <Button
+            onClick={showUpgradeModal}
+            size="sm"
+            aria-label="Add tracker (upgrade required)"
+          >
             Add Tracker
           </Button>
         ) : (
@@ -33,7 +43,12 @@ export const Greeting = () => {
             to={"/create-tracker"}
           >
             {({ isPending }) => (
-              <Button size="sm" loading={isPending}>
+              <Button
+                size="sm"
+                loading={isPending}
+                aria-label="Create new appointment tracker"
+                aria-busy={isPending}
+              >
                 Add Tracker
               </Button>
             )}

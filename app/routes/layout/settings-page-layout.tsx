@@ -37,12 +37,25 @@ export default function SettingsPageLayout({
 }: Route.ComponentProps) {
   const { tab } = loaderData;
   const [activeTab, setActiveTab] = useState<SettingsTab>(tab);
+  const [showLoadingSkeleton, setShowLoadingSkeleton] = useState(false);
   const navigate = useNavigate();
   const navigation = useNavigation();
 
   const isNavigating =
     navigation.state === "loading" &&
     navigation.location?.pathname?.startsWith("/settings");
+
+  // Only show skeleton if loading takes more than 300ms
+  useEffect(() => {
+    if (isNavigating) {
+      const timer = setTimeout(() => {
+        setShowLoadingSkeleton(true);
+      }, 300);
+      return () => clearTimeout(timer);
+    } else {
+      setShowLoadingSkeleton(false);
+    }
+  }, [isNavigating]);
 
   const handleTabChange = useCallback(
     (value: SettingsTab | null) => {
@@ -62,7 +75,7 @@ export default function SettingsPageLayout({
         preventScrollReset: true,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   const pageTabs: PageTab[] = useMemo(
@@ -79,7 +92,7 @@ export default function SettingsPageLayout({
         path: "notifications",
       },
     ],
-    []
+    [],
   );
 
   const tabs = useMemo(
@@ -88,7 +101,7 @@ export default function SettingsPageLayout({
         value: tab.name,
         label: <TabLabel icon={tab.icon} label={tab.name} />,
       })),
-    [pageTabs]
+    [pageTabs],
   );
 
   const segmentedControlField = useField({
@@ -110,7 +123,7 @@ export default function SettingsPageLayout({
         }}
       />
     ),
-    [segmentedControlField, tabs, handleTabChange]
+    [segmentedControlField, tabs, handleTabChange],
   );
 
   return (
@@ -134,7 +147,7 @@ export default function SettingsPageLayout({
         description="You can change your settings here"
       >
         {settingsTabs}
-        {isNavigating ? (
+        {showLoadingSkeleton ? (
           <Skeleton visible height={100} radius="sm" />
         ) : (
           <Outlet />
