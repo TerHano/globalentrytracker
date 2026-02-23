@@ -59,7 +59,11 @@ export const LocationTrackerCard = ({
           {actions && (
             <Menu>
               <Menu.Target>
-                <ActionIcon variant="subtle" size="md" aria-label="Tracker actions">
+                <ActionIcon
+                  variant="subtle"
+                  size="md"
+                  aria-label="Tracker actions"
+                >
                   <EllipsisVerticalIcon size={14} />
                 </ActionIcon>
               </Menu.Target>
@@ -98,14 +102,26 @@ export const LocationTrackerCard = ({
           )}
         </Flex>
         <Stack gap={4}>
-          <Text fw={700} fz={{ base: "md", sm: "lg" }} c={enabled ? undefined : "dimmed"}>
+          <Text
+            fw={700}
+            fz={{ base: "md", sm: "lg" }}
+            c={enabled ? undefined : "dimmed"}
+          >
             {location.name}
           </Text>
           <Text fz={{ base: "sm", sm: "md" }} c="dimmed">
             {location.city}, {location.state}
           </Text>
-          <Badge size="xs" radius="xs" variant="light" color="blue" w="fit-content">
-            {getNotificationTypeText(notificationType.type as NotificationTypeEnum)}
+          <Badge
+            size="xs"
+            radius="xs"
+            variant="light"
+            color="blue"
+            w="fit-content"
+          >
+            {getNotificationTypeText(
+              notificationType.type as NotificationTypeEnum,
+            )}
           </Badge>
           <Text size="sm">
             <Text span fw={600}>
