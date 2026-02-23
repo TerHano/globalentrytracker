@@ -7,24 +7,23 @@ export const HowItWorks = () => {
       layout="centered"
       sectionId="howItWorks"
       title="How It Works"
-      description="Three simple steps to secure your Global Entry appointment
-"
+      description="Set your preferences once, and we continuously check for earlier Global Entry appointments that match what you want."
     >
       <SimpleGrid mt="md" cols={{ xs: 1, sm: 3 }} spacing="lg">
         <HowToStep
           step={1}
           label="Create an Account"
-          description="Sign up and create your account."
+          description="Sign up in minutes to save your trackers and notification settings in one place."
         />
         <HowToStep
           step={2}
-          label="Set Preferences"
-          description="Select your preferred locations and times."
+          label="Add Your Tracker"
+          description="Choose your interview location, notification type, and the latest appointment date you are willing to accept."
         />
         <HowToStep
           step={3}
           label="Get Notified"
-          description="Receive alerts when slots become available."
+          description="We monitor appointment availability and send alerts when an earlier qualifying slot opens so you can book it fast."
         />
       </SimpleGrid>
     </Section>
