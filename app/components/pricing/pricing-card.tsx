@@ -136,8 +136,8 @@ export const PricingCard = ({
                   mutateCheckout({
                     body: {
                       priceId,
-                      successUrl: `${window.location.origin}/dashboard`,
-                      cancelUrl: `${window.location.origin}/pricing`,
+                      successUrl: `${window.location.origin}/subscribed`,
+                      cancelUrl: `${window.location.origin}/dashboard`,
                     },
                   });
                 }}

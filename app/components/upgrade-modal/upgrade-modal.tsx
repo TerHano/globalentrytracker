@@ -9,16 +9,11 @@ import {
 import { Star } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { useValidateSubscription } from "~/hooks/api/useValidateSubscription";
 import { PricingGrid } from "../pricing/pricing-grid";
 import { Confetti, type ConfettiHandle } from "../ui/confetti";
 
 export interface UpgradeModalProps {
-  stack: ReturnType<
-    typeof useModalsStack<
-      "upgrade-benefits" | "validation-successful" | "validation-failed"
-    >
-  >;
+  stack: ReturnType<typeof useModalsStack<"upgrade-benefits">>;
   onClose?: () => void;
   open: boolean;
 }
@@ -41,20 +36,6 @@ export const UpgradeModal = ({
     stack.closeAll();
     onClose();
   }, [onClose, stack]);
-  const {
-    mutate: mutateValidateSubscription,
-    isPending: isValidateSubscriptionLoading,
-  } = useValidateSubscription({
-    onSuccess: (isUserSubscribed) => {
-      // handleClose();
-      if (isUserSubscribed) {
-        stack.open("validation-successful");
-      }
-      if (!isUserSubscribed) {
-        stack.open("validation-failed");
-      }
-    },
-  });
 
   useEffect(() => {
     if (open) {
@@ -102,73 +83,6 @@ export const UpgradeModal = ({
             ))}
           </SimpleGrid> */}
 
-          <Button
-            variant="subtle"
-            c="yellow"
-            loading={isValidateSubscriptionLoading}
-            onClick={() => {
-              mutateValidateSubscription({});
-            }}
-          >
-            {t("Validate Subscription")}
-          </Button>
-          <Button variant="subtle" color="dimmed" onClick={handleClose}>
-            {t("Close")}
-          </Button>
-        </Stack>
-      </Modal>
-      <Modal
-        size="lg"
-        withCloseButton={false}
-        onEnterTransitionEnd={() => {
-          shootConfetti();
-        }}
-        {...stack.register("validation-successful")}
-        onClose={handleClose}
-      >
-        <Confetti ref={confettiRef} />
-        <Stack
-          style={{ width: "100%" }}
-          align="center"
-          justify="center"
-          gap="xs"
-        >
-          <Star size={24} />
-
-          <Text fw="bold" fz="h4">
-            {t("You're Now A Pro!")}
-          </Text>
-          <Text fz="sm" c="dimmed">
-            {t("Enjoy all the benefits of Tracker Pro.")}
-          </Text>
-          <Button variant="subtle" color="dimmed" onClick={handleClose}>
-            {t("Close")}
-          </Button>
-        </Stack>
-      </Modal>
-      <Modal
-        withCloseButton={false}
-        onEnterTransitionEnd={() => {
-          shootConfetti();
-        }}
-        {...stack.register("validation-failed")}
-        onClose={handleClose}
-      >
-        <Confetti ref={confettiRef} />
-        <Stack
-          style={{ width: "100%" }}
-          align="center"
-          justify="center"
-          gap="xs"
-        >
-          <Star size={24} />
-
-          <Text fw="bold" fz="h4">
-            {t("Oops! You're Now A Loser!")}
-          </Text>
-          <Text fz="sm" c="dimmed">
-            {t("Enjoy none of the benefits of Tracker Pro.")}
-          </Text>
           <Button variant="subtle" color="dimmed" onClick={handleClose}>
             {t("Close")}
           </Button>
