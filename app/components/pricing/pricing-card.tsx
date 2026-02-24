@@ -148,11 +148,10 @@ export const PricingCard = ({
           ) : null}
           <Stack gap={3}>
             {features.map((feature, index) => (
-              <Group gap="xs" key={index}>
-                <ThemeIcon color="teal" size={15} radius="xl">
+              <Group gap="xs" key={index} wrap="nowrap" align="center">
+                <ThemeIcon color="teal" size={15} radius="xl" style={{ flexShrink: 0 }}>
                   <CircleCheck size={12} />
                 </ThemeIcon>
-                {/* <CircleCheck fill="teal" size={18} /> */}
                 <Text fw={600} fz="sm">
                   {feature}
                 </Text>

@@ -4,7 +4,8 @@ import {
   Skeleton,
   Text,
   Image,
-  SimpleGrid,
+  Flex,
+  Box,
 } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { planQuery } from "~/api/plans-api";
@@ -50,7 +51,7 @@ export const PricingGrid = ({
   }
 
   return (
-    <Stack gap="sm">
+    <Stack w="100%" gap="sm">
       <Stack gap={0} align="center" justify="center">
         <SegmentedControl
           value={selectedFrequency}
@@ -68,11 +69,11 @@ export const PricingGrid = ({
           ]}
         />
       </Stack>
-      <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="lg">
+      <Flex w="100%" wrap="wrap" justify="center" gap="lg">
         {isPlansLoading ? (
           <>
-            <SkeletonPriceCard />
-            <SkeletonPriceCard />
+            <Box w={{ base: "100%", sm: "45%", md: "30%" }}><SkeletonPriceCard /></Box>
+            <Box w={{ base: "100%", sm: "45%", md: "30%" }}><SkeletonPriceCard /></Box>
           </>
         ) : (
           plans
@@ -83,19 +84,20 @@ export const PricingGrid = ({
               return p.frequency.toString() == selectedFrequency;
             })
             .map((plan) => (
-              <PricingCard
-                key={plan.id}
-                priceId={plan.priceId}
-                title={plan.name}
-                price={plan.price}
-                frequency={plan.frequency}
-                description={plan.description}
-                features={plan.features}
-                showButton={allowPurchase}
-              />
+              <Box key={plan.id} w={{ base: "100%", sm: "45%", md: "30%" }}>
+                <PricingCard
+                  priceId={plan.priceId}
+                  title={plan.name}
+                  price={plan.price}
+                  frequency={plan.frequency}
+                  description={plan.description}
+                  features={plan.features}
+                  showButton={allowPurchase}
+                />
+              </Box>
             ))
         )}
-      </SimpleGrid>
+      </Flex>
     </Stack>
   );
 };

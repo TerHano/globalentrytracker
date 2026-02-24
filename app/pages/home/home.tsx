@@ -5,6 +5,7 @@ import {
   Group,
   Image,
   Paper,
+  Skeleton,
   Stack,
   Text,
 } from "@mantine/core";
@@ -19,7 +20,7 @@ import { useUserAuthenticated } from "~/hooks/useUserAuthenticated";
 
 export const HomePage = () => {
   const { scrollToId } = useIdScroll();
-  const { isUserAuthenticated } = useUserAuthenticated();
+  const { isUserAuthenticated, isLoading } = useUserAuthenticated();
   return (
     <Container size="xl">
       <Stack mt="lg" gap="xl">
@@ -33,7 +34,12 @@ export const HomePage = () => {
                 Get instant notifications when Global Entry interview slots
                 become available at your preferred locations.
               </Text>
-              {isUserAuthenticated ? (
+              {isLoading ? (
+                <Group mt="md" gap="xs">
+                  <Skeleton w={130} h={30} radius="sm" />
+                  <Skeleton w={110} h={30} radius="sm" />
+                </Group>
+              ) : isUserAuthenticated ? (
                 <Group mt="md" gap="xs">
                   <NavLink to="/dashboard">
                     {({ isPending }) => (
