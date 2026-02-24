@@ -72,8 +72,12 @@ export const PricingGrid = ({
       <Flex w="100%" wrap="wrap" justify="center" gap="lg">
         {isPlansLoading ? (
           <>
-            <Box w={{ base: "100%", sm: "45%", md: "30%" }}><SkeletonPriceCard /></Box>
-            <Box w={{ base: "100%", sm: "45%", md: "30%" }}><SkeletonPriceCard /></Box>
+            <Box w={{ base: "100%", sm: "45%", md: "30%" }}>
+              <SkeletonPriceCard />
+            </Box>
+            <Box w={{ base: "100%", sm: "45%", md: "30%" }}>
+              <SkeletonPriceCard />
+            </Box>
           </>
         ) : (
           plans
