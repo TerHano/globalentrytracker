@@ -128,6 +128,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/sync-subscription-role/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sync subscription role for a user
+         * @description Reconciles a user's subscription role with Stripe.
+         */
+        post: operations["SyncSubscriptionRoleForUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sync-subscription-roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sync subscription roles for all users
+         * @description Reconciles all users' subscription roles with Stripe.
+         */
+        post: operations["SyncAllSubscriptionRoles"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/auth/v1/authenticated": {
         parameters: {
             query?: never;
@@ -219,7 +259,7 @@ export interface paths {
         put?: never;
         /**
          * Register a new user
-         * @description Creates a new user account with the provided registration details.
+         * @description Creates a new user account with the provided registration details. A confirmation email has been sent. Please check your inbox and confirm your email before logging in.
          */
         post: operations["SignUp"];
         delete?: never;
@@ -1785,6 +1825,84 @@ export interface operations {
                 "application/json": components["schemas"]["GrantSubscriptionRequest"];
             };
         };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    SyncSubscriptionRoleForUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ObjectApiResponse"];
+                };
+            };
+        };
+    };
+    SyncAllSubscriptionRoles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {

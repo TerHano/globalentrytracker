@@ -7,14 +7,6 @@ import { UserModalButton } from "./user-modal-button";
 
 export const UsersTable = () => {
   const allUsers = useQuery(allUsersQuery());
-  // const deleteUserMutation = useDeleteUser({
-  //   onSuccess: (data, userId) => {
-  //     console.log("User deleted successfully:", data, userId);
-  //   },
-  //   onError: (errors) => {
-  //     console.error("Error deleting user:", errors);
-  //   },
-  // });
 
   if (allUsers.isLoading) {
     return (
@@ -31,7 +23,14 @@ export const UsersTable = () => {
       minHeight={150}
       records={allUsers.data ?? []}
       columns={[
-        { title: "ID", width: 100, accessor: "id" },
+        {
+          title: "ID",
+          width: 100,
+          accessor: "id",
+          render: (user) => (
+            <span title={user.id}>{user.id?.slice(0, 8)}...</span>
+          ),
+        },
 
         { title: "First Name", width: 150, accessor: "firstName" },
         { title: "Last Name", width: 150, accessor: "lastName" },
@@ -40,6 +39,7 @@ export const UsersTable = () => {
           accessor: "user.role.code",
           title: "Role",
           width: 150,
+          textAlign: "center",
           render: (user) => <UserRoleBadge roleCode={user.role?.code} />,
         },
         {
@@ -52,19 +52,8 @@ export const UsersTable = () => {
       ]}
       borderRadius="xs"
       withTableBorder
-      //rowBackgroundColor={(record) => "red"}
       pinLastColumn
       striped
-      // onRowClick={(row) => {
-      //   const user = row.record;
-      //   modals.open({
-      //     centered: true,
-      //     size: "xl",
-      //     withCloseButton: false,
-      //     children: <UserModalBody user={user} />,
-      //   });
-      //   // Handle row click, e.g., navigate to user details page
-      // }}
     />
   );
 };
