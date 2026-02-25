@@ -16,9 +16,7 @@ export const AdminConsolePage = () => (
         <UsersTable />
       </Page.Subsection>
 
-      {/* </Paper> */}
-      {/* <Paper p="md" shadow="xs" withBorder> */}
-      <Page.Subsection
+      {/* <Page.Subsection
         action={
           <AddEditPricingPlanButton
             buttonProps={{
@@ -33,7 +31,7 @@ export const AdminConsolePage = () => (
         description="Manage your pricing plans here."
       >
         <PricingList />
-      </Page.Subsection>
+      </Page.Subsection> */}
       {/* </Paper> */}
     </Stack>
   </Page>
