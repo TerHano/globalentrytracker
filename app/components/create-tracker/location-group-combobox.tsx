@@ -99,8 +99,9 @@ export const LocationGroupCombobox = ({
     null;
 
   // Build option elements with grouping
-  const options = Object.entries(filteredGroups).sort(([a], [b]) => a.localeCompare(b)).map(
-    ([state, stateLocations]) => (
+  const options = Object.entries(filteredGroups)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([state, stateLocations]) => (
       <Combobox.Group label={state} key={state}>
         {stateLocations.map((location) => (
           <Combobox.Option
@@ -112,8 +113,7 @@ export const LocationGroupCombobox = ({
           </Combobox.Option>
         ))}
       </Combobox.Group>
-    ),
-  );
+    ));
 
   return (
     <Combobox
