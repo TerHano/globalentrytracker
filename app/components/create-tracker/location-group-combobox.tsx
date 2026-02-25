@@ -99,7 +99,7 @@ export const LocationGroupCombobox = ({
     null;
 
   // Build option elements with grouping
-  const options = Object.entries(filteredGroups).map(
+  const options = Object.entries(filteredGroups).sort(([a], [b]) => a.localeCompare(b)).map(
     ([state, stateLocations]) => (
       <Combobox.Group label={state} key={state}>
         {stateLocations.map((location) => (
@@ -160,12 +160,22 @@ export const LocationGroupCombobox = ({
         </InputBase>
       </Combobox.Target>
 
-      <Combobox.Dropdown style={{ maxHeight: 300, overflowY: "auto" }}>
+      <Combobox.Dropdown
+        style={{ maxHeight: 300, overflowY: "auto" }}
+        onMouseDown={(e) => {
+          // Prevent blur of the trigger button (keeps dropdown open on iOS touch),
+          // but allow the search input itself to receive focus normally on desktop.
+          if ((e.target as HTMLElement).tagName !== "INPUT") {
+            e.preventDefault();
+          }
+        }}
+      >
         <Combobox.Search
           value={searchValue}
           onChange={(e) => setSearchValue(e.currentTarget.value)}
           placeholder={placeholder}
           leftSection={<Search size={14} />}
+          styles={{ input: { fontSize: "16px" } }}
         />
         <Combobox.Options>
           {options.length > 0 ? (
