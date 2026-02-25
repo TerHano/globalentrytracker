@@ -20,7 +20,16 @@ import { LabelValue } from "~/components/ui/label-value";
 import { UserRoleBadge } from "./user-role-badge";
 import { useState } from "react";
 import { planQuery } from "~/api/plans-api";
-import { ArrowLeft, Check, Copy, Gift, RefreshCw, Trash2, UserCheck, View } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  Copy,
+  Gift,
+  RefreshCw,
+  Trash2,
+  UserCheck,
+  View,
+} from "lucide-react";
 import type { paths } from "~/types/api";
 import { PlanFrequencyBadge } from "./plan-frequency-badge";
 import { useGrantSubscription } from "~/hooks/api/admin/useGrantSubscription";
@@ -57,6 +66,7 @@ export const UserModalButton = ({ user }: { user: User }) => {
         message: `Subscription granted successfully!`,
         status: "success",
       });
+      modals.close("grant-subscription-modal");
     },
     onError: (errors) => {
       showErrorCodeNotification(errors);
@@ -84,12 +94,19 @@ export const UserModalButton = ({ user }: { user: User }) => {
 
   const modals = useModalsStack(["user-modal", "grant-subscription-modal"]);
 
-  const initials = `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase();
+  const initials = `${user.firstName?.[0] ?? ""}${
+    user.lastName?.[0] ?? ""
+  }`.toUpperCase();
 
   return (
     <>
       <Modal.Stack>
-        <Modal size="xl" title="User Details" withCloseButton {...modals.register("user-modal")}>
+        <Modal
+          size="xl"
+          title="User Details"
+          withCloseButton
+          {...modals.register("user-modal")}
+        >
           <Stack>
             {/* Header */}
             <Stack gap="xs" align="center" justify="center">
@@ -97,7 +114,11 @@ export const UserModalButton = ({ user }: { user: User }) => {
                 {initials}
               </Avatar>
               <UserRoleBadge roleCode={user.role?.code} />
-              <Text lh={1} fz="2rem" fw={600}>{`${user.firstName} ${user.lastName}`}</Text>
+              <Text
+                lh={1}
+                fz="2rem"
+                fw={600}
+              >{`${user.firstName} ${user.lastName}`}</Text>
               <Text lh={1} fz="1rem" c="dimmed">
                 {user.email}
               </Text>
@@ -124,7 +145,11 @@ export const UserModalButton = ({ user }: { user: User }) => {
                               color={copied ? "teal" : "gray"}
                               onClick={copy}
                             >
-                              {copied ? <Check size={12} /> : <Copy size={12} />}
+                              {copied ? (
+                                <Check size={12} />
+                              ) : (
+                                <Copy size={12} />
+                              )}
                             </ActionIcon>
                           </Tooltip>
                         )}
@@ -163,7 +188,11 @@ export const UserModalButton = ({ user }: { user: User }) => {
                               color={copied ? "teal" : "gray"}
                               onClick={copy}
                             >
-                              {copied ? <Check size={12} /> : <Copy size={12} />}
+                              {copied ? (
+                                <Check size={12} />
+                              ) : (
+                                <Copy size={12} />
+                              )}
                             </ActionIcon>
                           </Tooltip>
                         )}
@@ -188,7 +217,11 @@ export const UserModalButton = ({ user }: { user: User }) => {
                               color={copied ? "teal" : "gray"}
                               onClick={copy}
                             >
-                              {copied ? <Check size={12} /> : <Copy size={12} />}
+                              {copied ? (
+                                <Check size={12} />
+                              ) : (
+                                <Copy size={12} />
+                              )}
                             </ActionIcon>
                           </Tooltip>
                         )}
@@ -231,7 +264,11 @@ export const UserModalButton = ({ user }: { user: User }) => {
               <Title order={6} c="red" tt="uppercase" fz="0.7rem" fw={700}>
                 Danger Zone
               </Title>
-              <Button variant="light" color="red" leftSection={<Trash2 size={14} />}>
+              <Button
+                variant="light"
+                color="red"
+                leftSection={<Trash2 size={14} />}
+              >
                 Delete User
               </Button>
             </Stack>
