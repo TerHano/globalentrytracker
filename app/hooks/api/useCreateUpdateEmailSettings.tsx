@@ -6,6 +6,7 @@ import type { APIError } from "~/utils/error-utils";
 export interface CreateUpdateEmailSettingsRequest {
   id?: number;
   enabled: boolean;
+  maxNotificationsPerDay?: number | null;
 }
 interface useCreateUpdateEmailSettingsProps
   extends MutationHookOptions<

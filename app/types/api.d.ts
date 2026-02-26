@@ -1225,9 +1225,13 @@ export interface components {
         CreateDiscordSettingsRequest: {
             enabled: boolean;
             webhookUrl: string;
+            /** Format: int32 */
+            maxNotificationsPerDay?: number | null;
         };
         CreateEmailNotificationSettingsRequest: {
             enabled: boolean;
+            /** Format: int32 */
+            maxNotificationsPerDay?: number | null;
         };
         CreatePricingPlanRequest: {
             name: string;
@@ -1262,6 +1266,8 @@ export interface components {
             id?: number;
             enabled: boolean;
             webhookUrl: string;
+            /** Format: int32 */
+            maxNotificationsPerDay?: number | null;
         };
         DiscordNotificationSettingsDtoApiResponse: {
             success: boolean;
@@ -1273,6 +1279,8 @@ export interface components {
             id: number;
             enabled: boolean;
             email: string;
+            /** Format: int32 */
+            maxNotificationsPerDay?: number | null;
         };
         EmailNotificationSettingsDtoApiResponse: {
             success: boolean;
@@ -1477,11 +1485,15 @@ export interface components {
             id: number;
             enabled: boolean;
             webhookUrl: string;
+            /** Format: int32 */
+            maxNotificationsPerDay?: number | null;
         };
         UpdateEmailNotificationSettingsRequest: {
             /** Format: int32 */
             id: number;
             enabled: boolean;
+            /** Format: int32 */
+            maxNotificationsPerDay?: number | null;
         };
         UpdatePricingPlanRequest: {
             /** Format: int32 */

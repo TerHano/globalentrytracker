@@ -3,6 +3,7 @@ import {
   Button,
   Divider,
   Group,
+  NumberInput,
   Stack,
   Switch,
   Text,
@@ -28,6 +29,8 @@ interface EmailSettingsProps {
 
 interface EmailSettingsForm {
   enabled: boolean;
+  limitNotifications: boolean;
+  maxNotificationsPerDay: number | undefined;
 }
 
 export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
@@ -85,11 +88,27 @@ export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
 
   const schema = z.object({
     enabled: z.boolean(),
+    limitNotifications: z.boolean(),
+    maxNotificationsPerDay: z
+      .number()
+      .int()
+      .min(1, "Must be at least 1")
+      .optional(),
+  }).superRefine((val, ctx) => {
+    if (val.limitNotifications && !val.maxNotificationsPerDay) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Please enter a limit",
+        path: ["maxNotificationsPerDay"],
+      });
+    }
   });
 
   const form = useForm<EmailSettingsForm>({
     initialValues: {
       enabled: false,
+      limitNotifications: false,
+      maxNotificationsPerDay: undefined,
     },
 
     validate: zodResolver(schema),
@@ -104,6 +123,9 @@ export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
       const request: CreateUpdateEmailSettingsRequest = {
         id: settings?.id,
         enabled: values.enabled,
+        maxNotificationsPerDay: values.limitNotifications
+          ? (values.maxNotificationsPerDay ?? null)
+          : null,
       };
       await emailSettingsMutate.mutateAsync({ body: request });
     },
@@ -114,6 +136,8 @@ export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
     if (!form.initialized) {
       form.initialize({
         enabled: settings ? settings.enabled : false,
+        limitNotifications: !!settings?.maxNotificationsPerDay,
+        maxNotificationsPerDay: settings?.maxNotificationsPerDay ?? undefined,
       });
     }
   }, [form, settings]);
@@ -161,6 +185,38 @@ export const EmailSettingsCard = ({ settings }: EmailSettingsProps) => {
             <LabelValue label="Email">
               <>{settings?.email}</>
             </LabelValue>
+            <Switch
+              size="sm"
+              label={
+                <Text size="sm" fw={500}>
+                  Limit daily notifications
+                </Text>
+              }
+              color="green"
+              key={form.key("limitNotifications")}
+              {...form.getInputProps("limitNotifications")}
+              description={
+                <Text component="span" size="xs">
+                  Cap the number of notifications this channel sends per day
+                </Text>
+              }
+            />
+            {form.values.limitNotifications && (
+              <NumberInput
+                label="Max notifications per day"
+                description={
+                  <Text component="span" size="xs">
+                    You will stop receiving email notifications once this limit
+                    is reached. The count resets on a rolling 24-hour window.
+                  </Text>
+                }
+                min={1}
+                allowDecimal={false}
+                styles={{ wrapper: { width: 160 } }}
+                key={form.key("maxNotificationsPerDay")}
+                {...form.getInputProps("maxNotificationsPerDay")}
+              />
+            )}
             <Divider />
             <Group justify="end" gap="md" wrap="wrap">
               <Button
