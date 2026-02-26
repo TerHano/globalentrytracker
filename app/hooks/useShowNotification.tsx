@@ -29,7 +29,7 @@ export const useShowNotification = () => {
         withCloseButton: true,
       });
     },
-    []
+    [],
   );
 
   const errorNotificationMap = useMemo<
@@ -105,7 +105,7 @@ export const useShowNotification = () => {
         }
       }
     },
-    [errorNotificationMap]
+    [errorNotificationMap],
   );
 
   return { showNotification, showErrorCodeNotification };
