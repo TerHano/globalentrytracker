@@ -26,10 +26,10 @@ export const useShowNotification = () => {
         message,
         color: getColorForStatus(status),
         icon,
-        withCloseButton: false,
+        withCloseButton: true,
       });
     },
-    []
+    [],
   );
 
   const errorNotificationMap = useMemo<
@@ -100,12 +100,12 @@ export const useShowNotification = () => {
             message: notificationProps.message,
             color: getColorForStatus("error"),
             icon: notificationProps.icon,
-            withCloseButton: false,
+            withCloseButton: true,
           });
         }
       }
     },
-    [errorNotificationMap]
+    [errorNotificationMap],
   );
 
   return { showNotification, showErrorCodeNotification };
