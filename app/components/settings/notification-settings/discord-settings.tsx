@@ -2,6 +2,7 @@ import {
   Button,
   Divider,
   Group,
+  NumberInput,
   Stack,
   Switch,
   Text,
@@ -33,6 +34,8 @@ interface DiscordSettingsProps {
 interface DiscordSettingsForm {
   webhookUrl: string;
   enabled: boolean;
+  limitNotifications: boolean;
+  maxNotificationsPerDay: number | undefined;
 }
 
 export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
@@ -55,7 +58,7 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
       showNotification({
         title: t("Failed to save Discord Settings"),
         message: t(
-          "There was an error saving your settings. Please try again."
+          "There was an error saving your settings. Please try again.",
         ),
         status: "error",
         icon: <DiscordIcon size={16} />,
@@ -84,21 +87,39 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
     },
   });
 
-  const schema = z.object({
-    enabled: z.boolean(),
-    webhookUrl: z
-      .string()
-      .nonempty("Webhook URL is required")
-      .regex(
-        /https:\/\/discord\.com\/api\/webhooks\/\d+\/[a-zA-Z0-9_-]+/,
-        "Invalid Discord Webhook URL"
-      ),
-  });
+  const schema = z
+    .object({
+      enabled: z.boolean(),
+      limitNotifications: z.boolean(),
+      maxNotificationsPerDay: z
+        .number()
+        .int()
+        .min(1, "Must be at least 1")
+        .optional(),
+      webhookUrl: z
+        .string()
+        .nonempty("Webhook URL is required")
+        .regex(
+          /https:\/\/discord\.com\/api\/webhooks\/\d+\/[a-zA-Z0-9_-]+/,
+          "Invalid Discord Webhook URL",
+        ),
+    })
+    .superRefine((val, ctx) => {
+      if (val.limitNotifications && !val.maxNotificationsPerDay) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Please enter a limit",
+          path: ["maxNotificationsPerDay"],
+        });
+      }
+    });
 
   const form = useForm<DiscordSettingsForm>({
     initialValues: {
       webhookUrl: "",
       enabled: false,
+      limitNotifications: false,
+      maxNotificationsPerDay: undefined,
     },
     onValuesChange: (values) => {
       setIsEnabled(values.enabled);
@@ -120,10 +141,13 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
         id: settings?.id ?? 0,
         webhookUrl: values.webhookUrl,
         enabled: values.enabled,
+        maxNotificationsPerDay: values.limitNotifications
+          ? values.maxNotificationsPerDay ?? null
+          : null,
       };
       await discordSettingsMutate.mutateAsync({ body: request });
     },
-    [discordSettingsMutate, form, settings?.id]
+    [discordSettingsMutate, form, settings?.id],
   );
 
   useEffect(() => {
@@ -131,6 +155,8 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
       form.initialize({
         webhookUrl: settings?.webhookUrl ?? "",
         enabled: settings ? settings.enabled : false,
+        limitNotifications: !!settings?.maxNotificationsPerDay,
+        maxNotificationsPerDay: settings?.maxNotificationsPerDay ?? undefined,
       });
     }
   }, [form, settings]);
@@ -183,6 +209,41 @@ export const DiscordSettingsCard = ({ settings }: DiscordSettingsProps) => {
             key={form.key("webhookUrl")}
             {...form.getInputProps("webhookUrl")}
           />
+          <Switch
+            size="sm"
+            label={
+              <Text size="sm" fw={500}>
+                Limit daily notifications
+              </Text>
+            }
+            defaultChecked={
+              settings ? !!settings.maxNotificationsPerDay : false
+            }
+            color="green"
+            key={form.key("limitNotifications")}
+            {...form.getInputProps("limitNotifications")}
+            description={
+              <Text component="span" size="xs">
+                Cap the number of notifications this channel sends per day
+              </Text>
+            }
+          />
+          {form.values.limitNotifications && (
+            <NumberInput
+              label="Max notifications per day"
+              description={
+                <Text component="span" size="xs">
+                  You will stop receiving Discord notifications once this limit
+                  is reached. The count resets on a rolling 24-hour window.
+                </Text>
+              }
+              min={1}
+              allowDecimal={false}
+              styles={{ wrapper: { width: 160 } }}
+              key={form.key("maxNotificationsPerDay")}
+              {...form.getInputProps("maxNotificationsPerDay")}
+            />
+          )}
           <Divider />
           <Group justify="end" gap="md" wrap="wrap">
             <Button
