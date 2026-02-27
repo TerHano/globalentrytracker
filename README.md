@@ -1,24 +1,59 @@
-# Welcome to React Router!
+# Global Entry Tracker
 
-A modern, production-ready template for building full-stack React applications using React Router.
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+A full-stack web application that monitors U.S. Customs and Border Protection (CBP) Global Entry enrollment center appointment availability and sends real-time notifications when slots open up.
 
 ## Features
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- **Appointment Tracking** — Monitor one or more Global Entry enrollment center locations simultaneously
+- **Real-time Notifications** — Get alerted the moment an appointment slot becomes available
+  - Email notifications (via AWS SES / SMTP)
+  - Discord notifications (via webhooks)
+- **Subscription Plans** — Tiered plans powered by Stripe, unlocking more tracked locations and notification channels
+- **Dashboard** — At-a-glance view of all active trackers and their status
+- **Settings** — Manage notification preferences, profile, and subscription from a single place
+- **Admin Panel** — Internal dashboard for managing users and system state
+- **Server-side Rendering** — Fast initial page loads with React Router v7 SSR
+
+## Tech Stack
+
+### Frontend
+
+| Technology                                             | Purpose                                            |
+| ------------------------------------------------------ | -------------------------------------------------- |
+| [React Router v7](https://reactrouter.com/)            | Full-stack framework with SSR                      |
+| [TypeScript](https://www.typescriptlang.org/)          | Type safety                                        |
+| [Mantine](https://mantine.dev/)                        | UI component library                               |
+| [TailwindCSS](https://tailwindcss.com/)                | Utility-first styling                              |
+| [TanStack Query](https://tanstack.com/query)           | Server state management                            |
+| [Zod](https://zod.dev/)                                | Schema validation                                  |
+| [i18next](https://www.i18next.com/)                    | Internationalization                               |
+| [openapi-fetch](https://openapi-ts.dev/openapi-fetch/) | Type-safe API client (generated from OpenAPI spec) |
+| [Stripe.js](https://stripe.com/docs/js)                | Subscription payments                              |
+
+### Backend ([GlobalEntryTrackerAPI](https://github.com/TerHano/GlobalEntryTrackerAPI))
+
+| Technology            | Purpose                                                 |
+| --------------------- | ------------------------------------------------------- |
+| ASP.NET Core (.NET)   | REST API                                                |
+| PostgreSQL + EF Core  | Database & migrations                                   |
+| ASP.NET Core Identity | Authentication (cookie-based)                           |
+| Quartz.NET            | Scheduled jobs (appointment polling, subscription sync) |
+| Stripe                | Subscription billing & webhooks                         |
+| AWS SES / SMTP        | Email notifications                                     |
+| Discord Webhooks      | Discord notifications                                   |
+| Serilog               | Structured logging                                      |
+| Swagger / OpenAPI     | API documentation & type generation                     |
+
+---
 
 ## Getting Started
 
-### Installation
+### Prerequisites
 
-Install the dependencies:
+- Node.js 20+
+- The [GlobalEntryTrackerAPI](https://github.com/TerHano/GlobalEntryTrackerAPI) backend running locally
+
+### Installation
 
 ```bash
 npm install
@@ -32,56 +67,94 @@ Start the development server with HMR:
 npm run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
+The app will be available at `http://localhost:5173`.
+
+### Generating API Types
+
+The frontend uses types generated from the backend's OpenAPI spec. With the API running locally, regenerate them with:
+
+```bash
+npm run generate-types
+```
+
+This outputs the types to `app/types/api.d.ts`.
+
+---
 
 ## Building for Production
-
-Create a production build:
 
 ```bash
 npm run build
 ```
 
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
+To run the production build locally:
 
 ```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
+npm start
 ```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
 
 ---
 
-Built with ❤️ using React Router.
+## Code Quality
+
+```bash
+# Type check
+npm run typecheck
+
+# Lint
+npm run lint
+
+# Lint and auto-fix
+npm run scan
+```
+
+---
+
+## Deployment
+
+### Docker
+
+```bash
+docker build -t globalentrytracker .
+docker run -p 3000:3000 globalentrytracker
+```
+
+The production build output structure:
+
+```
+build/
+├── client/    # Static assets (served by CDN or the Node server)
+└── server/    # SSR server entry point
+```
+
+The app can be deployed to any Docker-compatible platform (AWS ECS, Google Cloud Run, Fly.io, Railway, etc.).
+
+---
+
+## Project Structure
+
+```
+app/
+├── api/              # API fetch functions & React Query keys
+├── assets/           # Static images and icons
+├── components/       # Shared and feature UI components
+│   ├── appshell/     # App shell, navigation, header
+│   ├── auth/         # Login, signup, reset password forms
+│   ├── create-tracker/
+│   ├── dashboard/
+│   ├── settings/     # Profile, notification & subscription settings
+│   ├── pricing/
+│   └── ui/           # Generic reusable components
+├── hooks/            # Custom React hooks (API hooks, UI hooks)
+├── i18n/             # Translation files
+├── models/           # Domain model types
+├── pages/            # Page-level components
+├── routes/           # React Router route modules
+└── utils/            # Utility functions
+```
+
+---
+
+## Related Repositories
+
+- **API**: [GlobalEntryTrackerAPI](https://github.com/TerHano/GlobalEntryTrackerAPI) — ASP.NET Core backend

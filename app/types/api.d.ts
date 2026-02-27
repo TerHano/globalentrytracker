@@ -4,3113 +4,3119 @@
  */
 
 export interface paths {
-    "/api/v1/admin/users": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all users
-         * @description Retrieves a list of all users in the system. Requires Admin authorization.
-         */
-        get: operations["GetAllUsers"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  "/api/v1/admin/users": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/v1/admin/roles": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all roles
-         * @description Retrieves a list of all roles in the system. Requires Admin authorization.
-         */
-        get: operations["GetAllRoles"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get all users
+     * @description Retrieves a list of all users in the system. Requires Admin authorization.
+     */
+    get: operations["GetAllUsers"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/admin/roles": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/v1/admin/user/{userId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Delete a user by userId
-         * @description Deletes a user from the system by their userId. Requires Admin authorization.
-         */
-        delete: operations["DeleteUserById"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get all roles
+     * @description Retrieves a list of all roles in the system. Requires Admin authorization.
+     */
+    get: operations["GetAllRoles"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/admin/user/{userId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/v1/admin/pricing": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /**
-         * Update pricing to the system
-         * @description Updates pricing information to the system. Requires Admin authorization.
-         */
-        put: operations["UpdatePricing"];
-        /**
-         * Add pricing to the system
-         * @description Adds pricing information to the system. Requires Admin authorization.
-         */
-        post: operations["AddPricing"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * Delete a user by userId
+     * @description Deletes a user from the system by their userId. Requires Admin authorization.
+     */
+    delete: operations["DeleteUserById"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/admin/pricing": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/v1/admin/pricing/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Deletes pricing from the system
-         * @description Deletes pricing information from the system by its ID. Requires Admin authorization.
-         */
-        delete: operations["DeletePricing"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    /**
+     * Update pricing to the system
+     * @description Updates pricing information to the system. Requires Admin authorization.
+     */
+    put: operations["UpdatePricing"];
+    /**
+     * Add pricing to the system
+     * @description Adds pricing information to the system. Requires Admin authorization.
+     */
+    post: operations["AddPricing"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/admin/pricing/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/v1/admin/grant-subscription": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Grant a subscription to a user
-         * @description Grants a subscription to a user by their userId and planId. Requires Admin authorization.
-         */
-        post: operations["GrantSubscription"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * Deletes pricing from the system
+     * @description Deletes pricing information from the system by its ID. Requires Admin authorization.
+     */
+    delete: operations["DeletePricing"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/admin/grant-subscription": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/v1/admin/sync-subscription-role/{userId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Sync subscription role for a user
-         * @description Reconciles a user's subscription role with Stripe.
-         */
-        post: operations["SyncSubscriptionRoleForUser"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Grant a subscription to a user
+     * @description Grants a subscription to a user by their userId and planId. Requires Admin authorization.
+     */
+    post: operations["GrantSubscription"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/admin/sync-subscription-role/{userId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/v1/admin/sync-subscription-roles": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Sync subscription roles for all users
-         * @description Reconciles all users' subscription roles with Stripe.
-         */
-        post: operations["SyncAllSubscriptionRoles"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Sync subscription role for a user
+     * @description Reconciles a user's subscription role with Stripe.
+     */
+    post: operations["SyncSubscriptionRoleForUser"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/admin/sync-subscription-roles": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/v1/authenticated": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Check if user is authenticated
-         * @description Checks if the user is authenticated and returns a boolean value.
-         */
-        get: operations["IsAuthenticated"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Sync subscription roles for all users
+     * @description Reconciles all users' subscription roles with Stripe.
+     */
+    post: operations["SyncAllSubscriptionRoles"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/authenticated": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/v1/password-recovery": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Send password reset email
-         * @description Sends a password reset email to the user with the provided email address.
-         */
-        post: operations["SendPasswordResetEmail"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Check if user is authenticated
+     * @description Checks if the user is authenticated and returns a boolean value.
+     */
+    get: operations["IsAuthenticated"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/password-recovery": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/v1/resend-email-verification": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Resend email verification
-         * @description Resends the email verification link to the user with the provided email address.
-         */
-        post: operations["ResendEmailVerification"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Send password reset email
+     * @description Sends a password reset email to the user with the provided email address.
+     */
+    post: operations["SendPasswordResetEmail"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/resend-email-verification": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/v1/reset-password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Reset user password
-         * @description Resets the password for the authenticated user.
-         */
-        post: operations["ResetPassword"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Resend email verification
+     * @description Resends the email verification link to the user with the provided email address.
+     */
+    post: operations["ResendEmailVerification"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/reset-password": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/v1/register": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Register a new user
-         * @description Creates a new user account with the provided registration details. A confirmation email has been sent. Please check your inbox and confirm your email before logging in.
-         */
-        post: operations["SignUp"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Reset user password
+     * @description Resets the password for the authenticated user.
+     */
+    post: operations["ResetPassword"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/register": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/v1/login": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Authenticate a user and obtain a token
-         * @description Authenticates the user with the provided credentials and returns a token cookie.
-         */
-        post: operations["SignIn"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Register a new user
+     * @description Creates a new user account with the provided registration details. A confirmation email has been sent. Please check your inbox and confirm your email before logging in.
+     */
+    post: operations["SignUp"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/login": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/v1/notification-settings/discord": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get Discord notification settings for the current user
-         * @description Retrieves the Discord notification settings for the currently authenticated user.
-         */
-        get: operations["GetDiscordNotificationSettings"];
-        /**
-         * Update Discord notification settings for the current user
-         * @description Updates the Discord notification settings for the currently authenticated user.
-         */
-        put: operations["UpdateDiscordNotificationSettings"];
-        /**
-         * Create Discord notification settings for the current user
-         * @description Creates new Discord notification settings for the currently authenticated user.
-         */
-        post: operations["CreateDiscordNotificationSettings"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Authenticate a user and obtain a token
+     * @description Authenticates the user with the provided credentials and returns a token cookie.
+     */
+    post: operations["SignIn"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/notification-settings/discord": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/v1/notification-settings/discord/test": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Send a test Discord notification to the current user
-         * @description Sends a test Discord notification to the currently authenticated user to verify Discord notification settings.
-         */
-        post: operations["SendTestDiscordNotification"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get Discord notification settings for the current user
+     * @description Retrieves the Discord notification settings for the currently authenticated user.
+     */
+    get: operations["GetDiscordNotificationSettings"];
+    /**
+     * Update Discord notification settings for the current user
+     * @description Updates the Discord notification settings for the currently authenticated user.
+     */
+    put: operations["UpdateDiscordNotificationSettings"];
+    /**
+     * Create Discord notification settings for the current user
+     * @description Creates new Discord notification settings for the currently authenticated user.
+     */
+    post: operations["CreateDiscordNotificationSettings"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/notification-settings/discord/test": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/v1/notification-settings/email": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get email notification settings for the current user
-         * @description Retrieves the email notification settings for the currently authenticated user.
-         */
-        get: operations["GetEmailNotificationSettings"];
-        /**
-         * Update email notification settings for the current user
-         * @description Updates the email notification settings for the currently authenticated user.
-         */
-        put: operations["UpdateEmailNotificationSettings"];
-        /**
-         * Create email notification settings for the current user
-         * @description Creates new email notification settings for the currently authenticated user.
-         */
-        post: operations["CreateEmailNotificationSettings"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Send a test Discord notification to the current user
+     * @description Sends a test Discord notification to the currently authenticated user to verify Discord notification settings.
+     */
+    post: operations["SendTestDiscordNotification"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/notification-settings/email": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/v1/notification-settings/email/test": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Send a test email notification to the current user
-         * @description Sends a test email notification to the currently authenticated user to verify email notification settings.
-         */
-        post: operations["SendTestEmailNotification"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Get email notification settings for the current user
+     * @description Retrieves the email notification settings for the currently authenticated user.
+     */
+    get: operations["GetEmailNotificationSettings"];
+    /**
+     * Update email notification settings for the current user
+     * @description Updates the email notification settings for the currently authenticated user.
+     */
+    put: operations["UpdateEmailNotificationSettings"];
+    /**
+     * Create email notification settings for the current user
+     * @description Creates new email notification settings for the currently authenticated user.
+     */
+    post: operations["CreateEmailNotificationSettings"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/notification-settings/email/test": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/webhook/v1/payment-success": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Send a test email notification to the current user
+     * @description Sends a test email notification to the currently authenticated user to verify email notification settings.
+     */
+    post: operations["SendTestEmailNotification"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/webhook/v1/payment-success": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/v1/logout": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
         };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Void"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/auth/v1/refresh": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["RefreshRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["AccessTokenResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/logout": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/v1/confirmEmail": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Void"];
+          };
         };
-        get: operations["MapEntryAlertIdentityApi-/api/auth/v1/confirmEmail"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/auth/v1/verify-email": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["ConfirmEmailRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/refresh": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/v1/resendConfirmationEmail": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["RefreshRequest"];
         };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["ResendConfirmationEmailRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["AccessTokenResponse"];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/auth/v1/forgotPassword": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["ForgotPasswordRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/confirmEmail": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/v1/resetPassword": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["ResetPasswordRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get: operations["MapEntryAlertIdentityApi-/api/auth/v1/confirmEmail"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/verify-email": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/auth/v1/manage/2fa": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ConfirmEmailRequest"];
         };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["TwoFactorRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["TwoFactorResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/auth/v1/manage/info": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["InfoResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["InfoRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["InfoResponse"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/problem+json": components["schemas"]["HttpValidationProblemDetails"];
-                    };
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/resendConfirmationEmail": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/v1/location": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ResendConfirmationEmailRequest"];
         };
-        /**
-         * Get all appointment locations
-         * @description Retrieves a list of all available appointment locations for the authenticated user.
-         */
-        get: operations["GetAllLocations"];
-        put?: never;
-        /**
-         * Create a new appointment location
-         * @description Creates a new appointment location for the authenticated user.
-         */
-        post: operations["CreateLocation"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/location/states": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
         };
-        /**
-         * Get all appointment location states
-         * @description Retrieves a list of all available appointment location states for the authenticated user.
-         */
-        get: operations["GetAllLocationStates"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/v1/tracked-locations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/forgotPassword": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ForgotPasswordRequest"];
         };
-        /**
-         * Get all tracked locations for the current user
-         * @description Retrieves all appointment locations tracked by the currently authenticated user.
-         */
-        get: operations["GetTrackedLocations"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/tracked-locations/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
         };
-        /**
-         * Get a tracked location by ID
-         * @description Retrieves a specific tracked appointment location by its ID for the current user.
-         */
-        get: operations["GetTrackedLocationById"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/track-location": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/problem+json": components["schemas"]["HttpValidationProblemDetails"];
+          };
         };
-        get?: never;
-        /**
-         * Update a tracked location
-         * @description Updates an existing tracked appointment location for the current user.
-         */
-        put: operations["UpdateTrackedLocation"];
-        /**
-         * Create a new tracked location
-         * @description Creates a new tracked appointment location for the current user.
-         */
-        post: operations["CreateTrackedLocation"];
-        /**
-         * Delete all tracked locations for the current user
-         * @description Deletes all tracked appointment locations for the currently authenticated user.
-         */
-        delete: operations["DeleteAllTrackedLocations"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/v1/track-location/{locationTrackerId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/resetPassword": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["ResetPasswordRequest"];
         };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Delete a tracked location by ID
-         * @description Deletes a specific tracked appointment location by its ID for the current user.
-         */
-        delete: operations["DeleteTrackedLocationById"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/notification-settings": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
         };
-        /**
-         * Get all notification settings for the current user
-         * @description Retrieves all notification settings for the currently authenticated user.
-         */
-        get: operations["GetUserNotificationSettings"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/notification-settings/check": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/problem+json": components["schemas"]["HttpValidationProblemDetails"];
+          };
         };
-        /**
-         * Check if user has notifications set up
-         * @description Checks if the currently authenticated user has any notifications set up.
-         */
-        get: operations["CheckUserNotificationSetup"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/v1/notification-types": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/manage/2fa": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["TwoFactorRequest"];
         };
-        /**
-         * Get all notification types
-         * @description Retrieves a list of all available notification types for the authenticated user.
-         */
-        get: operations["GetNotificationTypes"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/plans": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["TwoFactorResponse"];
+          };
         };
-        /**
-         * Get available subscription plans
-         * @description Retrieves a list of available subscription plans for users.
-         */
-        get: operations["GetPlans"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/subscribe": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/problem+json": components["schemas"]["HttpValidationProblemDetails"];
+          };
         };
-        get?: never;
-        put?: never;
-        /**
-         * Subscribe to a plan
-         * @description Creates a checkout session for the user to subscribe to a plan.
-         */
-        post: operations["Subscribe"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/manage-subscription": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
         };
-        get?: never;
-        put?: never;
-        /**
-         * Manage subscription
-         * @description Creates a session for the user to manage their subscription.
-         */
-        post: operations["ManageSubscription"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/v1/validate-subscription": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/v1/manage/info": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["InfoResponse"];
+          };
         };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Validate user subscription
-         * @description Validates if the current user has an active subscription.
-         */
-        patch: operations["ValidateSubscription"];
-        trace?: never;
-    };
-    "/api/v1/subscription": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/problem+json": components["schemas"]["HttpValidationProblemDetails"];
+          };
         };
-        /**
-         * Get subscription information
-         * @description Retrieves the subscription information for the current user.
-         */
-        get: operations["GetSubscriptionInfo"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
         };
-        /**
-         * Get current user's details
-         * @description Retrieves the details of the currently authenticated user.
-         */
-        get: operations["GetCurrentUser"];
-        /**
-         * Update current user's details
-         * @description Updates the details of the currently authenticated user.
-         */
-        put: operations["UpdateCurrentUser"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
     };
-    "/api/v1/me/permissions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["InfoRequest"];
         };
-        /**
-         * Get current user's permissions
-         * @description Retrieves the permissions assigned to the currently authenticated user.
-         */
-        get: operations["GetCurrentUserPermissions"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/next-notification": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["InfoResponse"];
+          };
         };
-        /**
-         * Get next notification check for user
-         * @description Retrieves the next scheduled notification check for the currently authenticated user.
-         */
-        get: operations["GetNextNotificationCheck"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/problem+json": components["schemas"]["HttpValidationProblemDetails"];
+          };
+        };
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
     };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/location": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get all appointment locations
+     * @description Retrieves a list of all available appointment locations for the authenticated user.
+     */
+    get: operations["GetAllLocations"];
+    put?: never;
+    /**
+     * Create a new appointment location
+     * @description Creates a new appointment location for the authenticated user.
+     */
+    post: operations["CreateLocation"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/location/states": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get all appointment location states
+     * @description Retrieves a list of all available appointment location states for the authenticated user.
+     */
+    get: operations["GetAllLocationStates"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/tracked-locations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get all tracked locations for the current user
+     * @description Retrieves all appointment locations tracked by the currently authenticated user.
+     */
+    get: operations["GetTrackedLocations"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/tracked-locations/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get a tracked location by ID
+     * @description Retrieves a specific tracked appointment location by its ID for the current user.
+     */
+    get: operations["GetTrackedLocationById"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/track-location": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /**
+     * Update a tracked location
+     * @description Updates an existing tracked appointment location for the current user.
+     */
+    put: operations["UpdateTrackedLocation"];
+    /**
+     * Create a new tracked location
+     * @description Creates a new tracked appointment location for the current user.
+     */
+    post: operations["CreateTrackedLocation"];
+    /**
+     * Delete all tracked locations for the current user
+     * @description Deletes all tracked appointment locations for the currently authenticated user.
+     */
+    delete: operations["DeleteAllTrackedLocations"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/track-location/{locationTrackerId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * Delete a tracked location by ID
+     * @description Deletes a specific tracked appointment location by its ID for the current user.
+     */
+    delete: operations["DeleteTrackedLocationById"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/notification-settings": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get all notification settings for the current user
+     * @description Retrieves all notification settings for the currently authenticated user.
+     */
+    get: operations["GetUserNotificationSettings"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/notification-settings/check": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Check if user has notifications set up
+     * @description Checks if the currently authenticated user has any notifications set up.
+     */
+    get: operations["CheckUserNotificationSetup"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/notification-types": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get all notification types
+     * @description Retrieves a list of all available notification types for the authenticated user.
+     */
+    get: operations["GetNotificationTypes"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/plans": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get available subscription plans
+     * @description Retrieves a list of available subscription plans for users.
+     */
+    get: operations["GetPlans"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/subscribe": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Subscribe to a plan
+     * @description Creates a checkout session for the user to subscribe to a plan.
+     */
+    post: operations["Subscribe"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/manage-subscription": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Manage subscription
+     * @description Creates a session for the user to manage their subscription.
+     */
+    post: operations["ManageSubscription"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/validate-subscription": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * Validate user subscription
+     * @description Validates if the current user has an active subscription.
+     */
+    patch: operations["ValidateSubscription"];
+    trace?: never;
+  };
+  "/api/v1/subscription": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get subscription information
+     * @description Retrieves the subscription information for the current user.
+     */
+    get: operations["GetSubscriptionInfo"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/me": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get current user's details
+     * @description Retrieves the details of the currently authenticated user.
+     */
+    get: operations["GetCurrentUser"];
+    /**
+     * Update current user's details
+     * @description Updates the details of the currently authenticated user.
+     */
+    put: operations["UpdateCurrentUser"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/me/permissions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get current user's permissions
+     * @description Retrieves the permissions assigned to the currently authenticated user.
+     */
+    get: operations["GetCurrentUserPermissions"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/next-notification": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get next notification check for user
+     * @description Retrieves the next scheduled notification check for the currently authenticated user.
+     */
+    get: operations["GetNextNotificationCheck"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        AccessTokenResponse: {
-            readonly tokenType?: string | null;
-            accessToken: string | null;
-            /** Format: int64 */
-            expiresIn: number;
-            refreshToken: string | null;
-        };
-        AppointmentLocationDto: {
-            /** Format: int32 */
-            id: number;
-            name: string;
-            address: string;
-            addressAdditional?: string | null;
-            city: string;
-            state: string;
-            postalCode: string;
-            timezone: string;
-        };
-        AppointmentLocationDtoApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["AppointmentLocationDto"];
-        };
-        AppointmentLocationDtoArrayApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["AppointmentLocationDto"][];
-        };
-        BooleanApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: boolean;
-        };
-        ConfirmEmailRequest: {
-            userId?: string | null;
-            code?: string | null;
-            changedEmail?: string | null;
-            email?: string | null;
-        };
-        CreateCheckoutSessionRequest: {
-            priceId: string;
-            successUrl: string;
-            cancelUrl: string;
-        };
-        CreateDiscordSettingsRequest: {
-            enabled: boolean;
-            webhookUrl: string;
-            /** Format: int32 */
-            maxNotificationsPerDay?: number | null;
-        };
-        CreateEmailNotificationSettingsRequest: {
-            enabled: boolean;
-            /** Format: int32 */
-            maxNotificationsPerDay?: number | null;
-        };
-        CreatePricingPlanRequest: {
-            name: string;
-            description: string;
-            priceId: string;
-            features: string;
-        };
-        CreateTrackerForUserRequest: {
-            /** Format: int32 */
-            locationId: number;
-            enabled: boolean;
-            /** Format: int32 */
-            notificationTypeId: number;
-            /** Format: date */
-            cutOffDate: string;
-        };
-        CreateUserRequest: {
-            firstName: string;
-            lastName: string;
-            email: string;
-            password: string;
-            redirectUrl: string;
-        };
-        DateTimeApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            /** Format: date-time */
-            data: string;
-        };
-        DiscordNotificationSettingsDto: {
-            /** Format: int32 */
-            id?: number;
-            enabled: boolean;
-            webhookUrl: string;
-            /** Format: int32 */
-            maxNotificationsPerDay?: number | null;
-        };
-        DiscordNotificationSettingsDtoApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["DiscordNotificationSettingsDto"];
-        };
-        EmailNotificationSettingsDto: {
-            /** Format: int32 */
-            id: number;
-            enabled: boolean;
-            email: string;
-            /** Format: int32 */
-            maxNotificationsPerDay?: number | null;
-        };
-        EmailNotificationSettingsDtoApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["EmailNotificationSettingsDto"];
-        };
-        Error: {
-            /** @enum {string} */
-            code: "GenericError" | "NotAvailable" | "TrackerForLocationAndTypeExists" | "IncorrectLoginInformation" | "ResendVerifyEmail" | "EmailNotConfirmed";
-            message: string;
-        };
-        ForgotPasswordRequest: {
-            email: string | null;
-        };
-        GrantSubscriptionRequest: {
-            userId: string;
-            priceId: string;
-        };
-        HttpValidationProblemDetails: {
-            type?: string | null;
-            title?: string | null;
-            /** Format: int32 */
-            status?: number | null;
-            detail?: string | null;
-            instance?: string | null;
-            errors?: {
-                [key: string]: string[];
-            } | null;
-        } & {
-            [key: string]: unknown;
-        };
-        InfoRequest: {
-            newEmail?: string | null;
-            newPassword?: string | null;
-            oldPassword?: string | null;
-        };
-        InfoResponse: {
-            email: string | null;
-            isEmailConfirmed: boolean;
-        };
-        Int32ApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            /** Format: int32 */
-            data: number;
-        };
-        IsAuthenticatedDto: {
-            isAuthenticated?: boolean;
-        };
-        IsAuthenticatedDtoApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["IsAuthenticatedDto"];
-        };
-        LoginRequest: {
-            email: string | null;
-            password: string | null;
-            twoFactorCode?: string | null;
-            twoFactorRecoveryCode?: string | null;
-        };
-        ManageSubscriptionSessionRequest: {
-            returnUrl: string;
-        };
-        NotificationCheckDto: {
-            isAnyNotificationsEnabled: boolean;
-        };
-        NotificationCheckDtoApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["NotificationCheckDto"];
-        };
-        NotificationTypeDto: {
-            /** Format: int32 */
-            id: number;
-            name: string;
-            description: string;
-            /**
-             * Format: int32
-             * @enum {integer}
-             */
-            type: 0 | 1;
-        };
-        NotificationTypeDtoArrayApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["NotificationTypeDto"][];
-        };
-        ObjectApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: unknown;
-        };
-        PasswordResetEmailRequest: {
-            email: string;
-            redirectUrl: string;
-        };
-        PermissionsDto: {
-            canCreateTracker: boolean;
-        };
-        PermissionsDtoApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["PermissionsDto"];
-        };
-        PlanOptionDto: {
-            /** Format: int32 */
-            id: number;
-            name: string;
-            description: string;
-            priceId: string;
-            /** Format: int64 */
-            price: number;
-            priceFormatted: string;
-            currency: string;
-            features: string[];
-            /**
-             * Format: int32
-             * @enum {integer}
-             */
-            frequency: 1 | 2;
-        };
-        PlanOptionDtoArrayApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["PlanOptionDto"][];
-        };
-        RefreshRequest: {
-            refreshToken: string | null;
-        };
-        ResendConfirmationEmailRequest: {
-            email: string | null;
-        };
-        ResendEmailVerificationRequest: {
-            email?: string | null;
-        };
-        ResetPasswordRequest: {
-            email: string | null;
-            resetCode: string | null;
-            newPassword: string | null;
-        };
-        RoleDto: {
-            id: string;
-            name: string;
-            code: string;
-        };
-        RoleDtoArrayApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["RoleDto"][];
-        };
-        StringApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: string;
-        };
-        StringArrayApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: string[];
-        };
-        TestDiscordSettingsRequest: {
-            webhookUrl: string;
-        };
-        TrackedLocationForUserDto: {
-            /** Format: int32 */
-            id: number;
-            location: components["schemas"]["AppointmentLocationDto"];
-            enabled: boolean;
-            notificationType: components["schemas"]["NotificationTypeDto"];
-            /** Format: date */
-            cutOffDate: string;
-            /** Format: date-time */
-            lastSeenEarliestAppointment?: string | null;
-        };
-        TrackedLocationForUserDtoApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["TrackedLocationForUserDto"];
-        };
-        TrackedLocationForUserDtoArrayApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["TrackedLocationForUserDto"][];
-        };
-        TwoFactorRequest: {
-            enable?: boolean | null;
-            twoFactorCode?: string | null;
-            resetSharedKey?: boolean;
-            resetRecoveryCodes?: boolean;
-            forgetMachine?: boolean;
-        };
-        TwoFactorResponse: {
-            sharedKey: string | null;
-            /** Format: int32 */
-            recoveryCodesLeft: number;
-            recoveryCodes?: string[] | null;
-            isTwoFactorEnabled: boolean;
-            isMachineRemembered: boolean;
-        };
-        UpdateDiscordSettingsRequest: {
-            /** Format: int32 */
-            id: number;
-            enabled: boolean;
-            webhookUrl: string;
-            /** Format: int32 */
-            maxNotificationsPerDay?: number | null;
-        };
-        UpdateEmailNotificationSettingsRequest: {
-            /** Format: int32 */
-            id: number;
-            enabled: boolean;
-            /** Format: int32 */
-            maxNotificationsPerDay?: number | null;
-        };
-        UpdatePricingPlanRequest: {
-            /** Format: int32 */
-            id: number;
-            name: string;
-            description: string;
-            priceId: string;
-            features: string;
-        };
-        UpdateTrackerForUserRequest: {
-            /** Format: int32 */
-            id: number;
-            /** Format: int32 */
-            locationId: number;
-            enabled: boolean;
-            /** Format: int32 */
-            notificationTypeId: number;
-            /** Format: date */
-            cutOffDate: string;
-        };
-        UpdateUserRequest: {
-            firstName: string;
-            lastName: string;
-        };
-        UserDto: {
-            firstName: string;
-            lastName: string;
-            email: string;
-            role: components["schemas"]["RoleDto"];
-        };
-        UserDtoApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["UserDto"];
-        };
-        UserDtoForAdmin: {
-            id: string;
-            externalId: string | null;
-            email: string;
-            firstName: string;
-            lastName: string;
-            /** Format: date-time */
-            createdAt: string;
-            role?: components["schemas"]["RoleDto"];
-            customerId?: string | null;
-            subscriptionId?: string | null;
-            /** Format: date-time */
-            nextNotificationAt: string;
-        };
-        UserDtoForAdminArrayApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["UserDtoForAdmin"][];
-        };
-        UserNotificationSettingsDto: {
-            discordSettings?: components["schemas"]["DiscordNotificationSettingsDto"];
-            emailSettings?: components["schemas"]["EmailNotificationSettingsDto"];
-        };
-        UserNotificationSettingsDtoApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["UserNotificationSettingsDto"];
-        };
-        UserSubscriptionDto: {
-            activeBilledSubscription: boolean;
-            planName: string;
-            /** Format: int64 */
-            planPrice: number;
-            currency?: string | null;
-            planInterval: string;
-            isEnding: boolean;
-            /** Format: date */
-            nextPaymentDate?: string | null;
-            cardBrand?: string | null;
-            cardLast4Digits?: string | null;
-        };
-        UserSubscriptionDtoApiResponse: {
-            success: boolean;
-            errors: components["schemas"]["Error"][];
-            data: components["schemas"]["UserSubscriptionDto"];
-        };
-        Void: Record<string, never>;
+  schemas: {
+    AccessTokenResponse: {
+      readonly tokenType?: string | null;
+      accessToken: string | null;
+      /** Format: int64 */
+      expiresIn: number;
+      refreshToken: string | null;
     };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    AppointmentLocationDto: {
+      /** Format: int32 */
+      id: number;
+      name: string;
+      address: string;
+      addressAdditional?: string | null;
+      city: string;
+      state: string;
+      postalCode: string;
+      timezone: string;
+    };
+    AppointmentLocationDtoApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["AppointmentLocationDto"];
+    };
+    AppointmentLocationDtoArrayApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["AppointmentLocationDto"][];
+    };
+    BooleanApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: boolean;
+    };
+    ConfirmEmailRequest: {
+      userId?: string | null;
+      code?: string | null;
+      changedEmail?: string | null;
+      email?: string | null;
+    };
+    CreateCheckoutSessionRequest: {
+      priceId: string;
+      successUrl: string;
+      cancelUrl: string;
+    };
+    CreateDiscordSettingsRequest: {
+      enabled: boolean;
+      webhookUrl: string;
+      /** Format: int32 */
+      maxNotificationsPerDay?: number | null;
+    };
+    CreateEmailNotificationSettingsRequest: {
+      enabled: boolean;
+      /** Format: int32 */
+      maxNotificationsPerDay?: number | null;
+    };
+    CreatePricingPlanRequest: {
+      name: string;
+      description: string;
+      priceId: string;
+      features: string;
+    };
+    CreateTrackerForUserRequest: {
+      /** Format: int32 */
+      locationId: number;
+      enabled: boolean;
+      /** Format: int32 */
+      notificationTypeId: number;
+      /** Format: date */
+      cutOffDate: string;
+    };
+    CreateUserRequest: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      password: string;
+      redirectUrl: string;
+    };
+    DateTimeApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      /** Format: date-time */
+      data: string;
+    };
+    DiscordNotificationSettingsDto: {
+      /** Format: int32 */
+      id?: number;
+      enabled: boolean;
+      webhookUrl: string;
+      /** Format: int32 */
+      maxNotificationsPerDay?: number | null;
+    };
+    DiscordNotificationSettingsDtoApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["DiscordNotificationSettingsDto"];
+    };
+    EmailNotificationSettingsDto: {
+      /** Format: int32 */
+      id: number;
+      enabled: boolean;
+      email: string;
+      /** Format: int32 */
+      maxNotificationsPerDay?: number | null;
+    };
+    EmailNotificationSettingsDtoApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["EmailNotificationSettingsDto"];
+    };
+    Error: {
+      /** @enum {string} */
+      code:
+        | "GenericError"
+        | "NotAvailable"
+        | "TrackerForLocationAndTypeExists"
+        | "IncorrectLoginInformation"
+        | "ResendVerifyEmail"
+        | "EmailNotConfirmed";
+      message: string;
+    };
+    ForgotPasswordRequest: {
+      email: string | null;
+    };
+    GrantSubscriptionRequest: {
+      userId: string;
+      priceId: string;
+    };
+    HttpValidationProblemDetails: {
+      type?: string | null;
+      title?: string | null;
+      /** Format: int32 */
+      status?: number | null;
+      detail?: string | null;
+      instance?: string | null;
+      errors?: {
+        [key: string]: string[];
+      } | null;
+    } & {
+      [key: string]: unknown;
+    };
+    InfoRequest: {
+      newEmail?: string | null;
+      newPassword?: string | null;
+      oldPassword?: string | null;
+    };
+    InfoResponse: {
+      email: string | null;
+      isEmailConfirmed: boolean;
+    };
+    Int32ApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      /** Format: int32 */
+      data: number;
+    };
+    IsAuthenticatedDto: {
+      isAuthenticated?: boolean;
+    };
+    IsAuthenticatedDtoApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["IsAuthenticatedDto"];
+    };
+    LoginRequest: {
+      email: string | null;
+      password: string | null;
+      twoFactorCode?: string | null;
+      twoFactorRecoveryCode?: string | null;
+    };
+    ManageSubscriptionSessionRequest: {
+      returnUrl: string;
+    };
+    NotificationCheckDto: {
+      isAnyNotificationsEnabled: boolean;
+    };
+    NotificationCheckDtoApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["NotificationCheckDto"];
+    };
+    NotificationTypeDto: {
+      /** Format: int32 */
+      id: number;
+      name: string;
+      description: string;
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      type: 0 | 1;
+    };
+    NotificationTypeDtoArrayApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["NotificationTypeDto"][];
+    };
+    ObjectApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: unknown;
+    };
+    PasswordResetEmailRequest: {
+      email: string;
+      redirectUrl: string;
+    };
+    PermissionsDto: {
+      canCreateTracker: boolean;
+    };
+    PermissionsDtoApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["PermissionsDto"];
+    };
+    PlanOptionDto: {
+      /** Format: int32 */
+      id: number;
+      name: string;
+      description: string;
+      priceId: string;
+      /** Format: int64 */
+      price: number;
+      priceFormatted: string;
+      currency: string;
+      features: string[];
+      /**
+       * Format: int32
+       * @enum {integer}
+       */
+      frequency: 1 | 2;
+    };
+    PlanOptionDtoArrayApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["PlanOptionDto"][];
+    };
+    RefreshRequest: {
+      refreshToken: string | null;
+    };
+    ResendConfirmationEmailRequest: {
+      email: string | null;
+    };
+    ResendEmailVerificationRequest: {
+      email?: string | null;
+    };
+    ResetPasswordRequest: {
+      email: string | null;
+      resetCode: string | null;
+      newPassword: string | null;
+    };
+    RoleDto: {
+      id: string;
+      name: string;
+      code: string;
+    };
+    RoleDtoArrayApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["RoleDto"][];
+    };
+    StringApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: string;
+    };
+    StringArrayApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: string[];
+    };
+    TestDiscordSettingsRequest: {
+      webhookUrl: string;
+    };
+    TrackedLocationForUserDto: {
+      /** Format: int32 */
+      id: number;
+      location: components["schemas"]["AppointmentLocationDto"];
+      enabled: boolean;
+      notificationType: components["schemas"]["NotificationTypeDto"];
+      /** Format: date */
+      cutOffDate: string;
+      /** Format: date-time */
+      lastSeenEarliestAppointment?: string | null;
+    };
+    TrackedLocationForUserDtoApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["TrackedLocationForUserDto"];
+    };
+    TrackedLocationForUserDtoArrayApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["TrackedLocationForUserDto"][];
+    };
+    TwoFactorRequest: {
+      enable?: boolean | null;
+      twoFactorCode?: string | null;
+      resetSharedKey?: boolean;
+      resetRecoveryCodes?: boolean;
+      forgetMachine?: boolean;
+    };
+    TwoFactorResponse: {
+      sharedKey: string | null;
+      /** Format: int32 */
+      recoveryCodesLeft: number;
+      recoveryCodes?: string[] | null;
+      isTwoFactorEnabled: boolean;
+      isMachineRemembered: boolean;
+    };
+    UpdateDiscordSettingsRequest: {
+      /** Format: int32 */
+      id: number;
+      enabled: boolean;
+      webhookUrl: string;
+      /** Format: int32 */
+      maxNotificationsPerDay?: number | null;
+    };
+    UpdateEmailNotificationSettingsRequest: {
+      /** Format: int32 */
+      id: number;
+      enabled: boolean;
+      /** Format: int32 */
+      maxNotificationsPerDay?: number | null;
+    };
+    UpdatePricingPlanRequest: {
+      /** Format: int32 */
+      id: number;
+      name: string;
+      description: string;
+      priceId: string;
+      features: string;
+    };
+    UpdateTrackerForUserRequest: {
+      /** Format: int32 */
+      id: number;
+      /** Format: int32 */
+      locationId: number;
+      enabled: boolean;
+      /** Format: int32 */
+      notificationTypeId: number;
+      /** Format: date */
+      cutOffDate: string;
+    };
+    UpdateUserRequest: {
+      firstName: string;
+      lastName: string;
+    };
+    UserDto: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      role: components["schemas"]["RoleDto"];
+    };
+    UserDtoApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["UserDto"];
+    };
+    UserDtoForAdmin: {
+      id: string;
+      externalId: string | null;
+      email: string;
+      firstName: string;
+      lastName: string;
+      /** Format: date-time */
+      createdAt: string;
+      role?: components["schemas"]["RoleDto"];
+      customerId?: string | null;
+      subscriptionId?: string | null;
+      /** Format: date-time */
+      nextNotificationAt: string;
+    };
+    UserDtoForAdminArrayApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["UserDtoForAdmin"][];
+    };
+    UserNotificationSettingsDto: {
+      discordSettings?: components["schemas"]["DiscordNotificationSettingsDto"];
+      emailSettings?: components["schemas"]["EmailNotificationSettingsDto"];
+    };
+    UserNotificationSettingsDtoApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["UserNotificationSettingsDto"];
+    };
+    UserSubscriptionDto: {
+      activeBilledSubscription: boolean;
+      planName: string;
+      /** Format: int64 */
+      planPrice: number;
+      currency?: string | null;
+      planInterval: string;
+      isEnding: boolean;
+      /** Format: date */
+      nextPaymentDate?: string | null;
+      cardBrand?: string | null;
+      cardLast4Digits?: string | null;
+    };
+    UserSubscriptionDtoApiResponse: {
+      success: boolean;
+      errors: components["schemas"]["Error"][];
+      data: components["schemas"]["UserSubscriptionDto"];
+    };
+    Void: Record<string, never>;
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    GetAllUsers: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserDtoForAdminArrayApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  GetAllUsers: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    GetAllRoles: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RoleDtoArrayApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+        content: {
+          "application/json": components["schemas"]["UserDtoForAdminArrayApiResponse"];
         };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    DeleteUserById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                userId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  GetAllRoles: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    UpdatePricing: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdatePricingPlanRequest"];
-            };
+        content: {
+          "application/json": components["schemas"]["RoleDtoArrayApiResponse"];
         };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    AddPricing: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreatePricingPlanRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Int32ApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  DeleteUserById: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        userId: string;
+      };
+      cookie?: never;
     };
-    DeletePricing: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
         };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    GrantSubscription: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["GrantSubscriptionRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  UpdatePricing: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    SyncSubscriptionRoleForUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                userId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdatePricingPlanRequest"];
+      };
     };
-    SyncAllSubscriptionRoles: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
         };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    IsAuthenticated: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["IsAuthenticatedDtoApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  AddPricing: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    SendPasswordResetEmail: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PasswordResetEmailRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreatePricingPlanRequest"];
+      };
     };
-    ResendEmailVerification: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ResendEmailVerificationRequest"];
-            };
+        content: {
+          "application/json": components["schemas"]["Int32ApiResponse"];
         };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    ResetPassword: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ResetPasswordRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  DeletePricing: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
     };
-    SignUp: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateUserRequest"];
-            };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
         };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    SignIn: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LoginRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  GrantSubscription: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    GetDiscordNotificationSettings: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DiscordNotificationSettingsDtoApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GrantSubscriptionRequest"];
+      };
     };
-    UpdateDiscordNotificationSettings: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateDiscordSettingsRequest"];
-            };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
         };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Int32ApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    CreateDiscordNotificationSettings: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateDiscordSettingsRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Int32ApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  SyncSubscriptionRoleForUser: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        userId: string;
+      };
+      cookie?: never;
     };
-    SendTestDiscordNotification: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TestDiscordSettingsRequest"];
-            };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
         };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    GetEmailNotificationSettings: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EmailNotificationSettingsDtoApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  SyncAllSubscriptionRoles: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    UpdateEmailNotificationSettings: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateEmailNotificationSettingsRequest"];
-            };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
         };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Int32ApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    CreateEmailNotificationSettings: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateEmailNotificationSettingsRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Int32ApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  IsAuthenticated: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    SendTestEmailNotification: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+        content: {
+          "application/json": components["schemas"]["IsAuthenticatedDtoApiResponse"];
         };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    "MapEntryAlertIdentityApi-/api/auth/v1/confirmEmail": {
-        parameters: {
-            query: {
-                userId: string;
-                code: string;
-                changedEmail?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  SendPasswordResetEmail: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    GetAllLocations: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AppointmentLocationDtoArrayApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PasswordResetEmailRequest"];
+      };
     };
-    CreateLocation: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AppointmentLocationDto"];
-            };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
         };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AppointmentLocationDtoApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    GetAllLocationStates: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StringArrayApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  ResendEmailVerification: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    GetTrackedLocations: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TrackedLocationForUserDtoArrayApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ResendEmailVerificationRequest"];
+      };
     };
-    GetTrackedLocationById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TrackedLocationForUserDtoApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
         };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    UpdateTrackedLocation: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateTrackerForUserRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Int32ApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  ResetPassword: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    CreateTrackedLocation: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateTrackerForUserRequest"];
-            };
-        };
-        responses: {
-            /** @description Created */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Int32ApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ResetPasswordRequest"];
+      };
     };
-    DeleteAllTrackedLocations: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
         };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    DeleteTrackedLocationById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                locationTrackerId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Int32ApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  SignUp: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    GetUserNotificationSettings: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserNotificationSettingsDtoApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateUserRequest"];
+      };
     };
-    CheckUserNotificationSetup: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["NotificationCheckDtoApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
         };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    GetNotificationTypes: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["NotificationTypeDtoArrayApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  SignIn: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    GetPlans: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PlanOptionDtoArrayApiResponse"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LoginRequest"];
+      };
     };
-    Subscribe: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateCheckoutSessionRequest"];
-            };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
         };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StringApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    ManageSubscription: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ManageSubscriptionSessionRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StringApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  GetDiscordNotificationSettings: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    ValidateSubscription: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BooleanApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+        content: {
+          "application/json": components["schemas"]["DiscordNotificationSettingsDtoApiResponse"];
         };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    GetSubscriptionInfo: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserSubscriptionDtoApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  UpdateDiscordNotificationSettings: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    GetCurrentUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserDtoApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateDiscordSettingsRequest"];
+      };
     };
-    UpdateCurrentUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateUserRequest"];
-            };
+        content: {
+          "application/json": components["schemas"]["Int32ApiResponse"];
         };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
         };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
     };
-    GetCurrentUserPermissions: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PermissionsDtoApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+  };
+  CreateDiscordNotificationSettings: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    GetNextNotificationCheck: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DateTimeApiResponse"];
-                };
-            };
-            /** @description Unauthorized */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ObjectApiResponse"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateDiscordSettingsRequest"];
+      };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Int32ApiResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  SendTestDiscordNotification: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TestDiscordSettingsRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  GetEmailNotificationSettings: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EmailNotificationSettingsDtoApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  UpdateEmailNotificationSettings: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateEmailNotificationSettingsRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Int32ApiResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  CreateEmailNotificationSettings: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateEmailNotificationSettingsRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Int32ApiResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  SendTestEmailNotification: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  "MapEntryAlertIdentityApi-/api/auth/v1/confirmEmail": {
+    parameters: {
+      query: {
+        userId: string;
+        code: string;
+        changedEmail?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetAllLocations: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AppointmentLocationDtoArrayApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  CreateLocation: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AppointmentLocationDto"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AppointmentLocationDtoApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  GetAllLocationStates: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StringArrayApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  GetTrackedLocations: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TrackedLocationForUserDtoArrayApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  GetTrackedLocationById: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TrackedLocationForUserDtoApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  UpdateTrackedLocation: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateTrackerForUserRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Int32ApiResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  CreateTrackedLocation: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateTrackerForUserRequest"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Int32ApiResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  DeleteAllTrackedLocations: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  DeleteTrackedLocationById: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        locationTrackerId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Int32ApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  GetUserNotificationSettings: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UserNotificationSettingsDtoApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  CheckUserNotificationSetup: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["NotificationCheckDtoApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  GetNotificationTypes: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["NotificationTypeDtoArrayApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  GetPlans: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PlanOptionDtoArrayApiResponse"];
+        };
+      };
+    };
+  };
+  Subscribe: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateCheckoutSessionRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StringApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  ManageSubscription: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ManageSubscriptionSessionRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StringApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  ValidateSubscription: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["BooleanApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  GetSubscriptionInfo: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UserSubscriptionDtoApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  GetCurrentUser: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UserDtoApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  UpdateCurrentUser: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  GetCurrentUserPermissions: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PermissionsDtoApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
+  GetNextNotificationCheck: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DateTimeApiResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObjectApiResponse"];
+        };
+      };
+    };
+  };
 }
