@@ -13,6 +13,7 @@ import type { Route } from "./+types/root";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
+import "@mantine/charts/styles.css";
 import "mantine-datatable/styles.css";
 
 import "./app.css";
@@ -77,7 +78,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             retry: 3, // Default retry logic for errors
           },
         },
-      })
+      }),
   );
 
   return (

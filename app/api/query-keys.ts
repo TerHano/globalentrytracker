@@ -24,4 +24,8 @@ export const QUERY_KEYS = {
   // Admin related
   ALL_USERS: ["admin", "users"],
   ALL_ROLES: ["admin", "roles"],
+
+  // History related
+  APPOINTMENT_HISTORY: (locationId: number, days: number) =>
+    ["appointment-history", locationId, days] as const,
 } as const;

@@ -9,6 +9,7 @@ import { ConfirmDeleteTrackerBody } from "./confirm-delete-tracker-body";
 import { LocationTrackerCard } from "../location-tracker-card";
 import type { components } from "~/types/api";
 import { useOptimisticTrackerToggle } from "~/utils/optimistic-updates-utils";
+import { AppointmentHistoryChart } from "./appointment-history-chart";
 
 interface ActionableTrackerCardProps {
   tracker: components["schemas"]["TrackedLocationForUserDto"];
@@ -112,6 +113,9 @@ export const ActionableTrackerCard = ({
   return (
     <LocationTrackerCard
       locationTracker={tracker}
+      bottomContent={
+        <AppointmentHistoryChart locationId={tracker.location.id} />
+      }
       actions={[
         {
           id: "toggle",

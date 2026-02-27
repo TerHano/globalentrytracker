@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import {
   Card,
   Stack,
@@ -16,6 +17,7 @@ import { NotificationTypeEnum } from "~/enum/NotificationType";
 
 interface LocationTrackerCardProps {
   locationTracker: TrackedLocation;
+  bottomContent?: ReactNode;
   actions?: (MenuItemProps & {
     id: string;
     link?: {
@@ -30,6 +32,7 @@ interface LocationTrackerCardProps {
 
 export const LocationTrackerCard = ({
   locationTracker,
+  bottomContent,
   actions,
 }: LocationTrackerCardProps) => {
   const getNotificationTypeText = (type: NotificationTypeEnum) => {
@@ -130,6 +133,7 @@ export const LocationTrackerCard = ({
             {dayjs(locationTracker.cutOffDate).format("MMM DD, YYYY")}
           </Text>
         </Stack>
+        {bottomContent}
       </Stack>
     </Card>
   );
