@@ -12,12 +12,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const changedEmail = requestUrl.searchParams.get("changedEmail");
 
   if (userId && code) {
-    const response = await fetchClient.POST("/api/auth/v1/verify-email", {
+    const response = await fetchClient.GET("/api/auth/v1/confirmEmail", {
       credentials: "include",
-      body: {
-        userId,
-        code,
-        changedEmail,
+      params: {
+        query: {
+          userId,
+          code,
+          changedEmail: changedEmail ?? undefined,
+        },
       },
     });
     if (response.response.status == 200) {

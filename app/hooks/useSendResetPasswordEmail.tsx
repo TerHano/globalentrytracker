@@ -3,13 +3,13 @@ import { $api } from "~/utils/fetchData";
 import type { paths } from "~/types/api";
 
 export type SendResetPasswordEmailRequest =
-  paths["/api/auth/v1/password-recovery"]["post"]["requestBody"]["content"]["application/json"];
+  paths["/api/auth/v1/forgotPassword"]["post"]["requestBody"]["content"]["application/json"];
 
 export const useSendResetPasswordEmail = ({
   onSuccess,
   onError,
 }: MutationHookOptions<SendResetPasswordEmailRequest, unknown | null>) => {
-  return $api.useMutation("post", "/api/auth/v1/password-recovery", {
+  return $api.useMutation("post", "/api/auth/v1/forgotPassword", {
     onSuccess: (data, request) => {
       // Call user-provided handler if it exists
       if (onSuccess) {

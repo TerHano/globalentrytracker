@@ -8,7 +8,12 @@ import { Key } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useResetPassword } from "~/hooks/useResetPassword";
 
-export const ResetPasswordForm = () => {
+export interface ResetPasswordFormProps {
+  email: string;
+  code: string;
+}
+
+export const ResetPasswordForm = ({ email, code }: ResetPasswordFormProps) => {
   const { showNotification } = useShowNotification();
   const navigate = useNavigate();
   const [passwordValue, setPasswordValue] = useState<string>("");
@@ -60,11 +65,13 @@ export const ResetPasswordForm = () => {
     (values: typeof form.values) => {
       resetPassword({
         body: {
+          email,
           newPassword: values.password,
+          resetCode: code,
         },
       });
     },
-    [form, resetPassword]
+    [form, resetPassword, code, email],
   );
   return (
     <Paper w="100%" maw="40rem" p="lg">

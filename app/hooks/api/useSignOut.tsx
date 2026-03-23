@@ -16,7 +16,7 @@ export const useSignOutUser = ({
     },
     onError: (error) => {
       if (onError) {
-        onError(error.errors);
+        onError(error);
       }
     },
   });

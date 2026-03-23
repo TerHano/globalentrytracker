@@ -38,7 +38,7 @@ export const EmailNotConfirmedModal = ({
   });
   const handleClose = () => {
     onClose();
-    modalStack.close("email-not-confirmed-modal");
+    modalStack.closeAll();
   };
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import { mutationRetryConfig } from "~/utils/request-config";
 import type { APIError } from "~/utils/error-utils";
 
 type ResendEmailVerificationRequest =
-  paths["/api/auth/v1/resend-email-verification"]["post"]["requestBody"]["content"]["application/json"];
+  paths["/api/auth/v1/resendConfirmationEmail"]["post"]["requestBody"]["content"]["application/json"];
 export const useResendEmailVerification = ({
   onSuccess = noop,
   onError = noop,
@@ -15,13 +15,13 @@ export const useResendEmailVerification = ({
   unknown,
   APIError[]
 >) => {
-  return $api.useMutation("post", "/api/auth/v1/resend-email-verification", {
+  return $api.useMutation("post", "/api/auth/v1/resendConfirmationEmail", {
     ...mutationRetryConfig,
     onSuccess: (data, request) => {
-      onSuccess(data.data, request.body);
+      onSuccess(data, request.body);
     },
-    onError: (r) => {
-      onError(r.errors);
+    onError: (error) => {
+      onError(error);
     },
   });
 };

@@ -8,6 +8,6 @@ export interface MutationHookOptions<
   Response,
   Error = DefaultAPIError[],
 > {
-  onSuccess?: (data: Response, request?: Request) => void;
+  onSuccess?: (data: Response, request: Request) => void;
   onError?: (error: Error) => void;
 }

@@ -35,7 +35,7 @@ export default function LoginForm() {
     onError: (errors) => {
       console.log("errored");
       const hasNotConfirmedEmailError = errors.some(
-        (error) => error.code === "EmailNotConfirmed"
+        (error) => error.code === "EmailNotConfirmed",
       );
       if (hasNotConfirmedEmailError) {
         setIsEmailNotConfirmedModalOpen(true);
@@ -124,7 +124,7 @@ export default function LoginForm() {
       const { email, password } = values;
       signInUser({ body: { email, password } });
     },
-    [form, signInUser]
+    [form, signInUser],
   );
 
   return (
