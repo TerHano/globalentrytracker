@@ -1,6 +1,7 @@
-import { redirect, type LoaderFunctionArgs } from "react-router";
+import { type LoaderFunctionArgs } from "react-router";
 import { fetchClient } from "~/utils/fetchData";
 import { VerifyEmailError } from "~/components/auth/verify-email-error-page";
+import { EmailConfirmedPage } from "~/components/auth/email-confirmed-page";
 import type { Route } from "./+types/auth.confirm";
 import { Stack } from "@mantine/core";
 
@@ -29,20 +30,33 @@ export async function loader({ request }: LoaderFunctionArgs) {
       if (setCookie) {
         headers.append("Set-Cookie", setCookie);
       }
-      return redirect("/dashboard", {
-        headers,
+
+      return new Response(JSON.stringify({ success: true, email }), {
+        headers: {
+          ...Object.fromEntries(headers),
+          "Content-Type": "application/json",
+        },
       });
     }
   }
   // return the user to an error page with instructions
-  return { email };
+  return { email, success: false };
   //return redirect("/auth/email-verify-error");
 }
 
 export default function EmailVerificationFailed({
   loaderData,
 }: Route.ComponentProps) {
-  const { email } = loaderData;
+  const { email, success } = loaderData;
+
+  if (success) {
+    return (
+      <Stack justify="center" align="center" p="md">
+        <EmailConfirmedPage />
+      </Stack>
+    );
+  }
+
   // This component is just a placeholder for the loader function
   // It will never be rendered, as the loader will redirect the user
   return (
