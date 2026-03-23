@@ -129,27 +129,32 @@ export default function LoginForm() {
 
   return (
     <Stack className="fade-in-up-animation">
-      <Title order={2} ta="center" mt="md">
-        {t("Welcome back to EntryAlert")}
-      </Title>
+      <Stack gap={4} ta="center" mt="md">
+        <Title order={2}>
+          {t("Welcome back to EntryAlert")}
+        </Title>
+        <Text c="dimmed" size="sm">
+          Sign in to monitor your Global Entry appointments
+        </Text>
+      </Stack>
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <TextInput
-          label="Email"
-          placeholder="hello@gmail.com"
-          size="md"
-          {...form.getInputProps("email")}
-          labelProps={{}}
-          rightSection={
-            <Mail size={16} color="gray" className={classes.icon} />
-          }
-        />
-        <PasswordInput
-          label="Password"
-          placeholder="Your password"
-          mt="md"
-          size="md"
-          {...form.getInputProps("password")}
-        />
+        <Stack gap="md">
+          <TextInput
+            label="Email"
+            placeholder="hello@gmail.com"
+            size="md"
+            {...form.getInputProps("email")}
+            rightSection={
+              <Mail size={16} color="gray" className={classes.icon} />
+            }
+          />
+          <PasswordInput
+            label="Password"
+            placeholder="Your password"
+            size="md"
+            {...form.getInputProps("password")}
+          />
+        </Stack>
 
         <Group mt="xs" justify="end" align="center">
           <Button
@@ -167,14 +172,14 @@ export default function LoginForm() {
           loading={isSignInUserLoading || isRedirecting}
           type="submit"
           fullWidth
-          mt="xl"
+          mt="md"
           size="md"
         >
           Login
         </Button>
       </form>
 
-      <Text ta="center" mt="md">
+      <Text ta="center" mt="xs">
         Don&apos;t have an account?{" "}
         <Anchor<"a"> href="/signup" fw={700}>
           Register
@@ -207,7 +212,8 @@ export default function LoginForm() {
             <TextInput
               {...emailField.getInputProps()}
               label="Email"
-              placeholder=""
+              placeholder="hello@gmail.com"
+              size="md"
             />
             <Button
               onClick={() => handleResetPassword()}

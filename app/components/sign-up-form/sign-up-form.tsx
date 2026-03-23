@@ -14,25 +14,20 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { useShowNotification } from "~/hooks/useShowNotification";
 import { Key } from "lucide-react";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import {
   useSignUpUser,
   type SignUpUserRequest,
 } from "~/hooks/api/useSignUpUser";
 import { PasswordInputWithStrength } from "../ui/password-input-with-strength";
 import emailIcon from "~/assets/icons/email.png";
-import { useNavigate } from "react-router";
 
 export default function SignUpForm() {
-  const navigate = useNavigate();
-
   const { t } = useTranslation();
   const { showNotification } = useShowNotification();
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [verificationEmail, setVerificationEmail] = useState<string | null>(
-    null
-  );
+  const [verificationEmail, setVerificationEmail] = useState<string | null>(null);
 
   const schema = z
     .object({
@@ -73,14 +68,15 @@ export default function SignUpForm() {
   });
 
   const { mutate: signUpUserMutate, isPending: isLoading } = useSignUpUser({
-    onSuccess: () => {
-      navigate("/dashboard");
+    onSuccess: (_, request) => {
+      setVerificationEmail(request?.email ?? null);
+      setIsModalOpen(true);
+      form.reset();
     },
     onError: (error) => {
       const errorMessage =
         error?.[0]?.message ??
         "An unexpected error occurred. Please try again.";
-      setVerificationEmail(null);
       showNotification({
         title: t("Sign Up Failed"),
         message: errorMessage,
@@ -106,10 +102,15 @@ export default function SignUpForm() {
   );
 
   return (
-    <div className="fade-in-up-animation">
-      <Title order={2} ta="center" mt="md" mb={30}>
-        {t("Ready To Get That Appointment?")}
-      </Title>
+    <Stack className="fade-in-up-animation">
+      <Stack gap={4} ta="center" mt="md">
+        <Title order={2}>
+          {t("Ready To Get That Appointment?")}
+        </Title>
+        <Text c="dimmed" size="sm">
+          Create your account and start tracking Global Entry slots
+        </Text>
+      </Stack>
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Stack gap="sm">
           <SimpleGrid cols={{ xs: 1, sm: 2 }} spacing="lg">
@@ -146,13 +147,13 @@ export default function SignUpForm() {
             size="md"
             {...form.getInputProps("confirmPassword")}
           />
-          <Button loading={isLoading} type="submit" fullWidth mt="xl" size="md">
+          <Button loading={isLoading} type="submit" fullWidth mt="md" size="md">
             Sign Up
           </Button>
         </Stack>
       </form>
 
-      <Text ta="center" mt="md">
+      <Text ta="center" mt="xs">
         Have an account?{" "}
         <Anchor<"a"> href="/login" fw={700}>
           Login
@@ -174,31 +175,23 @@ export default function SignUpForm() {
           <Text size="lg" fw={500} mt="md">
             {t("Check Your Email")}
           </Text>
-          <Text ta="center" size="sm" mt="xs">
-            <Trans>
-              We have sent you a verification email to{" "}
-              <Text component="span" c="white" fw={700}>
-                {verificationEmail}
-              </Text>
-              . Please check your inbox and click the link to verify your
-              account.
-            </Trans>
-            {/* {t(
-              `We have sent you a verification email to ${verificationEmail}. Please check your inbox and click the link to verify your account.`
-            )} */}
+          <Text ta="center" size="sm" mt="xs" c="dimmed">
+            We have sent you a verification email to{" "}
+            <Text component="span" fw={700}>
+              {verificationEmail}
+            </Text>
+            . Please check your inbox and click the link to verify your account.
           </Text>
           <Button
             variant="subtle"
             color="blue"
             mt="md"
-            onClick={() => {
-              setIsModalOpen(false);
-            }}
+            onClick={() => setIsModalOpen(false)}
           >
             {t("Close")}
           </Button>
         </Stack>
       </Modal>
-    </div>
+    </Stack>
   );
 }
