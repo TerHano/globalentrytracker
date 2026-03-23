@@ -27,7 +27,9 @@ export default function SignUpForm() {
   const { showNotification } = useShowNotification();
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [verificationEmail, setVerificationEmail] = useState<string | null>(null);
+  const [verificationEmail, setVerificationEmail] = useState<string | null>(
+    null,
+  );
 
   const schema = z
     .object({
@@ -98,15 +100,13 @@ export default function SignUpForm() {
       };
       signUpUserMutate({ body: requestBody });
     },
-    [form, signUpUserMutate]
+    [form, signUpUserMutate],
   );
 
   return (
     <Stack className="fade-in-up-animation">
       <Stack gap={4} ta="center" mt="md">
-        <Title order={2}>
-          {t("Ready To Get That Appointment?")}
-        </Title>
+        <Title order={2}>{t("Ready To Get That Appointment?")}</Title>
         <Text c="dimmed" size="sm">
           Create your account and start tracking Global Entry slots
         </Text>

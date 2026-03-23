@@ -130,9 +130,7 @@ export default function LoginForm() {
   return (
     <Stack className="fade-in-up-animation">
       <Stack gap={4} ta="center" mt="md">
-        <Title order={2}>
-          {t("Welcome back to EntryAlert")}
-        </Title>
+        <Title order={2}>{t("Welcome back to EntryAlert")}</Title>
         <Text c="dimmed" size="sm">
           Sign in to monitor your Global Entry appointments
         </Text>

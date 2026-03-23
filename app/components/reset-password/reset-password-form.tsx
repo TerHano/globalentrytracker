@@ -1,4 +1,12 @@
-import { Anchor, Button, Image, Paper, PasswordInput, Stack, Text } from "@mantine/core";
+import {
+  Anchor,
+  Button,
+  Image,
+  Paper,
+  PasswordInput,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { PasswordInputWithStrength } from "../ui/password-input-with-strength";
 import { useCallback, useState } from "react";
 import { z } from "zod";
@@ -105,7 +113,13 @@ export const ResetPasswordForm = ({ email, code }: ResetPasswordFormProps) => {
             size="md"
             type="password"
           />
-          <Button loading={isResetPasswordLoading} type="submit" fullWidth size="md" mt="xs">
+          <Button
+            loading={isResetPasswordLoading}
+            type="submit"
+            fullWidth
+            size="md"
+            mt="xs"
+          >
             Reset Password
           </Button>
           <Text ta="center" size="sm">
