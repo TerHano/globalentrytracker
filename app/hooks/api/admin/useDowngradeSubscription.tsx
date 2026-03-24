@@ -11,23 +11,19 @@ export const useDowngradeSubscription = ({
 }: MutationHookOptions<DowngradeSubscriptionParams, unknown>) => {
   const queryClient = useQueryClient();
 
-  return $api.useMutation(
-    "post",
-    "/api/v1/admin/downgrade-to-free/{userId}",
-    {
-      onSuccess: (data, request) => {
-        queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.ALL_USERS,
-        });
-        if (onSuccess) {
-          onSuccess(data.data, request?.params?.path);
-        }
-      },
-      onError: (r) => {
-        if (onError) {
-          onError(r.errors);
-        }
-      },
+  return $api.useMutation("post", "/api/v1/admin/downgrade-to-free/{userId}", {
+    onSuccess: (data, request) => {
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.ALL_USERS,
+      });
+      if (onSuccess) {
+        onSuccess(data.data, request?.params?.path);
+      }
     },
-  );
+    onError: (r) => {
+      if (onError) {
+        onError(r.errors);
+      }
+    },
+  });
 };
