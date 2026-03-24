@@ -1,25 +1,23 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "~/hooks/api/mutationOptions";
-import type { paths } from "~/types/api";
 import { QUERY_KEYS } from "~/api/query-keys";
 
-export type CreatePricingPlanRequest =
-  paths["/api/v1/admin/pricing"]["post"]["requestBody"]["content"]["application/json"];
+export type DowngradeSubscriptionParams = { userId: string };
 
-export const useCreatePricingPlan = ({
+export const useDowngradeSubscription = ({
   onSuccess,
   onError,
-}: MutationHookOptions<CreatePricingPlanRequest, number>) => {
+}: MutationHookOptions<DowngradeSubscriptionParams, unknown>) => {
   const queryClient = useQueryClient();
 
-  return $api.useMutation("post", "/api/v1/admin/pricing", {
+  return $api.useMutation("post", "/api/v1/admin/downgrade-to-free/{userId}", {
     onSuccess: (data, request) => {
       queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.PLANS,
+        queryKey: QUERY_KEYS.ALL_USERS,
       });
       if (onSuccess) {
-        onSuccess(data.data, request?.body);
+        onSuccess(data.data, request?.params?.path);
       }
     },
     onError: (r) => {

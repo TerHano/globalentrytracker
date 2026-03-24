@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "~/hooks/api/mutationOptions";
-import { allUsersQuery } from "~/api/admin/all-users-api";
+import { QUERY_KEYS } from "~/api/query-keys";
 
 export const useDeleteUser = ({
   onSuccess,
@@ -9,13 +9,10 @@ export const useDeleteUser = ({
 }: MutationHookOptions<number, unknown>) => {
   const queryClient = useQueryClient();
 
-  const queriesToInvalidate = [allUsersQuery.name];
   return $api.useMutation("delete", "/api/v1/admin/user/{userId}", {
     onSuccess: (data, request) => {
-      queriesToInvalidate.forEach((query) => {
-        queryClient.invalidateQueries({
-          queryKey: [query],
-        });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.ALL_USERS,
       });
       if (onSuccess) {
         const userId = Number.parseInt(request.params.path.userId ?? "0");

@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "~/hooks/api/mutationOptions";
-import { allUsersQuery } from "~/api/admin/all-users-api";
+import { QUERY_KEYS } from "~/api/query-keys";
 
 export type SyncSubscriptionRoleParams = { userId: string };
 
@@ -11,16 +11,13 @@ export const useSyncSubscriptionRole = ({
 }: MutationHookOptions<SyncSubscriptionRoleParams, unknown>) => {
   const queryClient = useQueryClient();
 
-  const queriesToInvalidate = [allUsersQuery.name];
   return $api.useMutation(
     "post",
     "/api/v1/admin/sync-subscription-role/{userId}",
     {
       onSuccess: (data, request) => {
-        queriesToInvalidate.forEach((query) => {
-          queryClient.invalidateQueries({
-            queryKey: [query],
-          });
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.ALL_USERS,
         });
         if (onSuccess) {
           onSuccess(data.data, request?.params?.path);
