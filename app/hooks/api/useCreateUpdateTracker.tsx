@@ -1,7 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "./mutationOptions";
-import { QUERY_KEYS } from "~/api/query-keys";
 import type { paths } from "~/types/api";
 import {
   invalidateTrackedLocationQueries,
@@ -14,8 +13,11 @@ export type CreateUpdateTrackerRequest =
   | paths["/api/v1/track-location"]["post"]["requestBody"]["content"]["application/json"]
   | paths["/api/v1/track-location"]["put"]["requestBody"]["content"]["application/json"];
 
-interface useCreateUpdateTrackerProps
-  extends MutationHookOptions<CreateUpdateTrackerRequest, number, APIError[]> {
+interface useCreateUpdateTrackerProps extends MutationHookOptions<
+  CreateUpdateTrackerRequest,
+  number,
+  APIError[]
+> {
   isUpdate?: boolean;
 }
 

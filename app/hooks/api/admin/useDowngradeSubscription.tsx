@@ -3,17 +3,17 @@ import { $api } from "~/utils/fetchData";
 import type { MutationHookOptions } from "~/hooks/api/mutationOptions";
 import { QUERY_KEYS } from "~/api/query-keys";
 
-export type SyncSubscriptionRoleParams = { userId: string };
+export type DowngradeSubscriptionParams = { userId: string };
 
-export const useSyncSubscriptionRole = ({
+export const useDowngradeSubscription = ({
   onSuccess,
   onError,
-}: MutationHookOptions<SyncSubscriptionRoleParams, unknown>) => {
+}: MutationHookOptions<DowngradeSubscriptionParams, unknown>) => {
   const queryClient = useQueryClient();
 
   return $api.useMutation(
     "post",
-    "/api/v1/admin/sync-subscription-role/{userId}",
+    "/api/v1/admin/downgrade-to-free/{userId}",
     {
       onSuccess: (data, request) => {
         queryClient.invalidateQueries({

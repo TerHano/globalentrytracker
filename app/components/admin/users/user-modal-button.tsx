@@ -28,11 +28,13 @@ import {
   RefreshCw,
   Trash2,
   UserCheck,
+  UserMinus,
   View,
 } from "lucide-react";
 import type { paths } from "~/types/api";
 import { PlanFrequencyBadge } from "./plan-frequency-badge";
 import { useGrantSubscription } from "~/hooks/api/admin/useGrantSubscription";
+import { useDowngradeSubscription } from "~/hooks/api/admin/useDowngradeSubscription";
 import { useSyncSubscriptionRole } from "~/hooks/api/admin/useSyncSubscriptionRole";
 import { useShowNotification } from "~/hooks/useShowNotification";
 
@@ -50,6 +52,20 @@ export const UserModalButton = ({ user }: { user: User }) => {
         icon: <UserCheck size={16} />,
         title: "Success",
         message: `Subscription role synced successfully!`,
+        status: "success",
+      });
+    },
+    onError: (errors) => {
+      showErrorCodeNotification(errors);
+    },
+  });
+
+  const downgradeSubscriptionMutation = useDowngradeSubscription({
+    onSuccess: () => {
+      showNotification({
+        icon: <UserMinus size={16} />,
+        title: "Success",
+        message: `Subscription removed successfully!`,
         status: "success",
       });
     },
@@ -233,14 +249,30 @@ export const UserModalButton = ({ user }: { user: User }) => {
                 </LabelValue>
               </SimpleGrid>
               <Group grow>
-                <Button
-                  variant="light"
-                  color="blue"
-                  leftSection={<Gift size={14} />}
-                  onClick={() => modals.open("grant-subscription-modal")}
-                >
-                  Grant Subscription
-                </Button>
+                {user.subscriptionId ? (
+                  <Button
+                    variant="light"
+                    color="red"
+                    leftSection={<UserMinus size={14} />}
+                    loading={downgradeSubscriptionMutation.isPending}
+                    onClick={() =>
+                      downgradeSubscriptionMutation.mutate({
+                        params: { path: { userId: user.id } },
+                      })
+                    }
+                  >
+                    Remove Subscription
+                  </Button>
+                ) : (
+                  <Button
+                    variant="light"
+                    color="blue"
+                    leftSection={<Gift size={14} />}
+                    onClick={() => modals.open("grant-subscription-modal")}
+                  >
+                    Grant Subscription
+                  </Button>
+                )}
                 <Button
                   variant="light"
                   color="teal"
