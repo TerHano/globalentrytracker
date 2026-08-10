@@ -75,15 +75,6 @@ export const UserModalButton = ({ user }: { user: User }) => {
   });
 
   const grantSubscriptionMutation = useGrantSubscription({
-    onSuccess: () => {
-      showNotification({
-        icon: <UserCheck size={16} />,
-        title: "Success",
-        message: `Subscription granted successfully!`,
-        status: "success",
-      });
-      modals.close("grant-subscription-modal");
-    },
     onError: (errors) => {
       showErrorCodeNotification(errors);
     },
@@ -105,6 +96,16 @@ export const UserModalButton = ({ user }: { user: User }) => {
         priceId: selectedPlan,
       },
     });
+    await syncSubscriptionRoleMutation.mutateAsync({
+      params: { path: { userId: user.id } },
+    });
+    showNotification({
+      icon: <UserCheck size={16} />,
+      title: "Success",
+      message: `Subscription granted successfully!`,
+      status: "success",
+    });
+    modals.close("grant-subscription-modal");
     setSelectedPlan("");
   };
 

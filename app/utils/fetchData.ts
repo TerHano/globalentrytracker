@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { ApiResponse } from "~/models/ApiResponse";
-import createFetchClient, { type Middleware } from "openapi-fetch";
+import createFetchClient from "openapi-fetch";
 import createClient from "openapi-react-query";
 import type { paths } from "~/types/api";
 
@@ -34,60 +33,6 @@ function validateResponse<T>(response: {
   return response.data.data;
 }
 
-/**
- * Enhanced error handling middleware with token refresh on client side
- * Automatically attempts to refresh expired tokens (401 responses)
- */
-const errorMiddleware: Middleware = {
-  onResponse: async ({ response, request }) => {
-    // If 401, attempt token refresh and retry
-    if (response.status === 401) {
-      console.log("401 error - attempting token refresh...");
-
-      try {
-        const refreshResponse = await fetch(
-          `${BASE_URL}/api/auth/v1/refresh-token`,
-          {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-          },
-        );
-
-        if (refreshResponse.ok) {
-          const refreshData = await refreshResponse.json();
-          if (refreshData.success && refreshData.data) {
-            console.log(
-              "Token refreshed successfully, retrying original request...",
-            );
-
-            // Retry the original request with the new token
-            const retryResponse = await fetch(response.url, {
-              method: request.method,
-              headers: {
-                ...Object.fromEntries(request.headers.entries()),
-                Authorization: `Bearer ${refreshData.data}`,
-              },
-              body: request.body,
-              credentials: "include",
-            });
-
-            return retryResponse;
-          }
-        }
-
-        console.log("Token refresh failed - user needs to re-login");
-      } catch (error) {
-        console.error("Token refresh error:", error);
-      }
-    }
-    return response;
-  },
-};
-
 const fetchClient = createFetchClient<paths>({
   baseUrl: BASE_URL,
   headers: {
@@ -97,8 +42,6 @@ const fetchClient = createFetchClient<paths>({
   credentials: "include",
 });
 
-// Enable error middleware for token refresh and enhanced error handling
-fetchClient.use(errorMiddleware);
 const $api = createClient(fetchClient);
 
 export { fetchClient, $api, validateResponse };
